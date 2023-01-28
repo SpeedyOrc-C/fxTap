@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "display.h": "c",
+        "fxconv-assets.h": "c",
+        "dirent.h": "c",
+        "dir.h": "c",
+        "stdio.h": "c",
+        "keycodes.h": "c",
+        "hardware.h": "c",
+        "drivers.h": "c",
+        "bfile.h": "c",
+        "gint.h": "c",
+        "fs.h": "c",
+        "beatmap.h": "c",
+        "assert.h": "c",
+        "keyboard.h": "c",
+        "ctype.h": "c",
+        "route.h": "c",
+        "config.h": "c",
+        "string.h": "c",
+        "time.h": "c",
+        "math.h": "c",
+        "openlibm_math.h": "c",
+        "errno.h": "c",
+        "router.h": "c",
+        "rtc.h": "c",
+        "config-casiowin.h": "c",
+        "keymap.h": "c"
+    }
+}

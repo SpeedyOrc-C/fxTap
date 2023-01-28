@@ -1,0 +1,55 @@
+example.png:
+  type: bopti-image
+  name: img_example
+
+MainMenu_Buttons.png:
+  type: bopti-image
+  name: Img_MainMenu_Buttons
+
+About.png:
+  type: bopti-image
+  name: Img_About
+
+FN_SelectSong.png:
+  type: bopti-image
+  name: Img_FN_SelectSong
+
+FN_PreviousNext.png:
+  type: bopti-image
+  name: Img_FN_PreviousNext
+
+Settings_Title.png:
+  type: bopti-image
+  name: Img_Settings_Title
+
+Settings_NotesFallingTime_Caption.png:
+  type: bopti-image
+  name: Img_Settings_NotesFallingTime_Caption
+
+Settings_NotesFallingTime_FN_EN.png:
+  type: bopti-image
+  name: Img_Settings_NotesFallingTime_FN_EN
+
+Settings_KeyBindingStyle_Caption.png:
+  type: bopti-image
+  name: Img_Settings_KeyBindingStyle_Caption
+
+Settings_KeyBindingStyle_Logos.png:
+  type: bopti-image
+  name: Img_Settings_KeyBindingStyle_Logos
+
+Settings_KeyBindingStyle_FN_EN.png:
+  type: bopti-image
+  name: Img_Settings_KeyBindingStyle_FN_EN
+
+Settings_KeyBindings_Caption.png:
+  type: bopti-image
+  name: Img_Settings_KeyBindings_Caption
+
+Settings_Language_Caption.png:
+  type: bopti-image
+  name: Img_Settings_Language_Caption
+
+Settings_Language_Options.png:
+  type: bopti-image
+  name: Img_Settings_Language_Options

@@ -1,0 +1,11 @@
+# Build files
+/build*/
+/*.g1a
+/*.g3a
+
+# Python bytecode
+__pycache__/
+
+# Common IDE files
+*.sublime-project
+*.sublime-workspace

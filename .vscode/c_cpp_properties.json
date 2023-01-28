@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "fx-9860G",
+            "compilerPath": "~/.local/bin/sh-elf-gcc",
+            "compilerArgs": [ "-D FX9860G" ],
+
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+
+            "includePath": ["./fxTap-Core/lib/include"],
+            "intelliSenseMode": "${default}",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
+            "name": "fx-CG50",
+            "compilerPath": "~/.local/bin/sh-elf-gcc",
+            "compilerArgs": [ "-D FXCG50" ],
+
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+
+            "includePath": ["./fxTap-Core/lib/include"],
+            "intelliSenseMode": "${default}",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

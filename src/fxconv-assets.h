@@ -1,0 +1,16 @@
+#include <gint/display.h>
+
+extern const bopti_image_t img_example;
+extern const bopti_image_t Img_MainMenu_Buttons;
+extern const bopti_image_t Img_About;
+extern const bopti_image_t Img_FN_SelectSong;
+extern const bopti_image_t Img_FN_PreviousNext;
+extern const bopti_image_t Img_Settings_Title;
+extern const bopti_image_t Img_Settings_NotesFallingTime_Caption;
+extern const bopti_image_t Img_Settings_NotesFallingTime_FN_EN;
+extern const bopti_image_t Img_Settings_KeyBindingStyle_Caption;
+extern const bopti_image_t Img_Settings_KeyBindingStyle_Logos;
+extern const bopti_image_t Img_Settings_KeyBindingStyle_FN_EN;
+extern const bopti_image_t Img_Settings_KeyBindings_Caption;
+extern const bopti_image_t Img_Settings_Language_Caption;
+extern const bopti_image_t Img_Settings_Language_Options;
