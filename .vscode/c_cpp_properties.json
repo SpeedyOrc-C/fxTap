@@ -8,7 +8,7 @@
             "cStandard": "c17",
             "cppStandard": "gnu++17",
 
-            "includePath": ["./fxTap-Core/lib/include"],
+            "includePath": ["./fxTap-Core/lib/include", "./include"],
             "intelliSenseMode": "${default}",
             "mergeConfigurations": false,
             "browse": {
@@ -24,7 +24,7 @@
             "cStandard": "c17",
             "cppStandard": "gnu++17",
 
-            "includePath": ["./fxTap-Core/lib/include"],
+            "includePath": ["./fxTap-Core/lib/include", "./include"],
             "intelliSenseMode": "${default}",
             "mergeConfigurations": false,
             "browse": {

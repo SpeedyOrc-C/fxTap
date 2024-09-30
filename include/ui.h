@@ -1,5 +1,5 @@
-#ifndef FXTAP_ROUTE_H
-#define FXTAP_ROUTE_H
+#ifndef FXTAP_UI_H
+#define FXTAP_UI_H
 
 #include <gint/display.h>
 #include <gint/keyboard.h>
@@ -18,4 +18,4 @@ void UI_Play(const char* fileName, const Config *config);
 void UI_Settings(Config *config);
 void UI_KeyTest(const Config *config);
 
-#endif // FXTAP_ROUTE_H
+#endif // FXTAP_UI_H

@@ -25,6 +25,8 @@
         "router.h": "c",
         "rtc.h": "c",
         "config-casiowin.h": "c",
-        "keymap.h": "c"
+        "keymap.h": "c",
+        "ui.h": "c",
+        "settings.h": "c"
     }
 }

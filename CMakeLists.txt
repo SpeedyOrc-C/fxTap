@@ -12,14 +12,18 @@ find_package(Gint 2.9 REQUIRED)
 
 set(SOURCES
   src/main.c
-  src/UI_MainMenu.c
-  src/UI_About.c
-  src/UI_Error_FxtapFolderNotFound.c
-  src/UI_Error_FxtapFolderEmpty.c
-  src/UI_SelectSong.c
-  src/UI_Play.c
-  src/UI_Settings.c
-  src/UI_KeyTest.c
+  src/ui/main-menu.c
+  src/ui/about.c
+  src/ui/error-fxtap-folder-not-found.c
+  src/ui/error-fxtap-folder-empty.c
+  src/ui/select-song.c
+  src/ui/play.c
+  src/ui/settings.c
+  src/ui/key-test.c
+  src/settings/notes-falling-time.c
+  src/settings/key-bindings.c
+  src/settings/key-binding-style.c
+  src/settings/language.c
 )
 # Shared assets, fx-9860G-only assets and fx-CG-50-only assets
 set(ASSETS
@@ -49,6 +53,7 @@ fxconv_declare_assets(${ASSETS} ${ASSETS_fx} ${ASSETS_cg} WITH_METADATA)
 add_executable(myaddin ${SOURCES} ${ASSETS} ${ASSETS_${FXSDK_PLATFORM}})
 add_subdirectory(fxTap-Core/lib)
 target_include_directories(myaddin PUBLIC fxTap-Core/lib/include)
+target_include_directories(myaddin PUBLIC include)
 target_compile_options(myaddin PRIVATE -Wall -Wextra -Os -g -flto)
 target_link_libraries(myaddin Gint::Gint fxTap-Core)
 

@@ -1,4 +1,4 @@
-#include "router.h"
+#include "ui.h"
 #include <gint/rtc.h>
 #include <fxTap/beatmap.h>
 #include <fxTap/beatmap-casiowin.h>
@@ -43,13 +43,13 @@ void Beatmap_New_LoadFromPath_BFile_Wrapper(Beatmap **beatmap, const char* path,
     *beatmap = Beatmap_New_LoadFromPath_BFile(path, error);
 }
 
-Beatmap *Beatmap_New_LoadFromFileInFxtapFolder(const char *fileName, BeatmapError *error)
+Beatmap *Beatmap_New_LoadFromFile_OptionalFolder(const char *fileName, bool insideFxTapFolder, BeatmapError *error)
 {
     char *path = malloc(6 + strlen(fileName) + 4 + 1);
     assert(path != NULL);
 
     Beatmap *beatmap;
-    sprintf(path, "FXTAP/%s.fxt", fileName);
+    sprintf(path, insideFxTapFolder ? "FXTAP/%s.fxt" : "%s.fxt", fileName);
 
     #ifdef FX9860G
         if (gint[HWFS] == HWFS_CASIOWIN)
@@ -78,7 +78,10 @@ Beatmap *Beatmap_New_LoadFromFileInFxtapFolder(const char *fileName, BeatmapErro
 void UI_Play(const char *fileName, const Config *config)
 {
     BeatmapError beatmapError;
-    Beatmap *beatmap = Beatmap_New_LoadFromFileInFxtapFolder(fileName, &beatmapError);
+    Beatmap *beatmap = Beatmap_New_LoadFromFile_OptionalFolder(fileName, true, &beatmapError);
+
+    if (beatmap == NULL)
+        beatmap = Beatmap_New_LoadFromFile_OptionalFolder(fileName, false, &beatmapError);
 
     if (beatmap == NULL)
     {
