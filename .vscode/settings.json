@@ -27,6 +27,9 @@
         "config-casiowin.h": "c",
         "keymap.h": "c",
         "ui.h": "c",
-        "settings.h": "c"
+        "settings.h": "c",
+        "beatmap-casiowin.h": "c",
+        "lib-config.h": "c",
+        "bfile-extern.h": "c"
     }
 }

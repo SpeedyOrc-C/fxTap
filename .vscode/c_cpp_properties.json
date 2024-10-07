@@ -3,7 +3,7 @@
         {
             "name": "fx-9860G",
             "compilerPath": "~/.local/bin/sh-elf-gcc",
-            "compilerArgs": [ "-D FX9860G" ],
+            "compilerArgs": [ "-DFX9860G", "-DFXTAP_CORE_ON_GINT" ],
 
             "cStandard": "c17",
             "cppStandard": "gnu++17",
@@ -19,7 +19,7 @@
         {
             "name": "fx-CG50",
             "compilerPath": "~/.local/bin/sh-elf-gcc",
-            "compilerArgs": [ "-D FXCG50" ],
+            "compilerArgs": [ "-DFXCG50", "-DFXTAP_CORE_ON_GINT" ],
 
             "cStandard": "c17",
             "cppStandard": "gnu++17",

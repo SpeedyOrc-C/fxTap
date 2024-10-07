@@ -55,6 +55,7 @@ add_subdirectory(fxTap-Core/lib)
 target_include_directories(myaddin PUBLIC fxTap-Core/lib/include)
 target_include_directories(myaddin PUBLIC include)
 target_compile_options(myaddin PRIVATE -Wall -Wextra -Os -g -flto)
+target_compile_definitions(fxTap-Core PUBLIC FXTAP_CORE_ON_GINT)
 target_link_libraries(myaddin Gint::Gint fxTap-Core)
 
 if("${FXSDK_PLATFORM_LONG}" STREQUAL fx9860G)
