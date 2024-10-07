@@ -9,6 +9,7 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
+#include <stdio.h>
 #include <math.h>
 
 int32_t time128Delta(int32_t start, int32_t end)

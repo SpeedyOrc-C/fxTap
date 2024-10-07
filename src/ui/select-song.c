@@ -38,9 +38,16 @@ void UI_SelectSong_G_Casiowin(const Config *config)
 
 	while (true)
 	{
+		const size_t fileNameLength = strlen(fileName);
+
 		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "File: %s.fxt", fileName);
-		dprint(1, 48, C_BLACK, isAlpha ? (isCapitalised ? "[ABC]" : "[abc]") : "[123]");
+		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
+		dprint(24, 35, C_BLACK, "[%-8s].fxt", fileName);
+		dpixel(30 + 6 * fileNameLength, 43, C_BLACK);
+		dpixel(29 + 6 * fileNameLength, 44, C_BLACK);
+		dpixel(30 + 6 * fileNameLength, 44, C_BLACK);
+		dpixel(31 + 6 * fileNameLength, 44, C_BLACK);
+		dprint(98, 48, C_BLACK, isAlpha ? (isCapitalised ? "[ABC]" : "[abc]") : "[123]");
 		dimage(0, 56, &Img_FN_SelectSong);
 		dupdate();
 

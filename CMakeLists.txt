@@ -43,6 +43,7 @@ set(ASSETS_fx
   assets-fx/Settings_KeyBindings_Caption.png
   assets-fx/Settings_Language_Caption.png
   assets-fx/Settings_Language_Options.png
+  assets-fx/SelectSong_TypeFilename.png
 )
 set(ASSETS_cg
   assets-cg/example.png
