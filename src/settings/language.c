@@ -1,5 +1,6 @@
-#include <settings.h>
+#include <assert.h>
 #include <fxconv-assets.h>
+#include <settings.h>
 
 void Language_Render(const Config *config)
 {
@@ -8,7 +9,7 @@ void Language_Render(const Config *config)
     dsubimage(0, 56, &Img_FN_PreviousNext, 0, 8 * config->Language, 128, 8, 0);
 }
 
-void Language_AcceptEvent(key_event_t e, Config *config)
+void Language_AcceptEvent(const key_event_t e, Config *config)
 {
     switch (e.key)
     {
@@ -25,5 +26,7 @@ void Language_AcceptEvent(key_event_t e, Config *config)
             if (config->Language < ZH_CN)
                 config->Language += 1;
             break;
+        default:
+            assert(false && "Invalid key");
     }
 }

@@ -1,5 +1,6 @@
+#include <assert.h>
 #include <settings.h>
-#include <fxconv-assets.h>
+#include "fxconv-assets.h"
 
 void NotesFallingTime_Render(const Config *config)
 {
@@ -8,7 +9,7 @@ void NotesFallingTime_Render(const Config *config)
     dimage(0, 56, &Img_Settings_NotesFallingTime_FN_EN);
 }
 
-void AdjestNotesFallingTime(Config *config, int16_t delta)
+void AdjestNotesFallingTime(Config *config, const int16_t delta)
 {
     config->NotesFallingTime += delta;
 
@@ -18,7 +19,7 @@ void AdjestNotesFallingTime(Config *config, int16_t delta)
         config->NotesFallingTime = 10000;
 }
 
-void NotesFallingTime_AcceptEvent(key_event_t e, Config *config)
+void NotesFallingTime_AcceptEvent(const key_event_t e, Config *config)
 {
     switch (e.key)
     {
@@ -34,5 +35,7 @@ void NotesFallingTime_AcceptEvent(key_event_t e, Config *config)
             AdjestNotesFallingTime(config,  10 ); break;
         case KEY_F6:
             AdjestNotesFallingTime(config,  100); break;
+        default:
+            assert(false && "Invalid key");
     }
 }

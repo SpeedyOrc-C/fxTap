@@ -1,3 +1,6 @@
+#ifndef FXCONV_ASSETS_H
+#define FXCONV_ASSETS_H
+
 #include <gint/display.h>
 
 extern const bopti_image_t img_example;
@@ -15,3 +18,5 @@ extern const bopti_image_t Img_Settings_KeyBindings_Caption;
 extern const bopti_image_t Img_Settings_Language_Caption;
 extern const bopti_image_t Img_Settings_Language_Options;
 extern const bopti_image_t Img_SelectSong_TypeFilename;
+
+#endif // FXCONV_ASSETS_H

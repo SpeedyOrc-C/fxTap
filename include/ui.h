@@ -1,13 +1,7 @@
 #ifndef FXTAP_UI_H
 #define FXTAP_UI_H
 
-#include <gint/display.h>
-#include <gint/keyboard.h>
-#include <fxTap/beatmap.h>
 #include <fxTap/config.h>
-#include <fxTap/config-casiowin.h>
-#include <stdlib.h>
-#include "fxconv-assets.h"
 
 void UI_MainMenu(Config *config);
 void UI_About();

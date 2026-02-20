@@ -1,13 +1,14 @@
-#include "ui.h"
-#include <gint/display.h>
 #include <fxTap/config.h>
 #include <fxTap/keymap.h>
+#include <gint/display.h>
+#include <gint/keyboard.h>
+#include "ui.h"
 
 void UI_KeyTest(const Config *config)
 {
     while (true)
     {
-        while (pollevent().type != KEYEV_NONE);
+        while (pollevent().type != KEYEV_NONE) {}
 
         dclear(C_WHITE);
 

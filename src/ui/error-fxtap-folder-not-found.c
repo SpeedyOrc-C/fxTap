@@ -1,3 +1,6 @@
+#include <gint/display.h>
+#include <gint/keyboard.h>
+
 #include "ui.h"
 
 void UI_Error_FxtapFolderNotFound()

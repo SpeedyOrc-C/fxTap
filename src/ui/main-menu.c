@@ -1,9 +1,9 @@
-#include "ui.h"
-#include <fxTap/config.h>
-#include <fxTap/config-casiowin.h>
 #include <assert.h>
+#include <fxTap/config.h>
 #include <gint/display.h>
-#include <gint/hardware.h>
+#include <gint/keyboard.h>
+#include "fxconv-assets.h"
+#include "ui.h"
 
 typedef enum Item { Item_Play, Item_KeyTest, Item_Settings, Item_About } Item;
 
@@ -11,16 +11,10 @@ void UI_MainMenu(Config *config)
 {
 	Item selectedItem = Item_Play;
 
-	while (1)
+    // ReSharper disable once CppDFAEndlessLoop
+    while (true)
 	{
 		dclear(C_WHITE);
-
-		#ifdef FXCG50
-			dprint(1, 1 + 0 * (1 + dfont_default()->line_height), C_BLACK, "  [EXE] Start");
-			dprint(1, 1 + 1 * (1 + dfont_default()->line_height), C_BLACK, "[SETUP] Settings");
-			dprint(1, 1 + 2 * (1 + dfont_default()->line_height), C_BLACK, "   [F5] Key Test");
-			dprint(1, 1 + 3 * (1 + dfont_default()->line_height), C_BLACK, "   [F6] About");
-		#endif
 
 		#ifdef FX9860G
 			for (Item renderItem = Item_Play; renderItem <= Item_About; renderItem += 1)
@@ -40,7 +34,7 @@ void UI_MainMenu(Config *config)
 
 		dupdate();
 
-		key_event_t e = getkey();
+		const key_event_t e = getkey();
 
 		if (e.key == KEY_EXE)
 		{

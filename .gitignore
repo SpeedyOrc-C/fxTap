@@ -5,7 +5,3 @@
 
 # Python bytecode
 __pycache__/
-
-# Common IDE files
-*.sublime-project
-*.sublime-workspace
