@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fxTap/beatmap-casiowin.h>
 #include <fxTap/beatmap.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
@@ -41,12 +40,10 @@ void RenderHold(const int column, const double positionBottom, const double posi
 	drect(column * 8, y1, column * 8 + 7, y2, C_BLACK);
 }
 
-#if defined(FX9860G)
 void Beatmap_New_LoadFromPath_BFile_Wrapper(Beatmap **beatmap, const char *path, BeatmapError *error)
 {
 	*beatmap = Beatmap_New_LoadFromPath_BFile(path, error);
 }
-#endif
 
 Beatmap *Beatmap_New_LoadFromFile_OptionalFolder(
 	const char *fileName,
