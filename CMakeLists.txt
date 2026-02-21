@@ -6,8 +6,6 @@ set(SOURCES
         src/main.c
         src/ui/main-menu.c
         src/ui/about.c
-        src/ui/error-fxtap-folder-not-found.c
-        src/ui/error-fxtap-folder-empty.c
         src/ui/select-song.c
         src/ui/play.c
         src/ui/settings.c
@@ -17,7 +15,6 @@ set(SOURCES
         src/settings/key-binding-style.c
         src/settings/language.c
 )
-# Shared assets, fx-9860G-only assets and fx-CG-50-only assets
 set(ASSETS
 )
 set(ASSETS_fx

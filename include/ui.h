@@ -1,15 +1,21 @@
-#ifndef FXTAP_UI_H
-#define FXTAP_UI_H
+#pragma once
 
 #include <fxTap/config.h>
 
+#include "fxTap/game.h"
+
 void UI_MainMenu(FXT_Config *config);
+
 void UI_About();
-void UI_Error_FxtapFolderNotFound();
-void UI_Error_FxtapFolderEmpty();
-void UI_SelectSong(const FXT_Config *config);
-void UI_Play(const char* fileName, const FXT_Config *config);
+
+void UI_Play(FxTap *fxTap, const FXT_Config *config);
+
 void UI_Settings(FXT_Config *config);
+
 void UI_KeyTest(const FXT_Config *config);
 
-#endif // FXTAP_UI_H
+[[nodiscard]]
+char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config);
+
+[[nodiscard]]
+char *UI_AskBeatmapPath_ListLibrary(void);

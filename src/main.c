@@ -4,9 +4,9 @@
 #include <gint/keyboard.h>
 #include "ui.h"
 
-void FXT_Config_Load_BFile_Wrapper(FXT_Config *config, FXT_Config_Error *error)
+FXT_Config_Error FXT_Config_Load_BFile_Wrapper(FXT_Config *dst)
 {
-	*error = FXT_Config_Load_BFile(config);
+	return FXT_Config_Load_BFile(dst);
 }
 
 FXT_Config_Error LoadConfig(FXT_Config *config)
@@ -14,14 +14,10 @@ FXT_Config_Error LoadConfig(FXT_Config *config)
 	if (gint[HWFS] == HWFS_FUGUE)
 		return FXT_Config_Load(config);
 
-	FXT_Config_Error configError;
-
-	gint_call((gint_call_t){
+	return gint_call((gint_call_t){
 		.function = &FXT_Config_Load_BFile_Wrapper,
-		.args = {{.pv = config}, {.pv = &configError}}
+		.args = {{.pv = config}}
 	});
-
-	return configError;
 }
 
 int main(void)

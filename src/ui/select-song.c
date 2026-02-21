@@ -13,41 +13,40 @@ uint8_t keycode_alpha(const int keycode)
 
 	switch (Row)
 	{
-		case 6: return 'A' + Column - 1;
-		case 5: return 'G' + Column - 1;
-		case 4: return 'M' + Column - 1;
-		case 3: return 'P' + Column - 1;
-		case 2: return 'U' + Column - 1;
-		case 1:
-			switch (Column)
-			{
-				case 1: return 'Z';
-				case 2: return ' ';
-				case 3: return '\"';
-				default: return -1;
-			}
+	case 6: return 'A' + Column - 1;
+	case 5: return 'G' + Column - 1;
+	case 4: return 'M' + Column - 1;
+	case 3: return 'P' + Column - 1;
+	case 2: return 'U' + Column - 1;
+	case 1:
+		switch (Column)
+		{
+		case 1: return 'Z';
+		case 2: return ' ';
+		case 3: return '\"';
 		default: return -1;
+		}
+	default: return -1;
 	}
 }
 
-void UI_SelectSong_G(const FXT_Config *config)
+char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 {
+	constexpr int FileNameMaxLen = 47;
 	bool isCapitalised = true;
 	bool isAlpha = true;
-	char fileName[8 + 1] = "\0\0\0\0\0\0\0\0\0";
 	int cursor = 0;
+	char *fileName = malloc(FileNameMaxLen + 1);
+
+	assert(fileName != nullptr);
+
+	memset(fileName, 0, FileNameMaxLen + 1);
 
 	while (true)
 	{
-		const size_t fileNameLength = strlen(fileName);
-
 		dclear(C_WHITE);
 		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
-		dprint(24, 35, C_BLACK, "[%-8s].fxt", fileName);
-		dpixel(30 + 6 * (int) fileNameLength, 43, C_BLACK);
-		dpixel(29 + 6 * (int) fileNameLength, 44, C_BLACK);
-		dpixel(30 + 6 * (int) fileNameLength, 44, C_BLACK);
-		dpixel(31 + 6 * (int) fileNameLength, 44, C_BLACK);
+		dprint(0, 35, C_BLACK, "[%s]", fileName);
 		dprint(98, 48, C_BLACK, isAlpha ? (isCapitalised ? "[ABC]" : "[abc]") : "[123]");
 		dimage(0, 56, &Img_FN_SelectSong);
 		dupdate();
@@ -56,162 +55,98 @@ void UI_SelectSong_G(const FXT_Config *config)
 
 		switch (e.key)
 		{
-			case KEY_DEL:
-				if (cursor > 0)
-				{
-					cursor -= 1;
-					fileName[cursor] = 0;
-				}
-				break;
+		case KEY_DEL:
+			if (cursor > 0)
+			{
+				cursor -= 1;
+				fileName[cursor] = 0;
+			}
+			break;
 
-			case KEY_ACON:
-				cursor = 0;
-				fileName[0] = 0;
-				break;
+		case KEY_ACON:
+			cursor = 0;
+			memset(fileName, 0, FileNameMaxLen);
+			break;
 
-			case KEY_EXIT:
-				return;
-
-			case KEY_EXE:
-				return UI_Play(fileName, config);
-
-			case KEY_F1:
-				if (cursor < 8)
-				{
-					fileName[cursor] = '.';
-					cursor += 1;
-				}
-				break;
-
-			case KEY_F2:
-				if (cursor < 8)
-				{
-					fileName[cursor] = '_';
-					cursor += 1;
-				}
-				break;
-
-			case KEY_F3:
-				if (cursor < 8)
-				{
-					fileName[cursor] = '~';
-					cursor += 1;
-				}
-				break;
-
-			case KEY_F4:
-				if (cursor < 8)
-				{
-					fileName[cursor] = '\'';
-					cursor += 1;
-				}
-				break;
-
-			case KEY_F5:
-				isAlpha = !isAlpha;
-				break;
-
-			case KEY_ALPHA:
-			case KEY_F6:
-				isCapitalised = !isCapitalised;
-				break;
-
-			default:
-				if (cursor >= 8) break;
-				if (isAlpha)
-				{
-					const auto c = keycode_alpha(e.key);
-
-					if (c != 255)
-					{
-						fileName[cursor] = isCapitalised ? (char) c : tolower(c);
-						cursor += 1;
-					}
-				}
-				else
-				{
-					const auto c = keycode_digit(e.key);
-
-					if (c != 255)
-					{
-						fileName[cursor] = '0' + c;
-						cursor += 1;
-					}
-				}
-				break;
-		}
-	}
-}
-
-void UI_SelectSong_CG(const FXT_Config *config)
-{
-	FindError error;
-	BeatmapFindEntries *entries = BeatmapFindEntries_New_InsideDirectory("FXTAP", &error);
-
-	if (entries == nullptr)
-	{
-		UI_Error_FxtapFolderNotFound();
-		return;
-	}
-
-	if (entries->Count == 0)
-	{
-		BeatmapFindEntries_Free(entries);
-		UI_Error_FxtapFolderEmpty();
-		return;
-	}
-
-	int selectedEntryIndex = 0;
-
-	while (true)
-	{
-		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "%2i/%i. %s: %s",
-		       selectedEntryIndex + 1,
-		       entries->Count,
-		       entries->Entries[selectedEntryIndex].FileName,
-		       entries->Entries[selectedEntryIndex].Metadata.Title
-		);
-		dupdate();
-
-		const key_event_t e = getkey();
-
-		if (e.key == KEY_EXIT)
-		{
-			BeatmapFindEntries_Free(entries);
-			return;
-		}
-
-		if (e.key == KEY_EXE)
-		{
-			char *fileName = malloc(strlen(entries->Entries[selectedEntryIndex].FileName) + 1);
-
-			assert(fileName != NULL);
-
-			strcpy(fileName, entries->Entries[selectedEntryIndex].FileName);
-
-			BeatmapFindEntries_Free(entries);
-
-			UI_Play(fileName, config);
-
+		case KEY_EXIT:
 			free(fileName);
-			return;
-		}
+			return nullptr;
 
-		if (e.key == KEY_UP && selectedEntryIndex > 0)
-		{
-			selectedEntryIndex -= 1;
-			continue;
-		}
+		case KEY_EXE:
+			return fileName;
 
-		if (e.key == KEY_DOWN && selectedEntryIndex < entries->Count - 1)
-		{
-			selectedEntryIndex += 1;
+		case KEY_F1:
+			if (cursor < FileNameMaxLen)
+			{
+				fileName[cursor] = '.';
+				cursor += 1;
+			}
+			break;
+
+		case KEY_F2:
+			if (cursor < FileNameMaxLen)
+			{
+				fileName[cursor] = '_';
+				cursor += 1;
+			}
+			break;
+
+		case KEY_F3:
+			if (cursor < FileNameMaxLen)
+			{
+				fileName[cursor] = '~';
+				cursor += 1;
+			}
+			break;
+
+		case KEY_F4:
+			if (cursor < FileNameMaxLen)
+			{
+				fileName[cursor] = '\'';
+				cursor += 1;
+			}
+			break;
+
+		case KEY_F5:
+			isAlpha = !isAlpha;
+			break;
+
+		case KEY_F6:
+			isCapitalised = !isCapitalised;
+			break;
+
+		case KEY_NEG:
+			if (cursor < FileNameMaxLen)
+			{
+				fileName[cursor] = '/';
+				cursor += 1;
+			}
+			break;
+
+		default:
+			if (cursor >= FileNameMaxLen) break;
+
+			if (isAlpha)
+			{
+				auto const c = keycode_alpha(e.key);
+
+				if (c != 255)
+				{
+					fileName[cursor] = isCapitalised ? (char) c : tolower(c);
+					cursor += 1;
+				}
+			}
+			else
+			{
+				auto const c = keycode_digit(e.key);
+
+				if (c != 255)
+				{
+					fileName[cursor] = '0' + c;
+					cursor += 1;
+				}
+			}
+			break;
 		}
 	}
-}
-
-void UI_SelectSong(const FXT_Config *config)
-{
-	UI_SelectSong_G(config);
 }
