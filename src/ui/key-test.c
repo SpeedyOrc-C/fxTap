@@ -4,7 +4,7 @@
 #include <gint/keyboard.h>
 #include "ui.h"
 
-void UI_KeyTest(const Config *config)
+void UI_KeyTest(const FXT_Config *config)
 {
     while (true)
     {

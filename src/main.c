@@ -1,48 +1,44 @@
-#include <assert.h>
-#include <fxTap/config-casiowin.h>
+#include <fxTap/config.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
 #include "ui.h"
 
-#ifdef FX9860G
-void Config_New_LoadFromDisk_BFile_Wrapper(Config **config, ConfigError *error)
+void FXT_Config_Load_BFile_Wrapper(FXT_Config *config, FXT_Config_Error *error)
 {
-    *config = Config_New_LoadFromDisk_BFile(error);
+	*error = FXT_Config_Load_BFile(config);
 }
-#endif
+
+FXT_Config_Error LoadConfig(FXT_Config *config)
+{
+	if (gint[HWFS] == HWFS_FUGUE)
+		return FXT_Config_Load(config);
+
+	FXT_Config_Error configError;
+
+	gint_call((gint_call_t){
+		.function = &FXT_Config_Load_BFile_Wrapper,
+		.args = {{.pv = config}, {.pv = &configError}}
+	});
+
+	return configError;
+}
 
 int main(void)
 {
-    Config *config;
-    ConfigError configError;
+	FXT_Config config;
+	const FXT_Config_Error configError = LoadConfig(&config);
 
-#ifdef FX9860G
-    if (gint[HWFS] == HWFS_CASIOWIN)
-    {
-        const gint_call_t call = {
-            .function = &Config_New_LoadFromDisk_BFile_Wrapper,
-            .args = {{.pv = &config}, {.pv = &configError}}
-        };
-        gint_call(call);
-    } else
-        config = Config_New_LoadFromDisk(&configError);
-#else
-    config = Config_New_LoadFromDisk(&configError);
-#endif
+	if (configError != 0)
+	{
+		dclear(C_WHITE);
+		dprint(1, 1, C_BLACK, "%d", configError);
+		dupdate();
+		getkey();
+		return 1;
+	}
 
-    if (config == NULL)
-    {
-        dclear(C_WHITE);
-        dprint(1, 1, C_BLACK, "%d", configError);
-        dupdate();
-        getkey();
-        return 1;
-    }
+	UI_MainMenu(&config);
 
-    assert(config);
-
-    UI_MainMenu(config);
-
-    return 1;
+	return 1;
 }

@@ -51,13 +51,13 @@ const char *KeyCode_ToString(const uint8_t key)
     }
 }
 
-void KeyBindings_Render(const Config *config)
+void KeyBindings_Render(const FXT_Config *config)
 {
     dsubimage(0, 12, &Img_Settings_KeyBindings_Caption,
               0, 50 * config->Language, 128, 50, 0);
 
     const char *keyString = KeyCode_ToString(config->PhysicalKeyOfFxTapKey[selectedKeyBinding]);
-    assert(0 <= selectedKeyBinding && selectedKeyBinding < MAX_KEY_COUNT);
+    assert(0 <= selectedKeyBinding && selectedKeyBinding < FXT_MaxKeyCount);
 
     drect_border(92, 26, 106, 36, C_WHITE, 1, C_BLACK);
     dtext(94, 28, C_BLACK, FxTapKey_ToString(selectedKeyBinding));
@@ -65,9 +65,9 @@ void KeyBindings_Render(const Config *config)
     dtext(94, 42, C_BLACK, keyString != NULL ? keyString : "UNSET");
 }
 
-void KeyBindings_AcceptEvent(const key_event_t e, Config *config)
+void KeyBindings_AcceptEvent(const key_event_t e, FXT_Config *config)
 {
-    assert(0 <= selectedKeyBinding && selectedKeyBinding < MAX_KEY_COUNT);
+    assert(0 <= selectedKeyBinding && selectedKeyBinding < FXT_MaxKeyCount);
 
     switch (e.key)
     {
@@ -77,7 +77,7 @@ void KeyBindings_AcceptEvent(const key_event_t e, Config *config)
             break;
 
         case KEY_RIGHT:
-            if (selectedKeyBinding < MAX_KEY_COUNT - 1)
+            if (selectedKeyBinding < FXT_MaxKeyCount - 1)
                 selectedKeyBinding += 1;
             break;
 

@@ -7,7 +7,7 @@
 
 typedef enum Item { Item_Play, Item_KeyTest, Item_Settings, Item_About } Item;
 
-void UI_MainMenu(Config *config)
+void UI_MainMenu(FXT_Config *config)
 {
 	Item selectedItem = Item_Play;
 

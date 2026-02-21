@@ -5,17 +5,17 @@
 #include <fxTap/keymap.h>
 #include <gint/keyboard.h>
 
-void NotesFallingTime_Render(const Config *config);
-void NotesFallingTime_AcceptEvent(key_event_t e, Config *config);
+void NotesFallingTime_Render(const FXT_Config *config);
+void NotesFallingTime_AcceptEvent(key_event_t e, FXT_Config *config);
 
 extern FxTapKey selectedKeyBinding;
-void KeyBindings_Render(const Config *config);
-void KeyBindings_AcceptEvent(key_event_t e, Config *config);
+void KeyBindings_Render(const FXT_Config *config);
+void KeyBindings_AcceptEvent(key_event_t e, FXT_Config *config);
 
-void KeyBindingStyle_Render(const Config *config);
-void KeyBindingStyle_AcceptEvent(key_event_t e, Config *config);
+void KeyBindingStyle_Render(const FXT_Config *config);
+void KeyBindingStyle_AcceptEvent(key_event_t e, FXT_Config *config);
 
-void Language_Render(const Config *config);
-void Language_AcceptEvent(key_event_t e, Config *config);
+void Language_Render(const FXT_Config *config);
+void Language_AcceptEvent(key_event_t e, FXT_Config *config);
 
 #endif //FXTAP_SETTINGS

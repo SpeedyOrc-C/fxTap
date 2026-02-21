@@ -1,6 +1,5 @@
 #include "settings.h"
 #include <string.h>
-#include <fxTap/config-casiowin.h>
 #include <fxTap/config.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
@@ -11,14 +10,14 @@
 
 typedef struct Item
 {
-    void (*Render)(const Config *config);
+    void (*Render)(const FXT_Config *config);
 
-    void (*AcceptEvent)(key_event_t e, Config *config);
+    void (*AcceptEvent)(key_event_t e, FXT_Config *config);
 } Item;
 
-void UI_Settings(Config *config)
+void UI_Settings(FXT_Config *config)
 {
-    const Config oldConfig = *config;
+    const FXT_Config oldConfig = *config;
 
     const Item items[ITEM_COUNT] = {
         {.Render = &NotesFallingTime_Render, .AcceptEvent = &NotesFallingTime_AcceptEvent},
@@ -35,7 +34,7 @@ void UI_Settings(Config *config)
 
     while (true)
     {
-        const bool settingsChanged = memcmp(&oldConfig, config, sizeof(Config)) != 0;
+        const bool settingsChanged = memcmp(&oldConfig, config, sizeof(FXT_Config)) != 0;
 
         dclear(C_WHITE);
         dsubimage(1, 1, &Img_Settings_Title, 0, 10 * config->Language, 64, 10, 0);
@@ -54,15 +53,15 @@ void UI_Settings(Config *config)
         {
             if (settingsChanged)
             {
-                ConfigError configError;
+                enum FXT_ConfigError configError;
 
                 if (gint[HWFS] == HWFS_CASIOWIN)
                     configError = gint_call((gint_call_t){
-                        .function = &Config_SaveToDisk_BFile,
+                        .function = &FXT_Config_Save_BFile,
                         .args = {{.pv = config}},
                     });
                 else
-                    configError = Config_SaveToDisk(config);
+                    configError = FXT_Config_Save(*config);
 
                 if (configError)
                 {
