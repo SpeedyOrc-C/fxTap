@@ -6,10 +6,10 @@
 #include "fxconv-assets.h"
 #include "ui.h"
 
-uint8_t keycode_alpha(const int keycode)
+static uint8_t AlphaFromKeyCode(const int keyCode)
 {
-	const int row = keycode >> 4;
-	const int column = keycode & 0xf;
+	const int row = keyCode >> 4;
+	const int column = keyCode & 0xf;
 
 	switch (row)
 	{
@@ -128,7 +128,7 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 
 			if (isAlpha)
 			{
-				auto const c = keycode_alpha(e.key);
+				auto const c = AlphaFromKeyCode(e.key);
 
 				if (c != 255)
 				{
@@ -140,9 +140,9 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 			{
 				auto const c = keycode_digit(e.key);
 
-				if (c != 255)
+				if (0 <= c && c <= 9)
 				{
-					fileName[cursor] = '0' + c;
+					fileName[cursor] = (char) ('0' + c);
 					cursor += 1;
 				}
 			}

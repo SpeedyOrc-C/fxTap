@@ -3,18 +3,17 @@
 #include "fxconv-assets.h"
 #include "ui.h"
 
-#define ITEM_COUNT 3
+static constexpr auto PageCount = 3;
 
 void UI_About()
 {
-	int item = 0;
+	int selectedPage = 0;
 
 	while (true)
 	{
 		dclear(C_WHITE);
 
-#ifdef FX9860G
-		switch (item)
+		switch (selectedPage)
 		{
 		case 0:
 			dsubimage(0, 0, &Img_About, 0, 0, 128, 64, 0);
@@ -35,26 +34,26 @@ void UI_About()
 		default:
 			assert(false && "Invalid about page");
 		}
-#endif
 
 		dupdate();
 
-		const key_event_t e = getkey();
+		auto const e = getkey();
 
-		if (e.key == KEY_EXIT)
+		switch (e.key)
+		{
+		case KEY_EXIT:
 			return;
-
-		if (e.key == KEY_UP)
-		{
-			if (item > 0)
-				item -= 1;
-			continue;
-		}
-
-		if (e.key == KEY_DOWN || e.key == KEY_EXE)
-		{
-			if (item < ITEM_COUNT - 1)
-				item += 1;
+		case KEY_UP:
+		case KEY_LEFT:
+			if (selectedPage > 0) selectedPage -= 1;
+			break;
+		case KEY_DOWN:
+		case KEY_RIGHT:
+		case KEY_EXE:
+			if (selectedPage < PageCount - 1) selectedPage += 1;
+			break;
+		default:
+			break;
 		}
 	}
 }

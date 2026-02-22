@@ -1,5 +1,4 @@
 #include "settings.h"
-#include <string.h>
 #include <fxTap/config.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
@@ -34,7 +33,7 @@ void UI_Settings(FXT_Config *config)
 
 	while (true)
 	{
-		const bool settingsChanged = memcmp(&oldConfig, config, sizeof(FXT_Config)) != 0;
+		const bool settingsChanged = !FXT_Config_Equal(&oldConfig, config);
 
 		dclear(C_WHITE);
 		dsubimage(1, 1, &Img_Settings_Title, 0, 10 * config->Language, 64, 10, 0);

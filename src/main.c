@@ -4,18 +4,13 @@
 #include <gint/keyboard.h>
 #include "ui.h"
 
-FXT_Config_Error FXT_Config_Load_BFile_Wrapper(FXT_Config *dst)
-{
-	return FXT_Config_Load_BFile(dst);
-}
-
-FXT_Config_Error LoadConfig(FXT_Config *config)
+static FXT_Config_Error LoadConfig(FXT_Config *config)
 {
 	if (gint[HWFS] == HWFS_FUGUE)
 		return FXT_Config_Load(config);
 
 	return gint_call((gint_call_t){
-		.function = &FXT_Config_Load_BFile_Wrapper,
+		.function = &FXT_Config_Load_BFile,
 		.args = {{.pv = config}}
 	});
 }
@@ -28,7 +23,7 @@ int main(void)
 	if (configError != 0)
 	{
 		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "%d", configError);
+		dprint(1, 1, C_BLACK, "Config Error: %d", configError);
 		dupdate();
 		getkey();
 		return 1;
