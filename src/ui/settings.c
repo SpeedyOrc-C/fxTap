@@ -8,18 +8,18 @@
 
 #define ITEM_COUNT 4
 
-typedef struct SettingsItem
+typedef struct MenuItem
 {
 	void (*Render)(const FXT_Config *config);
 
 	void (*AcceptEvent)(key_event_t e, FXT_Config *config);
-} SettingsItem;
+} MenuItem;
 
 void UI_Settings(FXT_Config *config)
 {
 	const FXT_Config oldConfig = *config;
 
-	const SettingsItem items[ITEM_COUNT] = {
+	const MenuItem items[ITEM_COUNT] = {
 		{.Render = &NotesFallingTime_Render, .AcceptEvent = &NotesFallingTime_AcceptEvent},
 		{.Render = &KeyBindings_Render, .AcceptEvent = &KeyBindings_AcceptEvent},
 		{.Render = &KeyBindingStyle_Render, .AcceptEvent = &KeyBindingStyle_AcceptEvent},

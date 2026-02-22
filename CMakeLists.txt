@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 set(CMAKE_C_STANDARD 23)
-project(MyAddin)
+project(fxTap)
 
 set(SOURCES
         src/main.c

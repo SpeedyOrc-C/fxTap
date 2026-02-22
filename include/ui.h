@@ -8,7 +8,7 @@ void UI_MainMenu(FXT_Config *config);
 
 void UI_About();
 
-void UI_Play(FxTap *fxTap, const FXT_Config *config);
+void UI_Play(FXT_Game *game, const FXT_Config *config);
 
 void UI_Settings(FXT_Config *config);
 

@@ -8,18 +8,18 @@
 
 uint8_t keycode_alpha(const int keycode)
 {
-	const int Row = keycode >> 4;
-	const int Column = keycode & 0xf;
+	const int row = keycode >> 4;
+	const int column = keycode & 0xf;
 
-	switch (Row)
+	switch (row)
 	{
-	case 6: return 'A' + Column - 1;
-	case 5: return 'G' + Column - 1;
-	case 4: return 'M' + Column - 1;
-	case 3: return 'P' + Column - 1;
-	case 2: return 'U' + Column - 1;
+	case 6: return 'A' + column - 1;
+	case 5: return 'G' + column - 1;
+	case 4: return 'M' + column - 1;
+	case 3: return 'P' + column - 1;
+	case 2: return 'U' + column - 1;
 	case 1:
-		switch (Column)
+		switch (column)
 		{
 		case 1: return 'Z';
 		case 2: return ' ';

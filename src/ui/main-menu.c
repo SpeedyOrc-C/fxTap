@@ -10,7 +10,13 @@
 #include "ui.h"
 #include "fxTap/game.h"
 
-typedef enum SettingsItem { Item_Play, Item_KeyTest, Item_Settings, Item_About } SettingsItem;
+typedef enum MenuItem
+{
+	Item_Play,
+	Item_KeyTest,
+	Item_Settings,
+	Item_About,
+} MenuItem;
 
 void Beatmap_New_LoadFromPath_BFile_Wrapper(FXT_Beatmap **beatmap, const char *path, FXT_BeatmapError *error)
 {
@@ -34,7 +40,7 @@ FXT_Beatmap *TryLoadBeatmap(const char *fileName, FXT_BeatmapError *error)
 		return beatmap;
 
 	// File not found. So try again with .fxt extension.
-	char *fileNameWithExtension = malloc(strlen(fileName) + 4 + 1);
+	char fileNameWithExtension[strlen(fileName) + 4 + 1];
 	sprintf(fileNameWithExtension, "%s.fxt", fileName);
 
 	if (gint[HWFS] == HWFS_CASIOWIN)
@@ -45,8 +51,6 @@ FXT_Beatmap *TryLoadBeatmap(const char *fileName, FXT_BeatmapError *error)
 	else
 		beatmap = FXT_Beatmap_Load(fileNameWithExtension, error);
 
-	free(fileNameWithExtension);
-
 	if (beatmap != nullptr)
 		return beatmap;
 
@@ -55,14 +59,14 @@ FXT_Beatmap *TryLoadBeatmap(const char *fileName, FXT_BeatmapError *error)
 
 void UI_MainMenu(FXT_Config *config)
 {
-	SettingsItem selectedItem = Item_Play;
+	MenuItem selectedItem = Item_Play;
 
 	// ReSharper disable once CppDFAEndlessLoop
 	while (true)
 	{
 		dclear(C_WHITE);
 
-		for (SettingsItem renderItem = Item_Play; renderItem <= Item_About; renderItem += 1)
+		for (MenuItem renderItem = Item_Play; renderItem <= Item_About; renderItem += 1)
 		{
 			const int y = 16 * renderItem;
 
@@ -91,7 +95,7 @@ void UI_MainMenu(FXT_Config *config)
 					continue;
 
 				FXT_BeatmapError error;
-				const auto beatmap = TryLoadBeatmap(filePath, &error);
+				auto const beatmap = TryLoadBeatmap(filePath, &error);
 
 				free(filePath);
 
@@ -104,10 +108,10 @@ void UI_MainMenu(FXT_Config *config)
 					continue;
 				}
 
-				FxTap fxtap;
-				FxTap_Init(&fxtap, beatmap);
+				FXT_Game game;
+				FXT_Game_Init(&game, beatmap);
 
-				UI_Play(&fxtap, config);
+				UI_Play(&game, config);
 
 				FXT_Beatmap_Free(beatmap);
 

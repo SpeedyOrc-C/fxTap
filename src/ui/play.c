@@ -9,6 +9,19 @@
 #include <gint/rtc.h>
 #include "ui.h"
 
+void RenderTap(const int column, const double positionBottom)
+{
+	const int y = (int) round(DHEIGHT - 1 - positionBottom);
+	drect(column * 8 + 1, y - 2, column * 8 + 7, y, C_BLACK);
+}
+
+void RenderHold(const int column, const double positionBottom, const double positionTop)
+{
+	const int y1 = (int) round(DHEIGHT - 1 - positionTop);
+	const int y2 = (int) round(DHEIGHT - 1 - positionBottom);
+	drect(column * 8 + 1, y1, column * 8 + 7, y2, C_BLACK);
+}
+
 int32_t Time128Delta(const int32_t start, const int32_t end)
 {
 	if (start <= end)
@@ -16,29 +29,38 @@ int32_t Time128Delta(const int32_t start, const int32_t end)
 	return 128 * 60 * 60 * 24 - start + end;
 }
 
-int ClampHeight(const int y)
+void RenderGameFrame(
+	const FXT_Game *game,
+	const FXT_RendererController *rendererController,
+	const int32_t timeNowMs)
 {
-	if (y < 0) return 0;
-	if (y >= DHEIGHT) return DHEIGHT - 1;
-	return y;
+	dclear(C_WHITE);
+
+	// Render notes
+	FXT_RendererController_Run(rendererController, game, timeNowMs);
+
+	// Render framework
+	for (int i = 0; i < game->ColumnCount + 1; i += 1)
+	{
+		auto const x = i * 8;
+		dline(x, 0, x, DHEIGHT - 1, C_BLACK);
+	}
+
+	// Render number of notes in different grades
+	dprint(84, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
+	dprint(84, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
+	dprint(84, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
+	dprint(84, 3 * 8, C_BLACK, "%d", game->Grades.Good);
+	dprint(84, 4 * 8, C_BLACK, "%d", game->Grades.Great);
+	dprint(84, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
+	dprint(84, 7 * 8, C_BLACK, "%d", game->Combo);
+
+	dupdate();
 }
 
-void RenderTap(const int column, const double positionBottom)
+void UI_Play(FXT_Game *game, const FXT_Config *config)
 {
-	const int y = ClampHeight(DHEIGHT - 1 - round(positionBottom));
-	drect(column * 8, y - 2, column * 8 + 7, y, C_BLACK);
-}
-
-void RenderHold(const int column, const double positionBottom, const double positionTop)
-{
-	const int y1 = ClampHeight(DHEIGHT - 1 - round(positionTop));
-	const int y2 = ClampHeight(DHEIGHT - 1 - round(positionBottom));
-	drect(column * 8, y1, column * 8 + 7, y2, C_BLACK);
-}
-
-void UI_Play(FxTap *fxTap, const FXT_Config *config)
-{
-	const KeyMapper keyMapper = FxTap_FetchKeyMapper(fxTap, config);
+	const KeyMapper keyMapper = FXT_Game_FetchKeyMapper(game, config);
 
 	if (keyMapper == nullptr)
 	{
@@ -50,19 +72,19 @@ void UI_Play(FxTap *fxTap, const FXT_Config *config)
 	}
 
 	dclear(C_WHITE);
-	dprint(0, 0, C_BLACK, "%s", fxTap->Beatmap->Metadata.Title);
-	dprint(0, 8, C_BLACK, "%s", fxTap->Beatmap->Metadata.Artist);
-	dprint(0, 16, C_BLACK, "%f", fxTap->Beatmap->Metadata.OverallDifficulty);
+	dprint(0, 0, C_BLACK, "%s", game->Beatmap->Metadata.Title);
+	dprint(0, 8, C_BLACK, "%s", game->Beatmap->Metadata.Artist);
+	dprint(0, 16, C_BLACK, "%f", game->Beatmap->Metadata.OverallDifficulty);
 	dprint(0, 24, C_BLACK, "%d %d %d %d",
-	       fxTap->Beatmap->Metadata.SizeOfColumn[0],
-	       fxTap->Beatmap->Metadata.SizeOfColumn[1],
-	       fxTap->Beatmap->Metadata.SizeOfColumn[2],
-	       fxTap->Beatmap->Metadata.SizeOfColumn[3]
+	       game->Beatmap->Metadata.SizeOfColumn[0],
+	       game->Beatmap->Metadata.SizeOfColumn[1],
+	       game->Beatmap->Metadata.SizeOfColumn[2],
+	       game->Beatmap->Metadata.SizeOfColumn[3]
 	);
 	dupdate();
 	getkey();
 
-	const RendererController Controller = {
+	const FXT_RendererController rendererController = {
 		.HeightAbove = DHEIGHT - 1,
 		.VisibleTime = config->NotesFallingTime,
 		.RenderTap = &RenderTap,
@@ -73,9 +95,6 @@ void UI_Play(FxTap *fxTap, const FXT_Config *config)
 
 	while (true)
 	{
-		const int32_t timeNow128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
-		const int32_t timeNowMs = timeNow128 * 1000 / 128;
-
 		bool isPressingColumn[FXT_MaxColumnCount] =
 				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -85,7 +104,7 @@ void UI_Play(FxTap *fxTap, const FXT_Config *config)
 
 			if (e.type == KEYEV_NONE) break;
 
-			for (int column = 0; column < fxTap->ColumnCount; column += 1)
+			for (int column = 0; column < game->ColumnCount; column += 1)
 			{
 				auto const fxTapKey = keyMapper(column);
 				auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
@@ -93,18 +112,11 @@ void UI_Play(FxTap *fxTap, const FXT_Config *config)
 			}
 		}
 
-		FxTap_Update(fxTap, timeNowMs, isPressingColumn);
+		auto const timeNow128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
+		const int32_t timeNowMs = timeNow128 * 1000 / 128;
 
-		dclear(C_WHITE);
-		RendererController_Run(&Controller, fxTap, timeNowMs);
-		dprint(84, 0 * 8, C_BLACK, "%d", fxTap->Grades.Miss);
-		dprint(84, 1 * 8, C_BLACK, "%d", fxTap->Grades.Meh);
-		dprint(84, 2 * 8, C_BLACK, "%d", fxTap->Grades.Ok);
-		dprint(84, 3 * 8, C_BLACK, "%d", fxTap->Grades.Good);
-		dprint(84, 4 * 8, C_BLACK, "%d", fxTap->Grades.Great);
-		dprint(84, 5 * 8, C_BLACK, "%d", fxTap->Grades.Perfect);
-		dprint(84, 7 * 8, C_BLACK, "%d", fxTap->Combo);
-		dupdate();
+		FXT_Game_Update(game, timeNowMs, isPressingColumn);
+		RenderGameFrame(game, &rendererController, timeNowMs);
 
 		if (keydown(KEY_EXIT)) break;
 	}
