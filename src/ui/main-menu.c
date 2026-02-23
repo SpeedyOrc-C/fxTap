@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fxTap/config.h>
+#include <fxTap/game.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
 #include "fxconv-assets.h"
 #include "ui.h"
-#include "fxTap/game.h"
 
 typedef enum MenuItem
 {
@@ -18,43 +18,33 @@ typedef enum MenuItem
 	Item_About,
 } MenuItem;
 
-void Beatmap_New_LoadFromPath_BFile_Wrapper(FXT_Beatmap **beatmap, const char *path, FXT_BeatmapError *error)
-{
-	*beatmap = FXT_Beatmap_Load_BFile(path, error);
-}
-
 [[nodiscard]]
-FXT_Beatmap *TryLoadBeatmap(const char *fileName, FXT_BeatmapError *error)
+FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 {
-	FXT_Beatmap *beatmap;
+	FXT_BeatmapError error = 0;
 
 	if (gint[HWFS] == HWFS_CASIOWIN)
-		gint_call((gint_call_t){
-			.function = &Beatmap_New_LoadFromPath_BFile_Wrapper,
-			.args = {{.pv = &beatmap}, {.pc = fileName}, {.pv = error}}
+		error = gint_call((gint_call_t){
+			.function = &FXT_Beatmap_Load_BFile,
+			.args = {{.pv = dst}, {.pc_c = path}}
 		});
 	else
-		beatmap = FXT_Beatmap_Load(fileName, error);
+		error = FXT_Beatmap_Load(dst, path);
 
-	if (beatmap != nullptr)
-		return beatmap;
+	if (error != FXT_BeatmapError_FileNotFound)
+		return error;
 
-	// File not found. So try again with .fxt extension.
-	char fileNameWithExtension[strlen(fileName) + 4 + 1];
-	sprintf(fileNameWithExtension, "%s.fxt", fileName);
+	// Try again with .fxt extension.
+	char fileNameWithExtension[strlen(path) + 4 + 1];
+	sprintf(fileNameWithExtension, "%s.fxt", path);
 
 	if (gint[HWFS] == HWFS_CASIOWIN)
-		gint_call((gint_call_t){
-			.function = &Beatmap_New_LoadFromPath_BFile_Wrapper,
-			.args = {{.pv = &beatmap}, {.pc = fileNameWithExtension}, {.pv = error}}
+		return gint_call((gint_call_t){
+			.function = &FXT_Beatmap_Load_BFile,
+			.args = {{.pv = dst}, {.pc = fileNameWithExtension}}
 		});
-	else
-		beatmap = FXT_Beatmap_Load(fileNameWithExtension, error);
 
-	if (beatmap != nullptr)
-		return beatmap;
-
-	return nullptr;
+	return FXT_Beatmap_Load(dst, fileNameWithExtension);
 }
 
 void UI_MainMenu(FXT_Config *config)
@@ -89,17 +79,16 @@ void UI_MainMenu(FXT_Config *config)
 			switch (selectedItem)
 			{
 			case Item_Play: {
-				auto const filePath = UI_AskBeatmapPath_TypeFileNameManually(config);
+				auto const path = UI_AskBeatmapPath_TypeFileNameManually(config);
 
-				if (filePath == nullptr)
+				if (path == nullptr)
 					continue;
 
-				FXT_BeatmapError error;
-				auto const beatmap = TryLoadBeatmap(filePath, &error);
+				FXT_Beatmap beatmap;
+				const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path);
+				free(path);
 
-				free(filePath);
-
-				if (beatmap == nullptr)
+				if (error)
 				{
 					dclear(C_WHITE);
 					dprint(1, 1, C_BLACK, "Error: %d", error);
@@ -109,11 +98,10 @@ void UI_MainMenu(FXT_Config *config)
 				}
 
 				FXT_Game game;
-				FXT_Game_Init(&game, beatmap);
-
+				FXT_Game_Init(&game, &beatmap);
 				UI_Play(&game, config);
 
-				FXT_Beatmap_Free(beatmap);
+				free(beatmap.Notes[0]);
 
 				continue;
 			}
