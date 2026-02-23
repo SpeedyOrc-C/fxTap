@@ -100,7 +100,7 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 
 		while (true)
 		{
-			const key_event_t e = pollevent();
+			auto const e = pollevent();
 
 			if (e.type == KEYEV_NONE) break;
 
@@ -113,7 +113,8 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 		}
 
 		auto const timeNow128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
-		const int32_t timeNowMs = timeNow128 * 1000 / 128;
+		// Wait for 1000ms before start
+		const int32_t timeNowMs = -1000 + timeNow128 * 1000 / 128;
 
 		FXT_Game_Update(game, timeNowMs, isPressingColumn);
 		RenderGameFrame(game, &rendererController, timeNowMs);

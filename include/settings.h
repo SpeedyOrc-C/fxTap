@@ -10,7 +10,7 @@ void NotesFallingTime_Render(const FXT_Config *config);
 
 void NotesFallingTime_AcceptEvent(key_event_t e, FXT_Config *config);
 
-extern FxTapKey selectedKeyBinding;
+extern FXT_Key selectedKeyBinding;
 
 void KeyBindings_Render(const FXT_Config *config);
 

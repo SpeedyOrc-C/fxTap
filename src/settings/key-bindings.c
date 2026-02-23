@@ -3,7 +3,7 @@
 #include "fxconv-assets.h"
 #include "settings.h"
 
-FxTapKey selectedKeyBinding;
+FXT_Key selectedKeyBinding;
 
 const char *KeyCode_ToString(const uint8_t key)
 {
@@ -59,7 +59,7 @@ void KeyBindings_Render(const FXT_Config *config)
 	assert(0 <= selectedKeyBinding && selectedKeyBinding < FXT_MaxKeyCount);
 
 	drect_border(92, 26, 106, 36, C_WHITE, 1, C_BLACK);
-	dtext(94, 28, C_BLACK, FxTapKey_ToString(selectedKeyBinding));
+	dtext(94, 28, C_BLACK, FXT_Key_ToString(selectedKeyBinding));
 	drect_border(92, 40, 124, 50, C_WHITE, 1, C_BLACK);
 	dtext(94, 42, C_BLACK, keyString != nullptr ? keyString : "UNSET");
 }

@@ -18,12 +18,12 @@ static FXT_Config_Error LoadConfig(FXT_Config *config)
 int main(void)
 {
 	FXT_Config config;
-	const FXT_Config_Error configError = LoadConfig(&config);
+	auto const error = LoadConfig(&config);
 
-	if (configError != 0)
+	if (error != 0)
 	{
 		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "Config Error: %d", configError);
+		dprint(1, 1, C_BLACK, "Config Error: %d", error);
 		dupdate();
 		getkey();
 		return 1;
