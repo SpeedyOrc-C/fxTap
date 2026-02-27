@@ -60,7 +60,7 @@ void UI_Settings(FXT_Config *config)
 						.args = {{.pv = config}},
 					});
 				else
-					configError = FXT_Config_Save(*config);
+					configError = FXT_Config_Save(config);
 
 				if (configError)
 				{
