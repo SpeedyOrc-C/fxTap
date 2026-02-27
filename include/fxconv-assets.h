@@ -3,10 +3,10 @@
 
 #include <gint/display.h>
 
-extern const bopti_image_t img_example;
 extern const bopti_image_t Img_MainMenu_Buttons;
 extern const bopti_image_t Img_About;
 extern const bopti_image_t Img_FN_SelectSong;
+extern const bopti_image_t Img_Path_FN;
 extern const bopti_image_t Img_FN_PreviousNext;
 extern const bopti_image_t Img_Settings_Title;
 extern const bopti_image_t Img_Settings_NotesFallingTime_Caption;
