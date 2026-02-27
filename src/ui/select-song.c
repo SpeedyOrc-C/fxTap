@@ -48,7 +48,7 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
 		dprint(0, 35, C_BLACK, "[%s]", fileName);
 		dprint(98, 48, C_BLACK, isAlpha ? (isCapitalised ? "[ABC]" : "[abc]") : "[123]");
-		dimage(0, 56, &Img_FN_SelectSong);
+		dimage(0, 56, &Img_Path_FN);
 		dupdate();
 
 		const key_event_t e = getkey();

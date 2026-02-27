@@ -18,10 +18,11 @@ set(SOURCES
 set(ASSETS
 )
 set(ASSETS_fx
-        assets-fx/example.png
         assets-fx/MainMenu_Buttons.png
         assets-fx/About.png
-        assets-fx/FN_SelectSong.png
+        assets-fx/SelectASong_Title.png
+        assets-fx/SelectASong_FN.png
+        assets-fx/Path_FN.png
         assets-fx/FN_PreviousNext.png
         assets-fx/Settings_Title.png
         assets-fx/Settings_NotesFallingTime_Caption.png

@@ -1,11 +1,11 @@
-#ifndef FXCONV_ASSETS_H
-#define FXCONV_ASSETS_H
+#pragma once
 
 #include <gint/display.h>
 
 extern const bopti_image_t Img_MainMenu_Buttons;
 extern const bopti_image_t Img_About;
-extern const bopti_image_t Img_FN_SelectSong;
+extern const bopti_image_t Img_SelectASong_FN;
+extern const bopti_image_t Img_SelectASong_Title;
 extern const bopti_image_t Img_Path_FN;
 extern const bopti_image_t Img_FN_PreviousNext;
 extern const bopti_image_t Img_Settings_Title;
@@ -18,5 +18,3 @@ extern const bopti_image_t Img_Settings_KeyBindings_Caption;
 extern const bopti_image_t Img_Settings_Language_Caption;
 extern const bopti_image_t Img_Settings_Language_Options;
 extern const bopti_image_t Img_SelectSong_TypeFilename;
-
-#endif // FXCONV_ASSETS_H
