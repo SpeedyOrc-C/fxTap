@@ -71,12 +71,12 @@ void KeyBindings_AcceptEvent(const key_event_t e, FXT_Config *config)
 	switch (e.key)
 	{
 	case KEY_LEFT:
-		if (selectedKeyBinding > 0)
+		if (selectedKeyBinding > FXT_Key_K1)
 			selectedKeyBinding -= 1;
 		break;
 
 	case KEY_RIGHT:
-		if (selectedKeyBinding < FXT_MaxKeyCount - 1)
+		if (selectedKeyBinding < FXT_Key_S1)
 			selectedKeyBinding += 1;
 		break;
 
