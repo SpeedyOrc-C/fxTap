@@ -7,7 +7,7 @@ extern const bopti_image_t Img_About;
 extern const bopti_image_t Img_SelectASong_FN;
 extern const bopti_image_t Img_SelectASong_Title;
 extern const bopti_image_t Img_Path_FN;
-extern const bopti_image_t Img_FN_PreviousNext;
+extern const bopti_image_t Img_Settings_Language_FN;
 extern const bopti_image_t Img_Settings_Title;
 extern const bopti_image_t Img_Settings_NotesFallingTime_Caption;
 extern const bopti_image_t Img_Settings_NotesFallingTime_FN_EN;

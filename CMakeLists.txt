@@ -23,7 +23,7 @@ set(ASSETS_fx
         assets-fx/SelectASong_Title.png
         assets-fx/SelectASong_FN.png
         assets-fx/Path_FN.png
-        assets-fx/FN_PreviousNext.png
+        assets-fx/Settings_Language_FN.png
         assets-fx/Settings_Title.png
         assets-fx/Settings_NotesFallingTime_Caption.png
         assets-fx/Settings_NotesFallingTime_FN_EN.png
