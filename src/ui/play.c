@@ -40,7 +40,7 @@ void RenderGameFrame(
 	FXT_RendererController_Run(rendererController, game, timeNowMs);
 
 	// Render framework
-	for (int i = 0; i < game->ColumnCount + 1; i += 1)
+	for (int i = 0; i < game->Beatmap->ColumnCount + 1; i += 1)
 	{
 		auto const x = i * 8;
 		dline(x, 0, x, DHEIGHT - 1, C_BLACK);
@@ -72,14 +72,14 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 	}
 
 	dclear(C_WHITE);
-	dprint(0, 0, C_BLACK, "%s", game->Beatmap->Metadata.Title);
-	dprint(0, 8, C_BLACK, "%s", game->Beatmap->Metadata.Artist);
-	dprint(0, 16, C_BLACK, "%f", game->Beatmap->Metadata.OverallDifficulty);
+	dprint(0, 0, C_BLACK, "%s", game->Beatmap->Title);
+	dprint(0, 8, C_BLACK, "%s", game->Beatmap->Artist);
+	dprint(0, 16, C_BLACK, "%f", game->Beatmap->OverallDifficulty);
 	dprint(0, 24, C_BLACK, "%d %d %d %d",
-	       game->Beatmap->Metadata.SizeOfColumn[0],
-	       game->Beatmap->Metadata.SizeOfColumn[1],
-	       game->Beatmap->Metadata.SizeOfColumn[2],
-	       game->Beatmap->Metadata.SizeOfColumn[3]
+	       game->Beatmap->ColumnSize[0],
+	       game->Beatmap->ColumnSize[1],
+	       game->Beatmap->ColumnSize[2],
+	       game->Beatmap->ColumnSize[3]
 	);
 	dupdate();
 	getkey();
@@ -104,7 +104,7 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 
 			if (e.type == KEYEV_NONE) break;
 
-			for (int column = 0; column < game->ColumnCount; column += 1)
+			for (int column = 0; column < game->Beatmap->ColumnCount; column += 1)
 			{
 				auto const fxTapKey = keyMapper(column);
 				auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];

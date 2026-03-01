@@ -20,7 +20,7 @@ void KeyBindingStyle_AcceptEvent(const key_event_t e, FXT_Config *config)
 	case KEY_F3:
 	case KEY_F4:
 	case KEY_F5:
-		config->KeyMapStyle = FXT_KeyMapStyle_BeatmaniaIIDX;
+		config->KeyMapStyle = FXT_KeyMapStyle_Beatmania;
 		break;
 	case KEY_F6:
 		config->KeyMapStyle = FXT_KeyMapStyle_CoOp;

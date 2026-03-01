@@ -101,7 +101,7 @@ void UI_MainMenu(FXT_Config *config)
 				FXT_Game_Init(&game, &beatmap);
 				UI_Play(&game, config);
 
-				free(beatmap.Notes[0]);
+				FXT_Beatmap_FreeInner(&beatmap);
 
 				continue;
 			}
