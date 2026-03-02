@@ -28,8 +28,8 @@ dependency [fxTap Core](https://github.com/SpeedyOrc-C/fxTap-Core) inside this f
 git clone https://github.com/SpeedyOrc-C/fxTap-Core
 ```
 
-Run this command to build `fxTap.gia`.
+Run this command to build the executable `fxTap.g1a`.
 
 ```sh
-fxsdk build
+fxsdk build-fx
 ```
