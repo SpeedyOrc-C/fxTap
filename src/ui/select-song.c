@@ -150,3 +150,26 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		}
 	}
 }
+
+char *UI_AskBeatmapPath_ListLibrary(const FXT_Config *config)
+{
+	while (true)
+	{
+		dclear(C_WHITE);
+		dsubimage(1, 1, &Img_SelectASong_Title, 0, 10 * config->Language, 128, 10, 0);
+		drect(0, 0, 127, 10, C_INVERT);
+		dsubimage(0, 56, &Img_SelectASong_FN, 0, 8 * config->Language, 128, 8, 0);
+		dupdate();
+
+		const key_event_t e = getkey();
+
+		switch (e.key)
+		{
+		case KEY_F5:
+			return UI_AskBeatmapPath_TypeFileNameManually(config);
+		case KEY_EXIT:
+			return nullptr;
+		default: break;
+		}
+	}
+}

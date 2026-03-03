@@ -79,7 +79,7 @@ void UI_MainMenu(FXT_Config *config)
 			switch (selectedItem)
 			{
 			case Item_Play: {
-				auto const path = UI_AskBeatmapPath_TypeFileNameManually(config);
+				auto const path = UI_AskBeatmapPath_ListLibrary(config);
 
 				if (path == nullptr)
 					continue;
