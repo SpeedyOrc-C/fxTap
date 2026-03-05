@@ -32,12 +32,13 @@ int32_t Time128Delta(const int32_t start, const int32_t end)
 void RenderGameFrame(
 	const FXT_Game *game,
 	const FXT_RendererController *rendererController,
-	const int32_t timeNowMs)
+	const FXT_TimeMs timeNow,
+	const FXT_TimeMs endTime)
 {
 	dclear(C_WHITE);
 
 	// Render notes
-	FXT_RendererController_Run(rendererController, game, timeNowMs);
+	FXT_RendererController_Run(rendererController, game, timeNow);
 
 	// Render framework
 	for (int i = 0; i < game->Beatmap->ColumnCount + 1; i += 1)
@@ -54,6 +55,12 @@ void RenderGameFrame(
 	dprint(84, 4 * 8, C_BLACK, "%d", game->Grades.Great);
 	dprint(84, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
 	dprint(84, 7 * 8, C_BLACK, "%d", game->Combo);
+
+	// Render progress bar
+	drect_border(DWIDTH - 4, 0, DWIDTH - 1, DHEIGHT - 1, C_WHITE, 1, C_BLACK);
+	auto const progress = (int) roundf((float) (DHEIGHT - 2) * (float) timeNow / (float) endTime);
+	if (progress > 0)
+		drect(DWIDTH - 3, 1, DWIDTH - 2, progress, C_BLACK);
 
 	dupdate();
 }
@@ -78,7 +85,8 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 		.RenderHold = &RenderHold,
 	};
 
-	const uint32_t startTime128 = rtc_ticks();
+	const FXT_TimeMs endTime = FXT_Game_LastNoteEndTime(game) + 1000;
+	auto const startTime128 = rtc_ticks();
 
 	while (true)
 	{
@@ -94,17 +102,18 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 			{
 				auto const fxTapKey = keyMapper(column);
 				auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
-				isPressingColumn[column] = keydown(physicalKey);
+				isPressingColumn[column] = keydown(physicalKey) != 0;
 			}
 		}
 
 		auto const timeNow128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
 		// Wait for 1000ms before start
-		const int32_t timeNowMs = -1000 + timeNow128 * 1000 / 128;
+		const FXT_TimeMs timeNow = -1000 + timeNow128 * 1000 / 128;
 
-		FXT_Game_Update(game, timeNowMs, isPressingColumn);
-		RenderGameFrame(game, &rendererController, timeNowMs);
+		FXT_Game_Update(game, timeNow, isPressingColumn);
+		RenderGameFrame(game, &rendererController, timeNow, endTime);
 
-		if (keydown(KEY_EXIT)) break;
+		if (keydown(KEY_EXIT) || endTime < timeNow)
+			break;
 	}
 }
