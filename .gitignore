@@ -1,3 +1,6 @@
+/.idea
+/fxTap-Core
+
 # Build files
 /build*/
 /*.g1a
