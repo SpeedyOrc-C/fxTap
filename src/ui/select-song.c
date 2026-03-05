@@ -1,7 +1,8 @@
-#include <assert.h>
 #include <ctype.h>
+#include <stb_ds.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fxTap/database.h>
 #include <gint/keyboard.h>
 #include "fxconv-assets.h"
 #include "ui.h"
@@ -108,11 +109,11 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 			break;
 
 		case KEY_F5:
-			isAlpha = !isAlpha;
+			isAlpha = ! isAlpha;
 			break;
 
 		case KEY_F6:
-			isCapitalised = !isCapitalised;
+			isCapitalised = ! isCapitalised;
 			break;
 
 		case KEY_NEG:
@@ -151,24 +152,132 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 	}
 }
 
-char *UI_AskBeatmapPath_ListLibrary(const FXT_Config *config)
+void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
 {
+	dclear(C_WHITE);
+
+	dprint(0, 0, C_BLACK, "[TITLE]");
+	dprint(0, 8, C_BLACK, "%s", record->Title);
+
+	dprint(0, 16, C_BLACK, "[ARTIST]");
+	dprint(0, 24, C_BLACK, "%s", record->Artist);
+
+	dprint(0, 32, C_BLACK, "[KEY] %u   [OD] %.2f", record->ColumnCount, record->OverallDifficulty);
+
+	dprint(0, 40, C_BLACK, "[COLUMN SIZES]");
+	switch (record->ColumnCount)
+	{
+	case 4:
+		dprint(0, 48, C_BLACK, "%d %d %d %d",
+		       record->ColumnSize[0],
+		       record->ColumnSize[1],
+		       record->ColumnSize[2],
+		       record->ColumnSize[3]
+		);
+		break;
+	case 5:
+		dprint(0, 48, C_BLACK, "%d %d %d %d %d",
+		       record->ColumnSize[0],
+		       record->ColumnSize[1],
+		       record->ColumnSize[2],
+		       record->ColumnSize[3],
+		       record->ColumnSize[4]
+		);
+		break;
+	case 6:
+		dprint(0, 48, C_BLACK, "%d %d %d %d %d %d",
+		       record->ColumnSize[0],
+		       record->ColumnSize[1],
+		       record->ColumnSize[2],
+		       record->ColumnSize[3],
+		       record->ColumnSize[4],
+		       record->ColumnSize[5]
+		);
+		break;
+	default:
+		break;
+	}
+
+	dupdate();
+	getkey();
+}
+
+char *UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database)
+{
+	auto const db = *database;
+
+	const size_t size = shlenu(db);
+
+	size_t selectedIndex = 0;
+
 	while (true)
 	{
 		dclear(C_WHITE);
+
 		dsubimage(1, 1, &Img_SelectASong_Title, 0, 10 * config->Language, 128, 10, 0);
 		drect(0, 0, 127, 10, C_INVERT);
 		dsubimage(0, 56, &Img_SelectASong_FN, 0, 8 * config->Language, 128, 8, 0);
+
+		if (size == 0)
+		{
+			dtext(56, 27, C_BLACK, "???");
+		}
+		else
+		{
+			// A/B means the A-th is being selected now and there are B beatmaps
+			dprint(93, 2, C_WHITE, "%2u/%u", selectedIndex + 1, size);
+
+			// Draw 2 beatmaps before
+			if (selectedIndex >= 2)
+				dtext(1, 13, C_BLACK, db[selectedIndex - 2].value.Title);
+			if (selectedIndex >= 1)
+				dtext(1, 21, C_BLACK, db[selectedIndex - 1].value.Title);
+
+			// Draw selected beatmap
+			dtext(1, 30, C_BLACK, db[selectedIndex].value.Title);
+			drect(0, 29, 127, 37, C_INVERT);
+
+			// Draw 2 beatmaps after
+			if (size - selectedIndex >= 2)
+				dtext(1, 39, C_BLACK, db[selectedIndex + 1].value.Title);
+			if (size - selectedIndex >= 3)
+				dtext(1, 47, C_BLACK, db[selectedIndex + 2].value.Title);
+		}
+
 		dupdate();
 
 		const key_event_t e = getkey();
 
 		switch (e.key)
 		{
-		case KEY_F5:
-			return UI_AskBeatmapPath_TypeFileNameManually(config);
+		case KEY_DOWN:
+		case KEY_RIGHT:
+			if (size > 0 && selectedIndex < size - 1)
+				selectedIndex += 1;
+			break;
+
+		case KEY_UP:
+		case KEY_LEFT:
+			if (size > 0 && selectedIndex > 0)
+				selectedIndex -= 1;
+			break;
+
+		case KEY_VARS:
+			UI_ShowBeatmapDetail(&db[selectedIndex].value);
+			break;
+
 		case KEY_EXIT:
 			return nullptr;
+
+		case KEY_F5: {
+			auto const userPath = UI_AskBeatmapPath_TypeFileNameManually(config);
+			if (userPath != nullptr)
+				return userPath;
+			break;
+		}
+
+		case KEY_EXE:
+			return db[selectedIndex].key;
 		default: break;
 		}
 	}

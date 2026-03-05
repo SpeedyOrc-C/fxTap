@@ -35,7 +35,7 @@ FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 		return error;
 
 	// Try again with .fxt extension.
-	char fileNameWithExtension[strlen(path) + 4 + 1];
+	char fileNameWithExtension[strlen(path) + 4 + 1] = {};
 	sprintf(fileNameWithExtension, "%s.fxt", path);
 
 	if (gint[HWFS] == HWFS_CASIOWIN)
@@ -47,13 +47,14 @@ FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 	return FXT_Beatmap_Load(dst, fileNameWithExtension);
 }
 
-void UI_MainMenu(FXT_Config *config)
+void UI_MainMenu(FXT_Config *config, const FXT_Database *database)
 {
 	MenuItem selectedItem = Item_Play;
 
 	// ReSharper disable once CppDFAEndlessLoop
 	while (true)
 	{
+	beginning:
 		dclear(C_WHITE);
 
 		for (MenuItem renderItem = Item_Play; renderItem <= Item_About; renderItem += 1)
@@ -79,31 +80,32 @@ void UI_MainMenu(FXT_Config *config)
 			switch (selectedItem)
 			{
 			case Item_Play: {
-				auto const path = UI_AskBeatmapPath_ListLibrary(config);
-
-				if (path == nullptr)
-					continue;
-
-				FXT_Beatmap beatmap;
-				const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path);
-				free(path);
-
-				if (error)
+				while (true)
 				{
-					dclear(C_WHITE);
-					dprint(1, 1, C_BLACK, "Error: %d", error);
-					dupdate();
-					getkey();
-					continue;
+					auto const path = UI_AskBeatmapPath_ListLibrary(config, database);
+					// FIXME)) Need free if path is from user's typing
+
+					if (path == nullptr)
+						goto beginning;
+
+					FXT_Beatmap beatmap;
+					const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path);
+
+					if (error)
+					{
+						dclear(C_WHITE);
+						dprint(1, 1, C_BLACK, "Error: %d", error);
+						dupdate();
+						getkey();
+						continue;
+					}
+
+					FXT_Game game;
+					FXT_Game_Init(&game, &beatmap);
+					UI_Play(&game, config);
+
+					FXT_Beatmap_FreeInner(&beatmap);
 				}
-
-				FXT_Game game;
-				FXT_Game_Init(&game, &beatmap);
-				UI_Play(&game, config);
-
-				FXT_Beatmap_FreeInner(&beatmap);
-
-				continue;
 			}
 			case Item_KeyTest:
 				UI_KeyTest(config);

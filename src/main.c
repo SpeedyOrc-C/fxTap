@@ -1,4 +1,6 @@
+#include <fxlibc/printf.h>
 #include <fxTap/config.h>
+#include <fxTap/database.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
@@ -17,19 +19,35 @@ static FXT_Config_Error LoadConfig(FXT_Config *config)
 
 int main(void)
 {
-	FXT_Config config;
-	auto const error = LoadConfig(&config);
+	__printf_enable_fp();
 
-	if (error != 0)
+	FXT_Config config;
+	auto const configError = LoadConfig(&config);
+
+	if (configError)
 	{
 		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "Config Error: %d", error);
+		dprint(1, 1, C_BLACK, "Config Error: %d", configError);
 		dupdate();
 		getkey();
 		return 1;
 	}
 
-	UI_MainMenu(&config);
+	FXT_Database database;
+	FXT_Database_Init(&database);
+
+	auto const databaseError = FXT_Database_SyncFromFileSystem(&database);
+
+	if (databaseError)
+	{
+		dclear(C_WHITE);
+		dprint(1, 1, C_BLACK, "Database Error: %d", configError);
+		dupdate();
+		getkey();
+		return 1;
+	}
+
+	UI_MainMenu(&config, &database);
 
 	return 1;
 }

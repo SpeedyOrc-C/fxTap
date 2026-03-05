@@ -71,19 +71,6 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 		return;
 	}
 
-	dclear(C_WHITE);
-	dprint(0, 0, C_BLACK, "%s", game->Beatmap->Title);
-	dprint(0, 8, C_BLACK, "%s", game->Beatmap->Artist);
-	dprint(0, 16, C_BLACK, "%f", game->Beatmap->OverallDifficulty);
-	dprint(0, 24, C_BLACK, "%d %d %d %d",
-	       game->Beatmap->ColumnSize[0],
-	       game->Beatmap->ColumnSize[1],
-	       game->Beatmap->ColumnSize[2],
-	       game->Beatmap->ColumnSize[3]
-	);
-	dupdate();
-	getkey();
-
 	const FXT_RendererController rendererController = {
 		.HeightAbove = DHEIGHT - 1,
 		.VisibleTime = config->NotesFallingTime,
@@ -95,8 +82,7 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 
 	while (true)
 	{
-		bool isPressingColumn[FXT_MaxColumnCount] =
-				{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		bool isPressingColumn[FXT_MaxColumnCount] = {};
 
 		while (true)
 		{
