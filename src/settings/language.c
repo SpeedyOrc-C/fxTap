@@ -22,6 +22,6 @@ void Language_AcceptEvent(const key_event_t e, FXT_Config *config)
 		config->Language = FXT_Language_ZhCn;
 		break;
 	default:
-		assert(false && "Invalid key");
+		break;
 	}
 }

@@ -44,6 +44,6 @@ void NotesFallingTime_AcceptEvent(const key_event_t e, FXT_Config *config)
 		AdjustNotesFallingTime(config, 100);
 		break;
 	default:
-		assert(false && "Invalid key");
+		break;
 	}
 }

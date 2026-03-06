@@ -26,6 +26,6 @@ void KeyBindingStyle_AcceptEvent(const key_event_t e, FXT_Config *config)
 		config->KeyMapStyle = FXT_KeyMapStyle_CoOp;
 		break;
 	default:
-		assert(false && "Invalid key");
+		break;
 	}
 }
