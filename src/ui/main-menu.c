@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
@@ -82,13 +83,15 @@ void UI_MainMenu(FXT_Config *config, const FXT_Database *database)
 				while (true)
 				{
 					auto const path = UI_AskBeatmapPath_ListLibrary(config, database);
-					// FIXME)) Need free if path is from user's typing
 
-					if (path == nullptr)
+					if (path.Path == nullptr)
 						goto beginning;
 
 					FXT_Beatmap beatmap;
-					const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path);
+					const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path.Path);
+
+					if (path.NeedFree)
+						free(path.Path);
 
 					if (error)
 					{

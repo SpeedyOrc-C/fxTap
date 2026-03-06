@@ -31,12 +31,14 @@ static uint8_t AlphaFromKeyCode(const int keyCode)
 	}
 }
 
-char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
+[[nodiscard]]
+OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 {
 	constexpr int FileNameMaxLen = 47;
 	bool isCapitalised = true;
 	bool isAlpha = true;
 	int cursor = 0;
+	// ReSharper disable once CppDFAMemoryLeak
 	char *fileName = malloc(FileNameMaxLen + 1);
 
 	assert(fileName != nullptr);
@@ -71,10 +73,11 @@ char *UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 
 		case KEY_EXIT:
 			free(fileName);
-			return nullptr;
+			return (OCharP){.Path = nullptr};
 
 		case KEY_EXE:
-			return fileName;
+			// ReSharper disable once CppDFAMemoryLeak
+			return (OCharP){.Path = fileName, .NeedFree = true};
 
 		case KEY_F1:
 			if (cursor < FileNameMaxLen)
@@ -202,7 +205,7 @@ void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
 	getkey();
 }
 
-char *UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database)
+OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database)
 {
 	auto const db = *database;
 
@@ -267,17 +270,17 @@ char *UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database
 			break;
 
 		case KEY_EXIT:
-			return nullptr;
+			return (OCharP){.Path = nullptr};
 
 		case KEY_F5: {
 			auto const userPath = UI_AskBeatmapPath_TypeFileNameManually(config);
-			if (userPath != nullptr)
+			if (userPath.Path != nullptr)
 				return userPath;
 			break;
 		}
 
 		case KEY_EXE:
-			return db[selectedIndex].key;
+			return (OCharP){.Path = db[selectedIndex].key, .NeedFree = false};
 		default: break;
 		}
 	}
