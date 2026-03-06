@@ -27,7 +27,7 @@ static uint8_t AlphaFromKeyCode(const int keyCode)
 		case 3: return '\"';
 		default: return -1;
 		}
-	default: return -1;
+	default: return 0;
 	}
 }
 
@@ -36,7 +36,6 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 {
 	constexpr int FileNameMaxLen = 47;
 	bool isCapitalised = true;
-	bool isAlpha = true;
 	int cursor = 0;
 	// ReSharper disable once CppDFAMemoryLeak
 	char *fileName = malloc(FileNameMaxLen + 1);
@@ -50,7 +49,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		dclear(C_WHITE);
 		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
 		dprint(0, 35, C_BLACK, "[%s]", fileName);
-		dprint(98, 48, C_BLACK, isAlpha ? (isCapitalised ? "[ABC]" : "[abc]") : "[123]");
+		dprint(98, 48, C_BLACK, isCapitalised ? "[ABC]" : "[abc]");
 		dimage(0, 56, &Img_Path_FN);
 		dupdate();
 
@@ -82,7 +81,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		case KEY_F1:
 			if (cursor < FileNameMaxLen)
 			{
-				fileName[cursor] = '.';
+				fileName[cursor] = '/';
 				cursor += 1;
 			}
 			break;
@@ -90,7 +89,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		case KEY_F2:
 			if (cursor < FileNameMaxLen)
 			{
-				fileName[cursor] = '_';
+				fileName[cursor] = '.';
 				cursor += 1;
 			}
 			break;
@@ -98,7 +97,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		case KEY_F3:
 			if (cursor < FileNameMaxLen)
 			{
-				fileName[cursor] = '~';
+				fileName[cursor] = '_';
 				cursor += 1;
 			}
 			break;
@@ -106,35 +105,23 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 		case KEY_F4:
 			if (cursor < FileNameMaxLen)
 			{
-				fileName[cursor] = '\'';
+				fileName[cursor] = '~';
 				cursor += 1;
 			}
 			break;
 
 		case KEY_F5:
-			isAlpha = ! isAlpha;
-			break;
-
-		case KEY_F6:
 			isCapitalised = ! isCapitalised;
-			break;
-
-		case KEY_NEG:
-			if (cursor < FileNameMaxLen)
-			{
-				fileName[cursor] = '/';
-				cursor += 1;
-			}
 			break;
 
 		default:
 			if (cursor >= FileNameMaxLen) break;
 
-			if (isAlpha)
+			if (e.alpha)
 			{
 				auto const c = AlphaFromKeyCode(e.key);
 
-				if (c != 255)
+				if (c != 0)
 				{
 					fileName[cursor] = isCapitalised ? (char) c : tolower(c);
 					cursor += 1;
@@ -237,6 +224,8 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		drect(0, 0, 127, 10, C_INVERT);
 		dsubimage(0, 56, &Img_SelectASong_FN, 0, 8 * config->Language, 128, 8, 0);
 
+		dsubimage(2, 56, descending ? &Img_Ascending_FN : &Img_Descending_FN, 0, 8 * config->Language, 19, 8, 0);
+
 		if (size == 0)
 		{
 			dtext(56, 27, C_BLACK, "???");
@@ -281,6 +270,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 				selectedIndex -= 1;
 			break;
 
+		case KEY_F6:
 		case KEY_VARS:
 			UI_ShowBeatmapDetail(&db[selectedIndex].value);
 			break;
@@ -288,7 +278,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		case KEY_EXIT:
 			return (OCharP){.Path = nullptr};
 
-		case KEY_F3:
+		case KEY_F1:
 			descending = ! descending;
 			break;
 

@@ -42,7 +42,6 @@ Open the settings to configure the key-mappings and notes falling speed.
 Here you can find some beatmaps ready to play,
 especially if you don't want to convert the beatmaps by yourself.
 
-
 # Build
 
 Set up [fxSDK](https://git.planet-casio.com/Lephenixnoir/fxsdk) first. And then clone
