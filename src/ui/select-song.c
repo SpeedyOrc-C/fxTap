@@ -260,14 +260,14 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		{
 		case KEY_DOWN:
 		case KEY_RIGHT:
-			if (size > 0 && selectedIndex < size - 1)
-				selectedIndex += 1;
+			if (size > 0)
+				selectedIndex = (selectedIndex + 1) % size;
 			break;
 
 		case KEY_UP:
 		case KEY_LEFT:
-			if (size > 0 && selectedIndex > 0)
-				selectedIndex -= 1;
+			if (size > 0)
+				selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : size - 1;
 			break;
 
 		case KEY_F4:
