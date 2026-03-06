@@ -276,7 +276,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 
 		case KEY_F6:
 		case KEY_VARS:
-			UI_ShowBeatmapDetail(&db[selectedIndex].value);
+			UI_ShowBeatmapDetail(&view[selectedIndex]->value);
 			break;
 
 		case KEY_EXIT:
