@@ -19,6 +19,14 @@ A rhythm game runs on CASIO calculators, the successor of [fx4K](https://github.
    card slot, please copy your beatmap from SD card to flash memory before play.)
 5. Open the settings to configure the key-mappings and notes falling speed.
 
+## Beatmap Index
+
+[fxTap Index](https://github.com/SpeedyOrc-C/fxTap-Index)
+
+Here you can find some beatmaps ready to play,
+especially if you don't want to convert the beatmaps by yourself.
+
+
 ## Build
 
 Set up [fxSDK](https://git.planet-casio.com/Lephenixnoir/fxsdk) first. And then clone
