@@ -5,7 +5,7 @@
 #include "fxconv-assets.h"
 #include "ui.h"
 
-#define ITEM_COUNT 4
+static constexpr uint8_t ItemCount = 4;
 
 typedef struct MenuItem
 {
@@ -18,29 +18,26 @@ void UI_Settings(FXT_Config *config)
 {
 	const FXT_Config oldConfig = *config;
 
-	const MenuItem items[ITEM_COUNT] = {
+	const MenuItem items[ItemCount] = {
 		{.Render = &NotesFallingTime_Render, .AcceptEvent = &NotesFallingTime_AcceptEvent},
 		{.Render = &KeyBindings_Render, .AcceptEvent = &KeyBindings_AcceptEvent},
 		{.Render = &KeyBindingStyle_Render, .AcceptEvent = &KeyBindingStyle_AcceptEvent},
-		{
-			.Render = &Language_Render,
-			.AcceptEvent = &Language_AcceptEvent
-		},
+		{.Render = &Language_Render, .AcceptEvent = &Language_AcceptEvent},
 	};
 
-	int item = 0;
+	uint8_t item = 0;
 	selectedKeyBinding = 0;
 
 	while (true)
 	{
-		const bool settingsChanged = !FXT_Config_Equal(&oldConfig, config);
+		const bool settingsChanged = ! FXT_Config_Equal(&oldConfig, config);
 
 		dclear(C_WHITE);
 		dsubimage(1, 1, &Img_Settings_Title, 0, 10 * config->Language, 64, 10, 0);
-		dprint(98, 2, C_BLACK, "%c %d/%d",
+		dprint(98, 2, C_BLACK, "%c %d/%u",
 		       settingsChanged ? '*' : ' ',
 		       item + 1,
-		       ITEM_COUNT
+		       ItemCount
 		);
 		drect(0, 0, 127, 10, C_INVERT);
 		items[item].Render(config);
@@ -84,7 +81,7 @@ void UI_Settings(FXT_Config *config)
 
 		if (e.key == KEY_DOWN)
 		{
-			if (item < ITEM_COUNT - 1)
+			if (item < ItemCount - 1)
 				item += 1;
 			continue;
 		}
