@@ -270,6 +270,10 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 				selectedIndex -= 1;
 			break;
 
+		case KEY_F4:
+			selectedIndex = rand() % size;
+			break;
+
 		case KEY_F6:
 		case KEY_VARS:
 			UI_ShowBeatmapDetail(&db[selectedIndex].value);
