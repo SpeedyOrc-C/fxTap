@@ -157,6 +157,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 
 void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
 {
+	// TODO)) Allow word wrapping in strings
 	dclear(C_WHITE);
 
 	dprint(0, 0, C_BLACK, "[TITLE]");
@@ -209,12 +210,27 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 {
 	auto const db = *database;
 
+	bool descending = true;
 	const size_t size = shlenu(db);
 
 	size_t selectedIndex = 0;
 
+	const struct FXT_Database *viewOrderByNameAsc[size] = {};
+	const struct FXT_Database *viewOrderByNameDsc[size] = {};
+
+	for (size_t i = 0; i < size; i += 1)
+	{
+		viewOrderByNameAsc[i] = &db[i];
+		viewOrderByNameDsc[i] = &db[i];
+	}
+
+	qsort(viewOrderByNameAsc, size, sizeof(FXT_Database), FXT_Database_Compare_Reverse_Void);
+	qsort(viewOrderByNameDsc, size, sizeof(FXT_Database), FXT_Database_Compare_Void);
+
 	while (true)
 	{
+		auto const view = descending ? viewOrderByNameDsc : viewOrderByNameAsc;
+
 		dclear(C_WHITE);
 
 		dsubimage(1, 1, &Img_SelectASong_Title, 0, 10 * config->Language, 128, 10, 0);
@@ -232,19 +248,19 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 
 			// Draw 2 beatmaps before
 			if (selectedIndex >= 2)
-				dtext(1, 13, C_BLACK, db[selectedIndex - 2].value.Title);
+				dtext(1, 13, C_BLACK, view[selectedIndex - 2]->value.Title);
 			if (selectedIndex >= 1)
-				dtext(1, 21, C_BLACK, db[selectedIndex - 1].value.Title);
+				dtext(1, 21, C_BLACK, view[selectedIndex - 1]->value.Title);
 
 			// Draw selected beatmap
-			dtext(1, 30, C_BLACK, db[selectedIndex].value.Title);
+			dtext(1, 30, C_BLACK, view[selectedIndex]->value.Title);
 			drect(0, 29, 127, 37, C_INVERT);
 
 			// Draw 2 beatmaps after
 			if (size - selectedIndex >= 2)
-				dtext(1, 39, C_BLACK, db[selectedIndex + 1].value.Title);
+				dtext(1, 39, C_BLACK, view[selectedIndex + 1]->value.Title);
 			if (size - selectedIndex >= 3)
-				dtext(1, 47, C_BLACK, db[selectedIndex + 2].value.Title);
+				dtext(1, 47, C_BLACK, view[selectedIndex + 2]->value.Title);
 		}
 
 		dupdate();
@@ -271,6 +287,10 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 
 		case KEY_EXIT:
 			return (OCharP){.Path = nullptr};
+
+		case KEY_F3:
+			descending = ! descending;
+			break;
 
 		case KEY_F5: {
 			auto const userPath = UI_AskBeatmapPath_TypeFileNameManually(config);
