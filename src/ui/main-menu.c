@@ -102,9 +102,7 @@ void UI_MainMenu(FXT_Config *config, const FXT_Database *database)
 						continue;
 					}
 
-					FXT_Game game;
-					FXT_Game_Init(&game, &beatmap);
-					UI_Play(&game, config);
+					UI_Play(&beatmap, config);
 
 					FXT_Beatmap_FreeInner(&beatmap);
 				}

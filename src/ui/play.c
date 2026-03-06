@@ -7,6 +7,7 @@
 #include <gint/display.h>
 #include <gint/keyboard.h>
 #include <gint/rtc.h>
+#include "fxconv-assets.h"
 #include "ui.h"
 
 void RenderTap(const int column, const double positionBottom)
@@ -73,9 +74,52 @@ void RenderGameFrame(
 	dupdate();
 }
 
-void UI_Play(FXT_Game *game, const FXT_Config *config)
+typedef enum PauseResult
 {
-	const KeyMapper keyMapper = FXT_Game_FetchKeyMapper(game, config);
+	PauseResult_Resume,
+	PauseResult_Restart,
+	PauseResult_Stop,
+} PauseResult;
+
+PauseResult Pause(const FXT_Config *config)
+{
+	for (int x = 0; x < DWIDTH; x += 1)
+		for (int y = 0; y < DHEIGHT; y += 1)
+			if ((x + y) % 2 == 1)
+				dpixel(x, y, C_WHITE);
+
+	dline(0, 55, DWIDTH - 1, 55, C_WHITE);
+	dsubimage(0, 56, &Img_Pause_FN, 0, 8 * config->Language, 128, 8, 0);
+	dupdate();
+
+	while (true)
+	{
+		auto const e = getkey();
+
+		switch (e.key)
+		{
+		case KEY_F1:
+		case KEY_F2:
+			return PauseResult_Stop;
+		case KEY_F3:
+		case KEY_F4:
+			return PauseResult_Restart;
+		case KEY_F5:
+		case KEY_F6:
+		case KEY_EXE:
+			return PauseResult_Resume;
+		default:
+			break;
+		}
+	}
+}
+
+void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
+{
+	FXT_Game game;
+	FXT_Game_Init(&game, beatmap);
+
+	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
 
 	if (keyMapper == nullptr)
 	{
@@ -93,20 +137,26 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 		.RenderHold = &RenderHold,
 	};
 
-	const FXT_TimeMs endTime = FXT_Game_LastNoteEndTime(game) + 1000;
-	auto const startTime128 = rtc_ticks();
+	static constexpr FXT_TimeMs WaitTimeBeforeStart = 1000;
+	static constexpr FXT_TimeMs WaitTimeAfterEnd = 1000;
+
+	const FXT_TimeMs endTime = FXT_Game_LastNoteEndTime(&game) + WaitTimeAfterEnd;
+
+	FXT_TimeMs timeOffset = -WaitTimeBeforeStart;
+	auto startTime128 = rtc_ticks();
 
 	while (true)
 	{
 		bool isPressingColumn[FXT_MaxColumnCount] = {};
 
+		// Fetch latest key states
 		while (true)
 		{
 			auto const e = pollevent();
 
 			if (e.type == KEYEV_NONE) break;
 
-			for (int column = 0; column < game->Beatmap->ColumnCount; column += 1)
+			for (int column = 0; column < game.Beatmap->ColumnCount; column += 1)
 			{
 				auto const fxTapKey = keyMapper(column);
 				auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
@@ -114,14 +164,37 @@ void UI_Play(FXT_Game *game, const FXT_Config *config)
 			}
 		}
 
-		auto const timeNow128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
-		// Wait for 1000ms before start
-		const FXT_TimeMs timeNow = -1000 + timeNow128 * 1000 / 128;
+		const int32_t timeElapsedSinceStart128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
+		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
+		const FXT_TimeMs gameTime = timeOffset + timeElapsedSinceStart;
 
-		FXT_Game_Update(game, timeNow, isPressingColumn);
-		RenderGameFrame(game, &rendererController, timeNow, endTime);
+		FXT_Game_Update(&game, gameTime, isPressingColumn);
+		RenderGameFrame(&game, &rendererController, gameTime, endTime);
 
-		if (keydown(KEY_EXIT) || endTime < timeNow)
-			break;
+		// Game finished normally
+		if (gameTime > endTime)
+		{
+			// TODO)) Grades view
+			return;
+		}
+
+		// Pause
+		if (keydown(KEY_EXIT))
+		{
+			switch (Pause(config))
+			{
+			case PauseResult_Resume:
+				timeOffset = gameTime;
+				startTime128 = rtc_ticks();
+				continue;
+			case PauseResult_Restart:
+				FXT_Game_Init(&game, beatmap);
+				timeOffset = -WaitTimeBeforeStart;
+				startTime128 = rtc_ticks();
+				continue;
+			case PauseResult_Stop:
+				return;
+			}
+		}
 	}
 }

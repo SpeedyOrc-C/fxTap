@@ -11,6 +11,7 @@ extern const bopti_image_t Img_SongName_FN;
 extern const bopti_image_t Img_Accuracy_FN;
 extern const bopti_image_t Img_Ascending_FN;
 extern const bopti_image_t Img_Descending_FN;
+extern const bopti_image_t Img_Pause_FN;
 extern const bopti_image_t Img_Settings_Language_FN;
 extern const bopti_image_t Img_Settings_Title;
 extern const bopti_image_t Img_Settings_NotesFallingTime_Caption;
