@@ -294,7 +294,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		}
 
 		case KEY_EXE:
-			return (OCharP){.Path = db[selectedIndex].key, .NeedFree = false};
+			return (OCharP){.Path = view[selectedIndex]->key, .NeedFree = false};
 		default: break;
 		}
 	}
