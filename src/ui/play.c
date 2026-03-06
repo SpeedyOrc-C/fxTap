@@ -11,15 +11,23 @@
 
 void RenderTap(const int column, const double positionBottom)
 {
-	const int y = (int) round(DHEIGHT - 1 - positionBottom);
-	drect(column * 8 + 1, y - 2, column * 8 + 7, y, C_BLACK);
+	auto const y = (int) round(DHEIGHT - 1 - positionBottom);
+	drect(column * 8 + 1, y - 4, column * 8 + 7, y, C_BLACK);
 }
 
 void RenderHold(const int column, const double positionBottom, const double positionTop)
 {
-	const int y1 = (int) round(DHEIGHT - 1 - positionTop);
-	const int y2 = (int) round(DHEIGHT - 1 - positionBottom);
-	drect(column * 8 + 1, y1, column * 8 + 7, y2, C_BLACK);
+	auto const x1 = column * 8 + 1;
+	auto const y1 = (int) round(DHEIGHT - 1 - positionTop);
+	auto const x2 = column * 8 + 7;
+	auto const y2 = (int) round(DHEIGHT - 1 - positionBottom);
+
+	for (int x = x1; x <= x2; x += 1)
+		for (int y = y1; y <= y2; y += 1)
+			if ((x + y) % 2 == 0)
+				dpixel(x, y, C_BLACK);
+
+	drect_border(x1, y1, x2, y2, C_NONE, 1, C_BLACK);
 }
 
 int32_t Time128Delta(const int32_t start, const int32_t end)
