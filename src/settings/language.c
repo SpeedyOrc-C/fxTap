@@ -1,6 +1,5 @@
-#include <assert.h>
-#include <fxconv-assets.h>
-#include <settings.h>
+#include "fxconv-assets.h"
+#include "settings.h"
 
 void Language_Render(const FXT_Config *config)
 {

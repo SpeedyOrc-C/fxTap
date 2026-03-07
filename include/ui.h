@@ -2,7 +2,6 @@
 
 #include <fxTap/config.h>
 #include <fxTap/database.h>
-#include <fxTap/game.h>
 
 void UI_MainMenu(FXT_Config *config, const FXT_Database *database);
 

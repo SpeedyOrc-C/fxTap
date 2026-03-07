@@ -1,7 +1,6 @@
-#include <settings.h>
 #include <gint/display.h>
-
 #include "fxconv-assets.h"
+#include "settings.h"
 
 void Appearance_Render(const FXT_Config *config)
 {
