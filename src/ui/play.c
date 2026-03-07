@@ -114,6 +114,34 @@ PauseResult Pause(const FXT_Config *config)
 	}
 }
 
+void ShowGrade(const FXT_Game *game)
+{
+	auto const grades = game->Grades;
+	auto const scoreV1 = 100 * FXT_Grades_ScoreV1(grades);
+	auto const scoreV2 = 100 * FXT_Grades_ScoreV2(grades);
+
+	dclear(C_WHITE);
+	dprint(0, 0 * 8, C_BLACK, "ACC v1/v2 %.2f/%.2f", scoreV1, scoreV2);
+	dprint(0, 1 * 8, C_BLACK, "MAX COMBO %u", game->Combo);
+	dprint(0, 2 * 8, C_BLACK, "  Perfect %u", grades.Perfect);
+	dprint(0, 3 * 8, C_BLACK, "    Great %u", grades.Great);
+	dprint(0, 4 * 8, C_BLACK, "     Good %u", grades.Good);
+	dprint(0, 5 * 8, C_BLACK, "       OK %u", grades.Ok);
+	dprint(0, 6 * 8, C_BLACK, "      Meh %u", grades.Meh);
+	dprint(0, 7 * 8, C_BLACK, "     Miss %u", grades.Miss);
+	dupdate();
+
+	while (true)
+	{
+		auto const e = getkey();
+
+		if (e.key == KEY_EXIT || e.key == KEY_EXE)
+			break;
+
+		// TODO)) Player can save their score if they want
+	}
+}
+
 void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
 {
 	FXT_Game game;
@@ -172,9 +200,9 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
 		RenderGameFrame(&game, &rendererController, gameTime, endTime);
 
 		// Game finished normally
-		if (gameTime > endTime)
+		if (gameTime > endTime || keydown(KEY_OPTN))
 		{
-			// TODO)) Grades view
+			ShowGrade(&game);
 			return;
 		}
 
