@@ -61,13 +61,14 @@ void RenderGameFrame(
 	}
 
 	// Render number of notes in different grades
-	dprint(103, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
-	dprint(103, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
-	dprint(103, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
-	dprint(103, 3 * 8, C_BLACK, "%d", game->Grades.Good);
-	dprint(103, 4 * 8, C_BLACK, "%d", game->Grades.Great);
-	dprint(103, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
-	dprint(103, 7 * 8, C_BLACK, "%d", game->Combo);
+	static constexpr int GradeX = 100;
+	dprint(GradeX, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
+	dprint(GradeX, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
+	dprint(GradeX, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
+	dprint(GradeX, 3 * 8, C_BLACK, "%d", game->Grades.Good);
+	dprint(GradeX, 4 * 8, C_BLACK, "%d", game->Grades.Great);
+	dprint(GradeX, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
+	dprint(GradeX, 7 * 8, C_BLACK, "%d", game->Combo);
 
 	// Render progress bar
 	drect_border(DWIDTH - 4, 0, DWIDTH - 1, DHEIGHT - 1, C_WHITE, 1, C_BLACK);
