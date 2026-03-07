@@ -11,6 +11,7 @@ set(SOURCES
 		src/ui/settings.c
 		src/ui/key-test.c
 		src/settings/notes-falling-time.c
+		src/settings/note-appearance.c
 		src/settings/key-bindings.c
 		src/settings/key-binding-style.c
 		src/settings/language.c
@@ -32,6 +33,8 @@ set(ASSETS_fx
 
 		assets-fx/Settings_Language_FN.png
 		assets-fx/Settings_Title.png
+		assets-fx/Settings_NoteAppearance_Caption.png
+		assets-fx/Settings_NoteAppearance_FN.png
 		assets-fx/Settings_NotesFallingTime_Caption.png
 		assets-fx/Settings_NotesFallingTime_FN_EN.png
 		assets-fx/Settings_KeyBindingStyle_Caption.png

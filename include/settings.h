@@ -10,6 +10,10 @@ void NotesFallingTime_Render(const FXT_Config *config);
 
 void NotesFallingTime_AcceptEvent(key_event_t e, FXT_Config *config);
 
+void Appearance_Render(const FXT_Config *config);
+
+void Appearance_AcceptEvent(key_event_t e, FXT_Config *config);
+
 extern FXT_Key selectedKeyBinding;
 
 void KeyBindings_Render(const FXT_Config *config);

@@ -10,17 +10,21 @@
 #include "fxconv-assets.h"
 #include "ui.h"
 
+static int ColumnWidth = 10;
+static int TapNoteHeight = 4;
+
 void RenderTap(const int column, const double positionBottom)
 {
+	auto const x = column * ColumnWidth;
 	auto const y = (int) round(DHEIGHT - 1 - positionBottom);
-	drect(column * 8 + 1, y - 4, column * 8 + 7, y, C_BLACK);
+	drect(x + 1, y - TapNoteHeight, x + ColumnWidth - 1, y, C_BLACK);
 }
 
 void RenderHold(const int column, const double positionBottom, const double positionTop)
 {
-	auto const x1 = column * 8 + 1;
+	auto const x1 = column * ColumnWidth + 1;
 	auto const y1 = (int) round(DHEIGHT - 1 - positionTop);
-	auto const x2 = column * 8 + 7;
+	auto const x2 = column * ColumnWidth + ColumnWidth - 1;
 	auto const y2 = (int) round(DHEIGHT - 1 - positionBottom);
 
 	for (int x = x1; x <= x2; x += 1)
@@ -50,20 +54,20 @@ void RenderGameFrame(
 	FXT_RendererController_Run(rendererController, game, timeNow);
 
 	// Render framework
-	for (int i = 0; i < game->Beatmap->ColumnCount + 1; i += 1)
+	for (int i = 0; i <= game->Beatmap->ColumnCount; i += 1)
 	{
-		auto const x = i * 8;
+		auto const x = i * ColumnWidth;
 		dline(x, 0, x, DHEIGHT - 1, C_BLACK);
 	}
 
 	// Render number of notes in different grades
-	dprint(84, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
-	dprint(84, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
-	dprint(84, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
-	dprint(84, 3 * 8, C_BLACK, "%d", game->Grades.Good);
-	dprint(84, 4 * 8, C_BLACK, "%d", game->Grades.Great);
-	dprint(84, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
-	dprint(84, 7 * 8, C_BLACK, "%d", game->Combo);
+	dprint(103, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
+	dprint(103, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
+	dprint(103, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
+	dprint(103, 3 * 8, C_BLACK, "%d", game->Grades.Good);
+	dprint(103, 4 * 8, C_BLACK, "%d", game->Grades.Great);
+	dprint(103, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
+	dprint(103, 7 * 8, C_BLACK, "%d", game->Combo);
 
 	// Render progress bar
 	drect_border(DWIDTH - 4, 0, DWIDTH - 1, DHEIGHT - 1, C_WHITE, 1, C_BLACK);
@@ -144,6 +148,9 @@ void ShowGrade(const FXT_Game *game)
 
 void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
 {
+	ColumnWidth = config->ColumnWidth;
+	TapNoteHeight = config->TapNoteHeight;
+
 	FXT_Game game;
 	FXT_Game_Init(&game, beatmap);
 

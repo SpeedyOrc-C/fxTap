@@ -14,6 +14,8 @@ extern const bopti_image_t Img_Descending_FN;
 extern const bopti_image_t Img_Pause_FN;
 extern const bopti_image_t Img_Settings_Language_FN;
 extern const bopti_image_t Img_Settings_Title;
+extern const bopti_image_t Img_Settings_NoteAppearance_Caption;
+extern const bopti_image_t Img_Settings_NoteAppearance_FN;
 extern const bopti_image_t Img_Settings_NotesFallingTime_Caption;
 extern const bopti_image_t Img_Settings_NotesFallingTime_FN_EN;
 extern const bopti_image_t Img_Settings_KeyBindingStyle_Caption;
