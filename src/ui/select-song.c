@@ -4,6 +4,7 @@
 #include <string.h>
 #include <fxTap/database.h>
 #include <gint/keyboard.h>
+#include <gint/rtc.h>
 #include "fxconv-assets.h"
 #include "ui.h"
 
@@ -271,7 +272,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 			break;
 
 		case KEY_F4:
-			selectedIndex = rand() % size;
+			selectedIndex = rtc_ticks() % size;
 			break;
 
 		case KEY_F6:
