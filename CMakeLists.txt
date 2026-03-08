@@ -30,6 +30,7 @@ set(ASSETS_fx
 		assets-fx/Ascending_FN.png
 		assets-fx/Descending_FN.png
 		assets-fx/Pause_FN.png
+		assets-fx/Save_FN.png
 
 		assets-fx/Settings_Language_FN.png
 		assets-fx/Settings_Title.png

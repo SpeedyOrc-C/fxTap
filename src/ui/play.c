@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include <fxTap/beatmap.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
@@ -119,7 +120,7 @@ PauseResult Pause(const FXT_Config *config)
 	}
 }
 
-void ShowGrade(const FXT_Game *game)
+bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 {
 	auto const grades = game->Grades;
 	auto const scoreV1 = 100 * FXT_Grades_ScoreV1(grades);
@@ -134,20 +135,29 @@ void ShowGrade(const FXT_Game *game)
 	dprint(0, 5 * 8, C_BLACK, "       OK %u", grades.Ok);
 	dprint(0, 6 * 8, C_BLACK, "      Meh %u", grades.Meh);
 	dprint(0, 7 * 8, C_BLACK, "     Miss %u", grades.Miss);
+	dsubimage(107, 56, &Img_Save_FN, 0, 8 * config->Language, 19, 8, 0);
 	dupdate();
 
 	while (true)
 	{
 		auto const e = getkey();
 
-		if (e.key == KEY_EXIT || e.key == KEY_EXE)
-			break;
+		switch (e.key)
+		{
+		case KEY_EXIT:
+		case KEY_EXE:
+			return false;
 
-		// TODO)) Player can save their score if they want
+		case KEY_F6:
+			return true;
+
+		default:
+			break;
+		}
 	}
 }
 
-void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
+void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
 {
 	ColumnWidth = config->ColumnWidth;
 	TapNoteHeight = config->TapNoteHeight;
@@ -210,7 +220,21 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config)
 		// Game finished normally
 		if (gameTime > endTime || keydown(KEY_OPTN))
 		{
-			ShowGrade(&game);
+			auto const saveGrades = ShowGrade(&game, config);
+
+			if (!saveGrades)
+				return;
+
+			auto const error = FXT_SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
+
+			if (error)
+			{
+				dclear(C_WHITE);
+				dprint(1, 1, C_BLACK, "Save Grades Error: %d", error);
+				dupdate();
+				getkey();
+			}
+
 			return;
 		}
 

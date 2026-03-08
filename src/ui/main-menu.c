@@ -87,22 +87,35 @@ void UI_MainMenu(FXT_Config *config, const FXT_Database *database)
 					if (path.Path == nullptr)
 						goto beginning;
 
+					auto const pathLength = strlen(path.Path);
+
 					FXT_Beatmap beatmap;
 					const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path.Path);
 
-					if (path.NeedFree)
-						free(path.Path);
+					char gradesPath[pathLength + 1] = {};
+					{
+						strcpy(gradesPath, path.Path);
+						gradesPath[pathLength - 3] = 't';
+						gradesPath[pathLength - 2] = 'b';
+						gradesPath[pathLength - 1] = 'g';
+					}
 
 					if (error)
 					{
+						if (path.NeedFree)
+							free(path.Path);
+
 						dclear(C_WHITE);
-						dprint(1, 1, C_BLACK, "Error: %d", error);
+						dprint(1, 1, C_BLACK, "Main Menu Error: %d", error);
 						dupdate();
 						getkey();
 						continue;
 					}
 
-					UI_Play(&beatmap, config);
+					UI_Play(&beatmap, config, path.Path);
+
+					if (path.NeedFree)
+						free(path.Path);
 
 					FXT_Beatmap_FreeInner(&beatmap);
 				}
