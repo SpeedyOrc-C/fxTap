@@ -233,8 +233,13 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		}
 		else
 		{
-			// A/B means the A-th is being selected now and there are B beatmaps
-			dprint(93, 2, C_WHITE, "%2u/%u", selectedIndex + 1, size);
+			auto const lastGrades = view[selectedIndex]->value.LastGrades;
+
+			if (lastGrades != nullptr)
+			{
+				auto const scoreV2 = FXT_Grades_ScoreV2(*lastGrades);
+				dprint(91, 2, C_WHITE, "%.2f", scoreV2 * 100);
+			}
 
 			// Draw 2 beatmaps before
 			if (selectedIndex >= 2)
