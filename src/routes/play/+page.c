@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdio.h>
 #include <fxTap/beatmap.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
@@ -193,21 +192,17 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 
 	while (true)
 	{
+		while (pollevent().type != KEYEV_NONE)
+		{
+		}
+
 		bool isPressingColumn[FXT_MaxColumnCount] = {};
 
-		// Fetch latest key states
-		while (true)
+		for (int column = 0; column < game.Beatmap->ColumnCount; column += 1)
 		{
-			auto const e = pollevent();
-
-			if (e.type == KEYEV_NONE) break;
-
-			for (int column = 0; column < game.Beatmap->ColumnCount; column += 1)
-			{
-				auto const fxTapKey = keyMapper(column);
-				auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
-				isPressingColumn[column] = keydown(physicalKey) != 0;
-			}
+			auto const fxTapKey = keyMapper(column);
+			auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
+			isPressingColumn[column] = keydown(physicalKey) != 0;
 		}
 
 		const int32_t timeElapsedSinceStart128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
@@ -222,7 +217,7 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 		{
 			auto const saveGrades = ShowGrade(&game, config);
 
-			if (!saveGrades)
+			if (! saveGrades)
 				return;
 
 			auto const error = FXT_SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
