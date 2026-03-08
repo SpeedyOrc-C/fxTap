@@ -4,17 +4,17 @@ project(fxTap)
 
 set(SOURCES
 		src/main.c
-		src/ui/main-menu.c
-		src/ui/about.c
-		src/ui/select-song.c
-		src/ui/play.c
-		src/ui/settings.c
-		src/ui/key-test.c
-		src/settings/notes-falling-time.c
-		src/settings/note-appearance.c
-		src/settings/key-bindings.c
-		src/settings/key-binding-style.c
-		src/settings/language.c
+		src/routes/about/+page.c
+		src/routes/key-test/+page.c
+		src/routes/main-menu/+page.c
+		src/routes/play/+page.c
+		src/routes/select-song/+page.c
+		src/routes/settings/+page.c
+		src/routes/settings/notes-falling-time.c
+		src/routes/settings/note-appearance.c
+		src/routes/settings/key-bindings.c
+		src/routes/settings/key-binding-style.c
+		src/routes/settings/language.c
 )
 set(ASSETS
 )
