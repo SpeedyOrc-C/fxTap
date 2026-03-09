@@ -47,7 +47,7 @@ int main(void)
 		return 1;
 	}
 
-	UI_MainMenu(&config, &database);
+	UI_MainMenuLoop(&config, &database);
 
 	return 1;
 }

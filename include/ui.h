@@ -3,7 +3,7 @@
 #include <fxTap/config.h>
 #include <fxTap/database.h>
 
-void UI_MainMenu(FXT_Config *config, FXT_Database *database);
+void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database);
 
 void UI_About();
 
