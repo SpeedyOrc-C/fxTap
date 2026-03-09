@@ -19,6 +19,9 @@ set(SOURCES
 set(ASSETS
 )
 set(ASSETS_fx
+		assets-fx/Banner.png
+		assets-fx/Elemental_Creation.png
+
 		assets-fx/MainMenu_Buttons.png
 		assets-fx/About.png
 		assets-fx/SelectASong_Title.png

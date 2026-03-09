@@ -2,6 +2,8 @@
 
 #include <gint/display.h>
 
+extern const bopti_image_t Img_Banner;
+extern const bopti_image_t Img_Elemental_Creation;
 extern const bopti_image_t Img_MainMenu_Buttons;
 extern const bopti_image_t Img_About;
 extern const bopti_image_t Img_SelectASong_FN;
