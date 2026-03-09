@@ -235,9 +235,9 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		{
 			auto const lastGrades = view[selectedIndex]->value.LastGrades;
 
-			if (lastGrades != nullptr)
+			if (lastGrades.Exist)
 			{
-				auto const scoreV2 = FXT_Grades_ScoreV2(*lastGrades);
+				auto const scoreV2 = FXT_Grades_ScoreV2(lastGrades.Value);
 				dprint(91, 2, C_WHITE, "%.2f", scoreV2 * 100);
 			}
 

@@ -3,11 +3,17 @@
 #include <fxTap/config.h>
 #include <fxTap/database.h>
 
-void UI_MainMenu(FXT_Config *config, const FXT_Database *database);
+void UI_MainMenu(FXT_Config *config, FXT_Database *database);
 
 void UI_About();
 
-void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath);
+typedef struct
+{
+	bool Finished;
+	FXT_Grades Grades;
+} UI_Play_Result;
+
+UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath);
 
 void UI_Settings(FXT_Config *config);
 

@@ -156,7 +156,7 @@ bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 	}
 }
 
-void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
+UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
 {
 	ColumnWidth = config->ColumnWidth;
 	TapNoteHeight = config->TapNoteHeight;
@@ -172,7 +172,7 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 		dprint(1, 1, C_BLACK, "Can't find key mapper");
 		dupdate();
 		getkey();
-		return;
+		return (UI_Play_Result){.Finished = false};
 	}
 
 	const FXT_RendererController rendererController = {
@@ -218,7 +218,7 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 			auto const saveGrades = ShowGrade(&game, config);
 
 			if (! saveGrades)
-				return;
+				return (UI_Play_Result){.Finished = true, .Grades = game.Grades};
 
 			auto const error = FXT_SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
 
@@ -230,7 +230,7 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 				getkey();
 			}
 
-			return;
+			return (UI_Play_Result){.Finished = true, .Grades = game.Grades};
 		}
 
 		// Pause
@@ -248,7 +248,7 @@ void UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *b
 				startTime128 = rtc_ticks();
 				continue;
 			case PauseResult_Stop:
-				return;
+				return (UI_Play_Result){.Finished = false};
 			}
 		}
 	}

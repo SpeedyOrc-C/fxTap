@@ -8,6 +8,7 @@
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
 #include "fxconv-assets.h"
+#include "stb_ds.h"
 #include "ui.h"
 
 typedef enum MenuItem
@@ -47,7 +48,7 @@ FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 	return FXT_Beatmap_Load(dst, fileNameWithExtension);
 }
 
-void UI_MainMenu(FXT_Config *config, const FXT_Database *database)
+void UI_MainMenu(FXT_Config *config, FXT_Database *database)
 {
 	MenuItem selectedItem = Item_Play;
 
