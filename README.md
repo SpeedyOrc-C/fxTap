@@ -1,41 +1,25 @@
 # fxTap
 
-A rhythm game runs on CASIO calculators, the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
+A rhythm game on CASIO calculators,
+the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
 
 ![Holding fx-9860GIII with fxTap running](./holding-fx9860-with-fxtap-running.jpg)
 
+## Features
+
+- Support 1K to 9K.
+- Support beatmania IIDX & DJMax column mapping.
+- Support Overall Difficulty.
+- Customisable key mapping, note falling speed, column width and tap note height.
+- Support pausing.
+- Walking the file system to find out all your beatmaps.
+- Previewing beatmap.
+- Saving grades.
+- English & Chinese UI.
+
 # How to play?
 
-## Download
-
-You can download your favourite song's beatmap from the following games:
-
-### [osu!](https://osu.ppy.sh)
-
-Each beatmap is a ZIP archive, so unzip them, ignoring its `osz` extension.
-Each archive may contain more than one beatmap,
-so pick one osu! beatmap with `osu` extension.
-
-### [Malody](https://malody.mugzone.net)
-
-Each beatmap is a JSON file, which can be converted directly.
-
-## Convert
-
-Convert that beatmap to fxTap's format with [fxTap Adapter](https://github.com/SpeedyOrc-C/fxTap-Adapter).
-
-## Copy
-
-Copy the executable to your calculator.
-
-- G/GII: Use [FA-124](https://edu.casio.com/forteachers/er/software) via USB cable (legacy).
-- GII SD: Use SD card (legacy).
-- GIII: Use USB cable directly.
-
-Also copy the beatmaps with `fxt` extension in flash memory of your calculator.
-(GII SD model has an SD card slot,
-please copy your beatmap from SD card to flash memory before play.)
-Open the settings to configure the key-mappings and notes falling speed.
+Please go to wiki.
 
 # Beatmap Index
 
