@@ -50,7 +50,7 @@ void UI_Settings(FXT_Config *config)
 		{
 			if (settingsChanged)
 			{
-				enum FXT_ConfigError configError;
+				FXT_ConfigError configError;
 
 				if (gint[HWFS] == HWFS_CASIOWIN)
 					configError = gint_call((gint_call_t){
