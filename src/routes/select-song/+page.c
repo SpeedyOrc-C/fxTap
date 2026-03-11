@@ -277,12 +277,14 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 			break;
 
 		case KEY_F4:
-			selectedIndex = rtc_ticks() % size;
+			if (size > 0)
+				selectedIndex = rtc_ticks() % size;
 			break;
 
 		case KEY_F6:
 		case KEY_VARS:
-			UI_ShowBeatmapDetail(&view[selectedIndex]->value);
+			if (size > 0)
+				UI_ShowBeatmapDetail(&view[selectedIndex]->value);
 			break;
 
 		case KEY_EXIT:
@@ -300,7 +302,8 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 		}
 
 		case KEY_EXE:
-			return (OCharP){.Path = view[selectedIndex]->key, .NeedFree = false};
+			if (size > 0)
+				return (OCharP){.Path = view[selectedIndex]->key, .NeedFree = false};
 		default: break;
 		}
 	}
