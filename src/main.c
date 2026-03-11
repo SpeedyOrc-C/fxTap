@@ -6,7 +6,7 @@
 #include <gint/keyboard.h>
 #include "ui.h"
 
-static FXT_Config_Error LoadConfig(FXT_Config *config)
+static FXT_ConfigError LoadConfig(FXT_Config *config)
 {
 	if (gint[HWFS] == HWFS_FUGUE)
 		return FXT_Config_Load(config);
