@@ -17,6 +17,16 @@ static FXT_ConfigError LoadConfig(FXT_Config *dst)
 	});
 }
 
+static FXT_DatabaseError LoadDatabase(FXT_Database *dst)
+{
+	FXT_Database_Init(dst);
+
+	if (gint[HWFS] == HWFS_FUGUE)
+		return FXT_Database_SyncFromFileSystem(dst);
+
+	return 0;
+}
+
 int main(void)
 {
 	__printf_enable_fp();
@@ -34,9 +44,7 @@ int main(void)
 	}
 
 	FXT_Database database;
-	FXT_Database_Init(&database);
-
-	auto const databaseError = FXT_Database_SyncFromFileSystem(&database);
+	auto const databaseError = LoadDatabase(&database);
 
 	if (databaseError)
 	{
