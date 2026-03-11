@@ -66,7 +66,7 @@ void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
 				free(path.Path);
 
 			dclear(C_WHITE);
-			dprint(1, 1, C_BLACK, "Main Menu Error: %d", error);
+			dprint(1, 1, C_BLACK, "Beatmap Error: %d", error);
 			dupdate();
 			getkey();
 			continue;
