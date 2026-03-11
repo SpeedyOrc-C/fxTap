@@ -6,14 +6,14 @@
 #include <gint/keyboard.h>
 #include "ui.h"
 
-static FXT_ConfigError LoadConfig(FXT_Config *config)
+static FXT_ConfigError LoadConfig(FXT_Config *dst)
 {
 	if (gint[HWFS] == HWFS_FUGUE)
-		return FXT_Config_Load(config);
+		return FXT_Config_Load(dst);
 
 	return gint_call((gint_call_t){
 		.function = &FXT_Config_Load_BFile,
-		.args = {{.pv = config}}
+		.args = {{.pv = dst}}
 	});
 }
 
