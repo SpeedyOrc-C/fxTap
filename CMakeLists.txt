@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_C_STANDARD 23)
 project(fxTap)
 
+set(FXTAP_VERSION "01.03.0001")
+
 set(SOURCES
 		src/main.c
 		src/routes/about/+page.c
@@ -70,7 +72,7 @@ target_compile_definitions(fxTap-Core PUBLIC FXTAP_CORE_ON_GINT FXTAP_CORE_USE_C
 target_link_libraries(fxTap Gint::Gint fxTap-Core)
 
 if ("${FXSDK_PLATFORM_LONG}" STREQUAL fx9860G)
-	generate_g1a(TARGET fxTap OUTPUT "fxTap.g1a" NAME "fxTap" ICON assets-fx/icon.png)
+	generate_g1a(TARGET fxTap VERSION ${FXTAP_VERSION} OUTPUT "fxTap.g1a" NAME "fxTap" ICON assets-fx/icon.png)
 elseif ("${FXSDK_PLATFORM_LONG}" STREQUAL fx9860G_G3A)
-	generate_g3a(TARGET fxTap OUTPUT "fxTap-fx.g3a" NAME "fxTap-fx" ICONS assets-cg/icon-uns.png assets-cg/icon-sel.png)
+	generate_g3a(TARGET fxTap VERSION ${FXTAP_VERSION} OUTPUT "fxTap-fx.g3a" NAME "fxTap-fx" ICONS assets-cg/icon-uns.png assets-cg/icon-sel.png)
 endif ()
