@@ -68,7 +68,6 @@ add_subdirectory(fxTap-Core)
 target_include_directories(fxTap PUBLIC fxTap-Core/include)
 target_include_directories(fxTap PUBLIC include)
 target_compile_options(fxTap PRIVATE -Wall -Wextra -Os -g -flto)
-target_compile_definitions(fxTap-Core PUBLIC FXTAP_CORE_ON_GINT FXTAP_CORE_USE_CASIOWIN)
 target_link_libraries(fxTap Gint::Gint fxTap-Core)
 
 if ("${FXSDK_PLATFORM_LONG}" STREQUAL fx9860G)
