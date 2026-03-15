@@ -1,6 +1,9 @@
 /.idea
 /fxTap-Core
 
+# Krita's backup
+/assets-*/*~
+
 # Build files
 /cmake-build*/
 /build*/
