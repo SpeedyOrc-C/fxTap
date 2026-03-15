@@ -1,0 +1,5 @@
+CompileFlags:
+   Add: [-std=c23, -nostdlib]
+   BuiltinHeaders: QueryDriver
+   # These are only in GCC, not in clang
+   Remove: [-fstrict-volatile-bitfields, -mb]

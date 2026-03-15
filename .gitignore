@@ -2,7 +2,9 @@
 /fxTap-Core
 
 # Build files
+/cmake-build*/
 /build*/
+/compile_commands.json
 /*.g1a
 /*.g3a
 
