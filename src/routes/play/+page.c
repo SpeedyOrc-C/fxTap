@@ -158,12 +158,6 @@ bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 
 UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
 {
-	ColumnWidth = config->ColumnWidth;
-	TapNoteHeight = config->TapNoteHeight;
-
-	FXT_Game game;
-	FXT_Game_Init(&game, beatmap);
-
 	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
 
 	if (keyMapper == nullptr)
@@ -175,9 +169,15 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 		return (UI_Play_Result){.Finished = false};
 	}
 
+	FXT_Game game;
+	FXT_Game_Init(&game, beatmap);
+
 	if (config->OverrideDefaultOverDifficulty)
 		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
 			(double) config->CustomOverallDifficulty10 / 10);
+
+	ColumnWidth = config->ColumnWidth;
+	TapNoteHeight = config->TapNoteHeight;
 
 	const FXT_RendererController rendererController = {
 		.HeightAbove = DHEIGHT - 1,

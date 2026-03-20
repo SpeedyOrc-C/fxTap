@@ -28,6 +28,7 @@ set(ASSETS_fx
 
 		assets-fx/MainMenu_Buttons.png
 		assets-fx/About.png
+		assets-fx/SelectSong_TypeFilename.png
 		assets-fx/SelectASong_Title.png
 		assets-fx/SelectASong_FN.png
 		assets-fx/Path_FN.png
@@ -54,7 +55,6 @@ set(ASSETS_fx
 		assets-fx/Settings_CustomOverallDifficulty_Caption.png
 		assets-fx/Settings_CustomOverallDifficulty_Disabled_FN.png
 		assets-fx/Settings_CustomOverallDifficulty_Enabled_FN.png
-		assets-fx/SelectSong_TypeFilename.png
 )
 set(ASSETS_cg
 		assets-cg/example.png
