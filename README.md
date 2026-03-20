@@ -3,7 +3,7 @@
 A rhythm game on CASIO calculators,
 the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
 
-![Holding fx-9860GIII with fxTap running](./holding-fx9860-with-fxtap-running.jpg)
+![Holding fx-9860GIII with fxTap running](./showcase.jpg)
 
 ## Features
 

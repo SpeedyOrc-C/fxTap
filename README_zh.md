@@ -2,7 +2,7 @@
 
 在卡西欧计算器上的音游，同时也是 [fx4K](https://github.com/SpeedyOrc-C/fx4K) 的续作。
 
-![Holding fx-9860GIII with fxTap running](./holding-fx9860-with-fxtap-running.jpg)
+![Holding fx-9860GIII with fxTap running](./showcase.jpg)
 
 ## 功能
 
