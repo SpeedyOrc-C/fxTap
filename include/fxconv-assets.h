@@ -27,4 +27,7 @@ extern const bopti_image_t Img_Settings_KeyBindingStyle_FN_EN;
 extern const bopti_image_t Img_Settings_KeyBindings_Caption;
 extern const bopti_image_t Img_Settings_Language_Caption;
 extern const bopti_image_t Img_Settings_Language_Options;
+extern const bopti_image_t Img_Settings_CustomOverallDifficulty_Caption;
+extern const bopti_image_t Img_Settings_CustomOverallDifficulty_Disabled_FN;
+extern const bopti_image_t Img_Settings_CustomOverallDifficulty_Enabled_FN;
 extern const bopti_image_t Img_SelectSong_TypeFilename;

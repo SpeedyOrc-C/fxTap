@@ -18,6 +18,7 @@ set(SOURCES
 		src/routes/settings/key-bindings.c
 		src/routes/settings/key-binding-style.c
 		src/routes/settings/language.c
+		src/routes/settings/custom-overall-difficulty.c
 )
 set(ASSETS
 )
@@ -50,6 +51,9 @@ set(ASSETS_fx
 		assets-fx/Settings_KeyBindings_Caption.png
 		assets-fx/Settings_Language_Caption.png
 		assets-fx/Settings_Language_Options.png
+		assets-fx/Settings_CustomOverallDifficulty_Caption.png
+		assets-fx/Settings_CustomOverallDifficulty_Disabled_FN.png
+		assets-fx/Settings_CustomOverallDifficulty_Enabled_FN.png
 		assets-fx/SelectSong_TypeFilename.png
 )
 set(ASSETS_cg

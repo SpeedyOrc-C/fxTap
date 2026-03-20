@@ -5,7 +5,7 @@
 #include "fxconv-assets.h"
 #include "ui.h"
 
-static constexpr uint8_t ItemCount = 5;
+static constexpr uint8_t ItemCount = 6;
 
 typedef struct MenuItem
 {
@@ -20,6 +20,7 @@ void UI_Settings(FXT_Config *config)
 
 	const MenuItem items[ItemCount] = {
 		{.Render = NotesFallingTime_Render, .AcceptEvent = NotesFallingTime_AcceptEvent},
+		{.Render = CustomOverallDifficulty_Render, .AcceptEvent = CustomOverallDifficulty_AcceptEvent},
 		{.Render = Appearance_Render, .AcceptEvent = Appearance_AcceptEvent},
 		{.Render = KeyBindings_Render, .AcceptEvent = KeyBindings_AcceptEvent},
 		{.Render = KeyBindingStyle_Render, .AcceptEvent = KeyBindingStyle_AcceptEvent},

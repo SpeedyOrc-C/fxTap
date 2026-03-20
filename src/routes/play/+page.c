@@ -175,6 +175,10 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 		return (UI_Play_Result){.Finished = false};
 	}
 
+	if (config->OverrideDefaultOverDifficulty)
+		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
+			(double) config->CustomOverallDifficulty10 / 10);
+
 	const FXT_RendererController rendererController = {
 		.HeightAbove = DHEIGHT - 1,
 		.VisibleTime = config->NotesFallingTime,

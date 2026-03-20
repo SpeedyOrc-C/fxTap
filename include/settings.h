@@ -27,3 +27,7 @@ void KeyBindingStyle_AcceptEvent(key_event_t e, FXT_Config *config);
 void Language_Render(const FXT_Config *config);
 
 void Language_AcceptEvent(key_event_t e, FXT_Config *config);
+
+void CustomOverallDifficulty_Render(const FXT_Config *config);
+
+void CustomOverallDifficulty_AcceptEvent(key_event_t e, FXT_Config *config);
