@@ -156,6 +156,17 @@ bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 	}
 }
 
+FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const FXT_Grades *grades)
+{
+	if (gint[HWFS] == HWFS_FUGUE)
+		return FXT_SaveGradesAlongBeatmap(beatmapPath, grades);
+
+	return gint_call((gint_call_t){
+		.function = FXT_SaveGradesAlongBeatmap_BFile,
+		.args = {{.pv_c = beatmapPath}, {.pv_c = grades}},
+	});
+}
+
 UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
 {
 	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
@@ -226,12 +237,12 @@ restart:
 			if (! saveGrades)
 				return (UI_Play_Result){.Finished = true, .Grades = game.Grades};
 
-			auto const error = FXT_SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
+			auto const error = SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
 
 			if (error)
 			{
 				dclear(C_WHITE);
-				dprint(1, 1, C_BLACK, "Save Grades Error: %d", error);
+				dprint(1, 1, C_BLACK, "Database Error: %d", error);
 				dupdate();
 				getkey();
 			}

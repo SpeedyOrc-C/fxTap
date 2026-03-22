@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <stb_ds.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fxTap/database.h>
@@ -39,7 +40,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 	bool isCapitalised = true;
 	int cursor = 0;
 	// ReSharper disable once CppDFAMemoryLeak
-	char *fileName = malloc(FileNameMaxLen + 1);
+	char *fileName = malloc(FileNameMaxLen + 4 + 1);
 
 	assert(fileName != nullptr);
 
@@ -76,6 +77,15 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 			return (OCharP){.Path = nullptr};
 
 		case KEY_EXE:
+			if (!(fileName[cursor - 4] == '.' && fileName[cursor - 3] == 'f' && fileName[cursor - 2] == 'x' && fileName[cursor - 1] == 't'))
+			{
+				fileName[cursor] = '.';
+				fileName[cursor + 1] = 'f';
+				fileName[cursor + 2] = 'x';
+				fileName[cursor + 3] = 't';
+				fileName[cursor + 4] = 0;
+			}
+
 			// ReSharper disable once CppDFAMemoryLeak
 			return (OCharP){.Path = fileName, .NeedFree = true};
 

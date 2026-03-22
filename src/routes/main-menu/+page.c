@@ -10,32 +10,15 @@
 #include "ui.h"
 
 [[nodiscard]]
-FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
+static FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 {
-	FXT_BeatmapError error = 0;
-
-	if (gint[HWFS] == HWFS_CASIOWIN)
-		error = gint_call((gint_call_t){
-			.function = &FXT_Beatmap_Load_BFile,
-			.args = {{.pv = dst}, {.pc_c = path}}
-		});
-	else
-		error = FXT_Beatmap_Load(dst, path);
-
-	if (error != FXT_BeatmapError_FileNotFound)
-		return error;
-
-	// Try again with .fxt extension.
-	char fileNameWithExtension[strlen(path) + 4 + 1] = {};
-	sprintf(fileNameWithExtension, "%s.fxt", path);
-
 	if (gint[HWFS] == HWFS_CASIOWIN)
 		return gint_call((gint_call_t){
 			.function = &FXT_Beatmap_Load_BFile,
-			.args = {{.pv = dst}, {.pc = fileNameWithExtension}}
+			.args = {{.pv = dst}, {.pc_c = path}}
 		});
 
-	return FXT_Beatmap_Load(dst, fileNameWithExtension);
+	return FXT_Beatmap_Load(dst, path);
 }
 
 void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
