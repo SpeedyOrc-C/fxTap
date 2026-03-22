@@ -169,13 +169,6 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 		return (UI_Play_Result){.Finished = false};
 	}
 
-	FXT_Game game;
-	FXT_Game_Init(&game, beatmap);
-
-	if (config->OverrideDefaultOverDifficulty)
-		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
-			(double) config->CustomOverallDifficulty10 / 10);
-
 	ColumnWidth = config->ColumnWidth;
 	TapNoteHeight = config->TapNoteHeight;
 
@@ -188,6 +181,15 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 
 	static constexpr FXT_TimeMs WaitTimeBeforeStart = 1000;
 	static constexpr FXT_TimeMs WaitTimeAfterEnd = 1000;
+
+	FXT_Game game;
+
+restart:
+	FXT_Game_Init(&game, beatmap);
+
+	if (config->OverrideDefaultOverallDifficulty)
+		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
+			(double) config->CustomOverallDifficulty10 / 10);
 
 	const FXT_TimeMs endTime = FXT_Game_LastNoteEndTime(&game) + WaitTimeAfterEnd;
 
@@ -247,10 +249,7 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 				startTime128 = rtc_ticks();
 				continue;
 			case PauseResult_Restart:
-				FXT_Game_Init(&game, beatmap);
-				timeOffset = -WaitTimeBeforeStart;
-				startTime128 = rtc_ticks();
-				continue;
+				goto restart;
 			case PauseResult_Stop:
 				return (UI_Play_Result){.Finished = false};
 			}
