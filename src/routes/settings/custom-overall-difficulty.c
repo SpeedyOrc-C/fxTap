@@ -9,7 +9,7 @@ void CustomOverallDifficulty_Render(const FXT_Config *config)
 
 	dsubimage(0, 12, &Img_Settings_CustomOverallDifficulty_Caption, 0, 10 * config->Language, 128, 10, 0);
 
-	if (config->OverrideDefaultOverDifficulty)
+	if (config->OverrideDefaultOverallDifficulty)
 	{
 		dprint(42, 24, C_BLACK, "[OD: %.1f]", od);
 
@@ -22,7 +22,7 @@ void CustomOverallDifficulty_Render(const FXT_Config *config)
 
 	{
 		auto const image =
-				config->OverrideDefaultOverDifficulty
+				config->OverrideDefaultOverallDifficulty
 					? &Img_Settings_CustomOverallDifficulty_Enabled_FN
 					: &Img_Settings_CustomOverallDifficulty_Disabled_FN;
 
@@ -37,24 +37,24 @@ void CustomOverallDifficulty_AcceptEvent(const key_event_t e, FXT_Config *config
 	switch (e.key)
 	{
 	case KEY_F1:
-		if (config->OverrideDefaultOverDifficulty && config->CustomOverallDifficulty10 >= 5)
+		if (config->OverrideDefaultOverallDifficulty && config->CustomOverallDifficulty10 >= 5)
 			config->CustomOverallDifficulty10 -= 5;
 		break;
 	case KEY_F2:
-		if (config->OverrideDefaultOverDifficulty && config->CustomOverallDifficulty10 >= 1)
+		if (config->OverrideDefaultOverallDifficulty && config->CustomOverallDifficulty10 >= 1)
 			config->CustomOverallDifficulty10 -= 1;
 		break;
 	case KEY_F3:
 	case KEY_F4:
-		config->OverrideDefaultOverDifficulty = ! config->OverrideDefaultOverDifficulty;
+		config->OverrideDefaultOverallDifficulty = ! config->OverrideDefaultOverallDifficulty;
 		config->CustomOverallDifficulty10 = 70;
 		break;
 	case KEY_F5:
-		if (config->OverrideDefaultOverDifficulty && config->CustomOverallDifficulty10 <= 199)
+		if (config->OverrideDefaultOverallDifficulty && config->CustomOverallDifficulty10 <= 199)
 			config->CustomOverallDifficulty10 += 1;
 		break;
 	case KEY_F6:
-		if (config->OverrideDefaultOverDifficulty && config->CustomOverallDifficulty10 <= 195)
+		if (config->OverrideDefaultOverallDifficulty && config->CustomOverallDifficulty10 <= 195)
 			config->CustomOverallDifficulty10 += 5;
 		break;
 	default:

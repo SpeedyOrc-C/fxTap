@@ -172,7 +172,7 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 	FXT_Game game;
 	FXT_Game_Init(&game, beatmap);
 
-	if (config->OverrideDefaultOverDifficulty)
+	if (config->OverrideDefaultOverallDifficulty)
 		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
 			(double) config->CustomOverallDifficulty10 / 10);
 
@@ -248,7 +248,7 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 				continue;
 			case PauseResult_Restart:
 				FXT_Game_Init(&game, beatmap);
-				if (config->OverrideDefaultOverDifficulty)
+				if (config->OverrideDefaultOverallDifficulty)
 					game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
 						(double) config->CustomOverallDifficulty10 / 10);
 				timeOffset = -WaitTimeBeforeStart;
