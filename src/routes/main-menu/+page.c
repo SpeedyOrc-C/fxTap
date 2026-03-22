@@ -47,18 +47,8 @@ void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
 		if (path.Path == nullptr)
 			break;
 
-		auto const pathLength = strlen(path.Path);
-
 		FXT_Beatmap beatmap;
 		const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path.Path);
-
-		char gradesPath[pathLength + 1] = {};
-		{
-			strcpy(gradesPath, path.Path);
-			gradesPath[pathLength - 3] = 't';
-			gradesPath[pathLength - 2] = 'b';
-			gradesPath[pathLength - 1] = 'g';
-		}
 
 		if (error)
 		{
