@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
 #include <gint/display.h>
