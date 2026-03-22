@@ -39,3 +39,9 @@ git clone https://github.com/SpeedyOrc-C/fxTap-Core
 ```sh
 fxsdk build-fx
 ```
+
+# 相关项目
+
+- 转谱器：[fxTap Adapater](https://github.com/SpeedyOrc-C/fxTap-Adapter)
+- 核心库：[fxTap Core](https://github.com/SpeedyOrc-C/fxTap-Core)
+- 

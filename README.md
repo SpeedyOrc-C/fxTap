@@ -42,3 +42,8 @@ Run this command to build the executable `fxTap.g1a`.
 ```sh
 fxsdk build-fx
 ```
+
+# Related Projects
+
+- Beatmap converter：[fxTap Adapater](https://github.com/SpeedyOrc-C/fxTap-Adapter)
+- Core library：[fxTap Core](https://github.com/SpeedyOrc-C/fxTap-Core)
