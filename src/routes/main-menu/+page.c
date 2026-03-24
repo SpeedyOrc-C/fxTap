@@ -12,7 +12,7 @@ static FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 {
 	if (gint[HWFS] == HWFS_CASIOWIN)
 		return gint_call((gint_call_t){
-			.function = &FXT_Beatmap_Load_BFile,
+			.function = FXT_Beatmap_Load_BFile,
 			.args = {{.pv = dst}, {.pc_c = path}}
 		});
 

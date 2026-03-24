@@ -12,7 +12,7 @@ static FXT_ConfigError LoadConfig(FXT_Config *dst)
 		return FXT_Config_Load(dst);
 
 	return gint_call((gint_call_t){
-		.function = &FXT_Config_Load_BFile,
+		.function = FXT_Config_Load_BFile,
 		.args = {{.pv = dst}}
 	});
 }
