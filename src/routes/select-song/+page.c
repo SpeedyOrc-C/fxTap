@@ -153,7 +153,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 	}
 }
 
-void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
+static void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
 {
 	// TODO)) Allow word wrapping in strings
 	dclear(C_WHITE);

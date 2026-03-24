@@ -19,7 +19,7 @@ static FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 	return FXT_Beatmap_Load(dst, path);
 }
 
-void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
+static void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
 {
 	while (true)
 	{
