@@ -24,7 +24,10 @@ static FXT_DatabaseError LoadDatabase(FXT_Database *dst)
 	if (gint[HWFS] == HWFS_FUGUE)
 		return FXT_Database_SyncFromFileSystem(dst);
 
-	return 0;
+	return gint_call((gint_call_t){
+		.function = FXT_Database_SyncFromFileSystem_BFile,
+		.args = {{.pv = dst}}
+	});
 }
 
 int main(void)
