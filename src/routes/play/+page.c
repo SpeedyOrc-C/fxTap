@@ -57,7 +57,15 @@ static void RenderGameFrame(
 	for (int i = 0; i <= game->Beatmap->ColumnCount; i += 1)
 	{
 		auto const x = i * ColumnWidth;
-		dline(x, 0, x, DHEIGHT - 1, C_BLACK);
+
+		for (int y = 0; y < DHEIGHT; y += 2)
+			dpixel(x, y, C_BLACK);
+	}
+
+	for (int x = 0; x < game->Beatmap->ColumnCount * ColumnWidth; x += 2)
+	{
+		dpixel(x, DHEIGHT - 1, C_BLACK);
+		dpixel(x, DHEIGHT - 1, C_BLACK);
 	}
 
 	// Render number of notes in different grades
