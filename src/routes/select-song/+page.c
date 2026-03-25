@@ -77,11 +77,12 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 			return (OCharP){.Path = nullptr};
 
 		case KEY_EXE:
-			if (cursor >= 4
-				&& ! (fileName[cursor - 4] == '.'
-					&& fileName[cursor - 3] == 'f'
-					&& fileName[cursor - 2] == 'x'
-					&& fileName[cursor - 1] == 't'))
+			if (cursor <= 3
+			    || fileName[cursor - 4] != '.'
+			    || fileName[cursor - 3] != 'f'
+			    || fileName[cursor - 2] != 'x'
+			    || fileName[cursor - 1] != 't'
+			)
 			{
 				fileName[cursor] = '.';
 				fileName[cursor + 1] = 'f';
