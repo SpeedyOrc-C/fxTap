@@ -66,6 +66,7 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 	{
 		MenuImage_Banner,
 		MenuImage_ElementalCreation,
+		MenuImage_Daisuke,
 	} MenuImage;
 
 	MenuItem selectedItem = MenuItem_Play;
@@ -83,6 +84,9 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 			break;
 		case MenuImage_ElementalCreation:
 			dimage(0, 0, &Img_Elemental_Creation);
+			break;
+		case MenuImage_Daisuke:
+			dimage(0, 0, &Img_Daisuke);
 			break;
 		}
 
@@ -123,7 +127,7 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 				selectedImage -= 1;
 			break;
 		case KEY_RIGHT:
-			if (selectedImage < MenuImage_ElementalCreation)
+			if (selectedImage < MenuImage_Daisuke)
 				selectedImage += 1;
 			break;
 		case KEY_EXE:

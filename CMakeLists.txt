@@ -25,6 +25,7 @@ set(ASSETS
 set(ASSETS_fx
 		assets-fx/Banner.png
 		assets-fx/Elemental_Creation.png
+		assets-fx/Daisuke.png
 
 		assets-fx/MainMenu_Buttons.png
 		assets-fx/About.png
