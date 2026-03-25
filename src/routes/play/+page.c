@@ -13,14 +13,14 @@
 static int ColumnWidth = 10;
 static int TapNoteHeight = 4;
 
-void RenderTap(const int column, const double positionBottom)
+static void RenderTap(const int column, const double positionBottom)
 {
 	auto const x = column * ColumnWidth;
 	auto const y = (int) round(DHEIGHT - 1 - positionBottom);
 	drect(x + 1, y - TapNoteHeight, x + ColumnWidth - 1, y, C_BLACK);
 }
 
-void RenderHold(const int column, const double positionBottom, const double positionTop)
+static void RenderHold(const int column, const double positionBottom, const double positionTop)
 {
 	auto const x1 = column * ColumnWidth + 1;
 	auto const y1 = (int) round(DHEIGHT - 1 - positionTop);
@@ -35,14 +35,14 @@ void RenderHold(const int column, const double positionBottom, const double posi
 	drect_border(x1, y1, x2, y2, C_NONE, 1, C_BLACK);
 }
 
-int32_t Time128Delta(const int32_t start, const int32_t end)
+static int32_t Time128Delta(const int32_t start, const int32_t end)
 {
 	if (start <= end)
 		return end - start;
 	return 128 * 60 * 60 * 24 - start + end;
 }
 
-void RenderGameFrame(
+static void RenderGameFrame(
 	const FXT_Game *game,
 	const FXT_RendererController *rendererController,
 	const FXT_TimeMs timeNow,
@@ -86,7 +86,7 @@ typedef enum PauseResult
 	PauseResult_Stop,
 } PauseResult;
 
-PauseResult Pause(const FXT_Config *config)
+static PauseResult Pause(const FXT_Config *config)
 {
 	for (int x = 0; x < DWIDTH; x += 1)
 		for (int y = 0; y < DHEIGHT; y += 1)
@@ -119,7 +119,7 @@ PauseResult Pause(const FXT_Config *config)
 	}
 }
 
-bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
+static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 {
 	auto const grades = game->Grades;
 	auto const scoreV1 = 100 * FXT_Grades_ScoreV1(grades);
@@ -156,7 +156,7 @@ bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 	}
 }
 
-FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const FXT_Grades *grades)
+static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const FXT_Grades *grades)
 {
 	if (gint[HWFS] == HWFS_FUGUE)
 		return FXT_SaveGradesAlongBeatmap(beatmapPath, grades);
