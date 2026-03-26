@@ -147,7 +147,7 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 			{
 				auto const c = keycode_digit(e.key);
 
-				if (0 <= c && c <= 9)
+				if (c != -1)
 				{
 					fileName[cursor] = (char) ('0' + c);
 					cursor += 1;
