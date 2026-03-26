@@ -87,14 +87,14 @@ static void RenderGameFrame(
 	dupdate();
 }
 
-typedef enum PauseResult
+typedef enum PauseAction
 {
-	PauseResult_Resume,
-	PauseResult_Restart,
-	PauseResult_Stop,
-} PauseResult;
+	PauseAction_Resume,
+	PauseAction_Restart,
+	PauseAction_Stop,
+} PauseAction;
 
-static PauseResult Pause(const FXT_Config *config)
+static PauseAction Pause(const FXT_Config *config)
 {
 	for (int x = 0; x < DWIDTH; x += 1)
 		for (int y = 0; y < DHEIGHT; y += 1)
@@ -113,14 +113,14 @@ static PauseResult Pause(const FXT_Config *config)
 		{
 		case KEY_F1:
 		case KEY_F2:
-			return PauseResult_Stop;
+			return PauseAction_Stop;
 		case KEY_F3:
 		case KEY_F4:
-			return PauseResult_Restart;
+			return PauseAction_Restart;
 		case KEY_F5:
 		case KEY_F6:
 		case KEY_EXE:
-			return PauseResult_Resume;
+			return PauseAction_Resume;
 		default:
 			break;
 		}
@@ -232,13 +232,13 @@ restart:
 
 		const int32_t timeElapsedSinceStart128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
 		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
-		const FXT_TimeMs gameTime = timeOffset + timeElapsedSinceStart;
+		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
 
-		FXT_Game_Update(&game, gameTime, isPressingColumn);
-		RenderGameFrame(&game, &rendererController, gameTime, endTime);
+		FXT_Game_Update(&game, timeNow, isPressingColumn);
+		RenderGameFrame(&game, &rendererController, timeNow, endTime);
 
 		// Game finished normally
-		if (gameTime > endTime || keydown(KEY_OPTN))
+		if (timeNow > endTime || keydown(KEY_OPTN))
 		{
 			auto const saveGrades = ShowGrade(&game, config);
 
@@ -263,13 +263,13 @@ restart:
 		{
 			switch (Pause(config))
 			{
-			case PauseResult_Resume:
-				timeOffset = gameTime;
+			case PauseAction_Resume:
+				timeOffset = timeNow;
 				startTime128 = rtc_ticks();
 				continue;
-			case PauseResult_Restart:
+			case PauseAction_Restart:
 				goto restart;
-			case PauseResult_Stop:
+			case PauseAction_Stop:
 				return (UI_Play_Result){.Finished = false};
 			}
 		}
