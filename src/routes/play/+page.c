@@ -46,7 +46,8 @@ static void RenderGameFrame(
 	const FXT_Game *game,
 	const FXT_RendererController *rendererController,
 	const FXT_TimeMs timeNow,
-	const FXT_TimeMs endTime)
+	const FXT_TimeMs endTime,
+	const bool isPressingColumn[10])
 {
 	dclear(C_WHITE);
 
@@ -54,21 +55,28 @@ static void RenderGameFrame(
 	FXT_RendererController_Run(rendererController, game, timeNow);
 
 	// Render framework
-	for (int i = 0; i <= game->Beatmap->ColumnCount; i += 1)
+	for (int column = 0; column <= game->Beatmap->ColumnCount; column += 1)
 	{
-		auto const x = i * ColumnWidth;
+		auto const x = column * ColumnWidth;
 
 		for (int y = 0; y < DHEIGHT; y += 2)
 			dpixel(x, y, C_BLACK);
+
+		// Render pressing effect
+		if (isPressingColumn[column])
+			drect_border(
+				x, DHEIGHT - TapNoteHeight,
+				x + ColumnWidth, DHEIGHT - 1,
+				C_NONE, 2, C_BLACK);
 	}
 
-	for (int x = 0; x < game->Beatmap->ColumnCount * ColumnWidth; x += 2)
+	for (int x = 0; x < game->Beatmap->ColumnCount * ColumnWidth + 1; x += 2)
 	{
-		dpixel(x, DHEIGHT - 1, C_BLACK);
+		dpixel(x, DHEIGHT - TapNoteHeight, C_BLACK);
 		dpixel(x, DHEIGHT - 1, C_BLACK);
 	}
 
-	// Render number of notes in different grades
+	// Display number of notes in different grades
 	static constexpr int GradeX = 100;
 	dprint(GradeX, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
 	dprint(GradeX, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
@@ -235,7 +243,7 @@ restart:
 		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
 
 		FXT_Game_Update(&game, timeNow, isPressingColumn);
-		RenderGameFrame(&game, &rendererController, timeNow, endTime);
+		RenderGameFrame(&game, &rendererController, timeNow, endTime, isPressingColumn);
 
 		// Game finished normally
 		if (timeNow > endTime || keydown(KEY_OPTN))
