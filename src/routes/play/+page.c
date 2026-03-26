@@ -77,14 +77,21 @@ static void RenderGameFrame(
 	}
 
 	// Display number of notes in different grades
-	static constexpr int GradeX = 100;
-	dprint(GradeX, 0 * 8, C_BLACK, "%d", game->Grades.Miss);
-	dprint(GradeX, 1 * 8, C_BLACK, "%d", game->Grades.Meh);
-	dprint(GradeX, 2 * 8, C_BLACK, "%d", game->Grades.Ok);
-	dprint(GradeX, 3 * 8, C_BLACK, "%d", game->Grades.Good);
-	dprint(GradeX, 4 * 8, C_BLACK, "%d", game->Grades.Great);
-	dprint(GradeX, 5 * 8, C_BLACK, "%d", game->Grades.Perfect);
-	dprint(GradeX, 7 * 8, C_BLACK, "%d", game->Combo);
+	{
+		static constexpr int x = DWIDTH - 7;
+		static constexpr int fg = C_BLACK;
+		static constexpr int bg = C_NONE;
+		static constexpr int halign = DTEXT_RIGHT;
+		static constexpr int valign = DTEXT_TOP;
+		static const char *format = "%d";
+		dprint_opt(x, 0 * 8, fg, bg, halign, valign, format, game->Grades.Miss);
+		dprint_opt(x, 1 * 8, fg, bg, halign, valign, format, game->Grades.Meh);
+		dprint_opt(x, 2 * 8, fg, bg, halign, valign, format, game->Grades.Ok);
+		dprint_opt(x, 3 * 8, fg, bg, halign, valign, format, game->Grades.Good);
+		dprint_opt(x, 4 * 8, fg, bg, halign, valign, format, game->Grades.Great);
+		dprint_opt(x, 5 * 8, fg, bg, halign, valign, format, game->Grades.Perfect);
+		dprint_opt(x, 7 * 8 + 1, fg, bg, halign, valign, format, game->Combo);
+	}
 
 	// Render progress bar
 	drect_border(DWIDTH - 4, 0, DWIDTH - 1, DHEIGHT - 1, C_WHITE, 1, C_BLACK);
