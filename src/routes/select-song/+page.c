@@ -7,6 +7,7 @@
 #include <gint/keyboard.h>
 #include <gint/rtc.h>
 #include "fxconv-assets.h"
+#include "getkey-alpha-lock.h"
 #include "ui.h"
 
 static uint8_t AlphaFromKeyCode(const int keyCode)
@@ -45,17 +46,28 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 	assert(fileName != nullptr);
 
 	memset(fileName, 0, FileNameMaxLen + 1);
+	KeyboardAlphaState = KA_Locked;
 
 	while (true)
 	{
 		dclear(C_WHITE);
 		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
 		dprint(0, 35, C_BLACK, "[%s]", fileName);
-		dprint(98, 48, C_BLACK, isCapitalised ? "[ABC]" : "[abc]");
+		dprint(98, 48, C_BLACK,
+		       KeyboardAlphaState == KA_Idle
+			       ? "[1]"
+			       : KeyboardAlphaState == KA_Active
+				         ? isCapitalised
+					           ? "[A]"
+					           : "[a]"
+				         : isCapitalised
+					           ? "L[A]"
+					           : "L[a]"
+		);
 		dimage(0, 56, &Img_Path_FN);
 		dupdate();
 
-		const key_event_t e = getkey();
+		const key_event_t e = getkey_alpha_lock();
 
 		switch (e.key)
 		{

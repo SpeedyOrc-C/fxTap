@@ -19,6 +19,7 @@ set(SOURCES
 		src/routes/settings/key-binding-style.c
 		src/routes/settings/language.c
 		src/routes/settings/custom-overall-difficulty.c
+		src/routes/select-song/getkey-alpha-lock.c
 )
 set(ASSETS
 )
