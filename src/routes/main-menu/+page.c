@@ -112,7 +112,10 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 		{
 		case KEY_MENU:
 			if (e.shift)
+			{
+				selectedItem = MenuItem_Settings;
 				UI_Settings(config);
+			}
 			break;
 		case KEY_UP:
 			if (selectedItem > MenuItem_Play)
@@ -129,6 +132,14 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 		case KEY_RIGHT:
 			if (selectedImage < MenuImage_Daisuke)
 				selectedImage += 1;
+			break;
+		case KEY_OPTN:
+			selectedItem = MenuItem_KeyTest;
+			UI_KeyTest(config);
+			break;
+		case KEY_VARS:
+			selectedItem = MenuItem_About;
+			UI_About();
 			break;
 		case KEY_EXE:
 			switch (selectedItem)
