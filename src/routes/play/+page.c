@@ -142,26 +142,99 @@ static PauseAction Pause(const FXT_Config *config)
 	}
 }
 
+static void RenderResultSummary(
+	const FXT_Config *config,
+	const float scoreV1, const float scoreV2, const int64_t meanTiming,
+	const FXT_Grades *grades, const FXT_Game *game)
+{
+	dprint(0, 0 * 8, C_BLACK, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
+	dprint(0, 1 * 8, C_BLACK, "Max Combo:%u", game->Combo);
+	dprint(0, 2 * 8, C_BLACK, "S300:%u", grades->Perfect);
+	dprint(0, 3 * 8, C_BLACK, " 300:%u", grades->Great);
+	dprint(0, 4 * 8, C_BLACK, " 200:%u", grades->Good);
+	dprint(64, 2 * 8, C_BLACK, " 100:%u", grades->Ok);
+	dprint(64, 3 * 8, C_BLACK, "  50:%u", grades->Meh);
+	dprint(64, 4 * 8, C_BLACK, "Miss:%u", grades->Miss);
+	dprint(0, 5 * 8, C_BLACK, "Mean Timing:%ims", meanTiming);
+
+	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
+}
+
+static void RenderTimingDistribution(const FXT_Config *config, const FXT_Game *game, const size_t highestDeltaFrequency)
+{
+	static constexpr int y1 = DHEIGHT - 18;
+
+	for (size_t i = 0; i < 41; i += 1)
+	{
+		const int x1 = 3 + 3 * (int) i;
+		const int x2 = x1 + 1;
+
+		const int height = (int) round(40 * (double) game->TimingDistribution[i] / (double) highestDeltaFrequency);
+		const int y2 = y1 - height + 1;
+
+		if (height > 0)
+			drect(x1, y2, x2, y1, C_BLACK);
+
+		if (i == 5 || i == 10 || i == 15 || i == 20 || i == 25 || i == 30 || i == 35)
+			for (int x = x1; x <= x2; x += 1)
+				for (int y = 0; y <= y1; y += 1)
+					if ((x + y) % 2 == 0)
+						dpixel(x, y, C_BLACK);
+	}
+
+	dprint_opt(1 + 3 * 10, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "-100");
+	dprint_opt(3 + 3 * 20 + 1, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "0");
+	dprint_opt(1 + 3 * 30, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "+100");
+
+	dsubimage(65, 56, &Img_Summary_FN, 0, 8 * config->Language, 40, 8, 0);
+}
+
 static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 {
+	typedef enum GradesView
+	{
+		GradesView_Summary,
+		GradesView_TimingDistribution,
+	} GradesView;
+
+	GradesView view = GradesView_Summary;
+
 	auto const grades = game->Grades;
 	auto const scoreV1 = 100 * FXT_Grades_ScoreV1(grades);
 	auto const scoreV2 = 100 * FXT_Grades_ScoreV2(grades);
 
-	dclear(C_WHITE);
-	dprint(0, 0 * 8, C_BLACK, "ACC v1/v2 %.2f/%.2f", scoreV1, scoreV2);
-	dprint(0, 1 * 8, C_BLACK, "MAX COMBO %u", game->Combo);
-	dprint(0, 2 * 8, C_BLACK, "  Perfect %u", grades.Perfect);
-	dprint(0, 3 * 8, C_BLACK, "    Great %u", grades.Great);
-	dprint(0, 4 * 8, C_BLACK, "     Good %u", grades.Good);
-	dprint(0, 5 * 8, C_BLACK, "       OK %u", grades.Ok);
-	dprint(0, 6 * 8, C_BLACK, "      Meh %u", grades.Meh);
-	dprint(0, 7 * 8, C_BLACK, "     Miss %u", grades.Miss);
-	dsubimage(107, 56, &Img_Save_FN, 0, 8 * config->Language, 19, 8, 0);
-	dupdate();
+	size_t highestDeltaFrequency = 0;
+	for (size_t i = 0; i < 41; i += 1)
+		if (game->TimingDistribution[i] > highestDeltaFrequency)
+			highestDeltaFrequency = game->TimingDistribution[i];
+
+	int64_t meanTiming10Ms = 0;
+	int64_t timingCount = 0;
+	for (size_t i = 0; i < 41; i += 1)
+	{
+		timingCount += game->TimingDistribution[i];
+		meanTiming10Ms += (int64_t) game->TimingDistribution[i] * 10 * (i - 20);
+	}
+	meanTiming10Ms /= timingCount;
 
 	while (true)
 	{
+		dclear(C_WHITE);
+
+		dsubimage(107, 56, &Img_Save_FN, 0, 8 * config->Language, 19, 8, 0);
+
+		switch (view)
+		{
+		case GradesView_Summary:
+			RenderResultSummary(config, scoreV1, scoreV2, meanTiming10Ms * 10, &grades, game);
+			break;
+		case GradesView_TimingDistribution:
+			RenderTimingDistribution(config, game, highestDeltaFrequency);
+			break;
+		}
+
+		dupdate();
+
 		auto const e = getkey();
 
 		switch (e.key)
@@ -169,6 +242,14 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 		case KEY_EXIT:
 		case KEY_EXE:
 			return false;
+
+		case KEY_F4:
+		case KEY_F5:
+			if (view == GradesView_Summary)
+				view = GradesView_TimingDistribution;
+			else
+				view = GradesView_Summary;
+			break;
 
 		case KEY_F6:
 			return true;

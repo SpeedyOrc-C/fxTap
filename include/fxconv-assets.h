@@ -16,6 +16,8 @@ extern const bopti_image_t Img_Ascending_FN;
 extern const bopti_image_t Img_Descending_FN;
 extern const bopti_image_t Img_Pause_FN;
 extern const bopti_image_t Img_Save_FN;
+extern const bopti_image_t Img_Summary_FN;
+extern const bopti_image_t Img_TimingDistribution_FN;
 extern const bopti_image_t Img_Settings_Language_FN;
 extern const bopti_image_t Img_Settings_Title;
 extern const bopti_image_t Img_Settings_NoteAppearance_Caption;
