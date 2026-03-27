@@ -155,7 +155,8 @@ static void RenderResultSummary(
 	dprint(64, 2 * 8, C_BLACK, " 100:%u", grades->Ok);
 	dprint(64, 3 * 8, C_BLACK, "  50:%u", grades->Meh);
 	dprint(64, 4 * 8, C_BLACK, "Miss:%u", grades->Miss);
-	dprint(0, 5 * 8, C_BLACK, "Mean Timing:%ims", meanTiming);
+	// FIXME)) Wrong value here
+	// dprint(0, 5 * 8, C_BLACK, "Mean Timing:%ims", meanTiming);
 
 	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
 }
@@ -163,6 +164,12 @@ static void RenderResultSummary(
 static void RenderTimingDistribution(const FXT_Config *config, const FXT_Game *game, const size_t highestDeltaFrequency)
 {
 	static constexpr int y1 = DHEIGHT - 18;
+
+	dprint_opt(1 + 3 * 10, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "-100");
+	dprint_opt(3 + 3 * 20 + 1, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "0");
+	dprint_opt(1 + 3 * 30, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "+100");
+
+	dsubimage(65, 56, &Img_Summary_FN, 0, 8 * config->Language, 40, 8, 0);
 
 	for (size_t i = 0; i < 41; i += 1)
 	{
@@ -181,12 +188,6 @@ static void RenderTimingDistribution(const FXT_Config *config, const FXT_Game *g
 					if ((x + y) % 2 == 0)
 						dpixel(x, y, C_BLACK);
 	}
-
-	dprint_opt(1 + 3 * 10, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "-100");
-	dprint_opt(3 + 3 * 20 + 1, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "0");
-	dprint_opt(1 + 3 * 30, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "+100");
-
-	dsubimage(65, 56, &Img_Summary_FN, 0, 8 * config->Language, 40, 8, 0);
 }
 
 static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
@@ -208,14 +209,18 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 		if (game->TimingDistribution[i] > highestDeltaFrequency)
 			highestDeltaFrequency = game->TimingDistribution[i];
 
-	int64_t meanTiming10Ms = 0;
+	int64_t sumTiming10Ms = 0;
 	int64_t timingCount = 0;
 	for (size_t i = 0; i < 41; i += 1)
 	{
 		timingCount += game->TimingDistribution[i];
-		meanTiming10Ms += (int64_t) game->TimingDistribution[i] * 10 * (i - 20);
+		sumTiming10Ms += (int64_t) game->TimingDistribution[i] * ((int64_t) i - 20);
 	}
-	meanTiming10Ms /= timingCount;
+
+	if (timingCount > 0)
+        sumTiming10Ms = sumTiming10Ms * 10 / timingCount;
+
+	auto const meanTiming = (int) round((double) sumTiming10Ms * 10 / (double) timingCount);
 
 	while (true)
 	{
@@ -226,10 +231,11 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 		switch (view)
 		{
 		case GradesView_Summary:
-			RenderResultSummary(config, scoreV1, scoreV2, meanTiming10Ms * 10, &grades, game);
+			RenderResultSummary(config, scoreV1, scoreV2, meanTiming, &grades, game);
 			break;
 		case GradesView_TimingDistribution:
-			RenderTimingDistribution(config, game, highestDeltaFrequency);
+			if (timingCount > 0)
+                RenderTimingDistribution(config, game, highestDeltaFrequency);
 			break;
 		}
 
@@ -246,7 +252,10 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 		case KEY_F4:
 		case KEY_F5:
 			if (view == GradesView_Summary)
-				view = GradesView_TimingDistribution;
+			{
+				if (timingCount > 0)
+                    view = GradesView_TimingDistribution;
+			}
 			else
 				view = GradesView_Summary;
 			break;
