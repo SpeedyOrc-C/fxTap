@@ -3,7 +3,7 @@ set(CMAKE_C_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(fxTap)
 
-set(FXTAP_VERSION "01.06.0001")
+set(FXTAP_VERSION "02.00.0000")
 
 set(SOURCES
 		src/main.c
