@@ -26,7 +26,7 @@ static FXT_DatabaseError LoadDatabase(FXT_Database *dst)
 
 	return gint_call((gint_call_t){
 		.function = FXT_Database_SyncFromFileSystem_BFile,
-		.args = {{.pv = dst}}
+		.args = {{.pv = (void *) dst}}
 	});
 }
 
