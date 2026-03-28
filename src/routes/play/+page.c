@@ -144,7 +144,7 @@ static PauseAction Pause(const FXT_Config *config)
 
 static void RenderResultSummary(
 	const FXT_Config *config,
-	const float scoreV1, const float scoreV2, const int64_t meanTiming,
+	const float scoreV1, const float scoreV2, const double meanTiming,
 	const FXT_Grades *grades, const FXT_Game *game)
 {
 	dprint(0, 0 * 8, C_BLACK, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
@@ -155,8 +155,7 @@ static void RenderResultSummary(
 	dprint(64, 2 * 8, C_BLACK, " 100:%u", grades->Ok);
 	dprint(64, 3 * 8, C_BLACK, "  50:%u", grades->Meh);
 	dprint(64, 4 * 8, C_BLACK, "Miss:%u", grades->Miss);
-	// FIXME)) Wrong value here
-	// dprint(0, 5 * 8, C_BLACK, "Mean Timing:%ims", meanTiming);
+	dprint(0, 5 * 8, C_BLACK, "Mean Timing:%.1fms", meanTiming);
 
 	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
 }
@@ -213,14 +212,12 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 	int64_t timingCount = 0;
 	for (size_t i = 0; i < 41; i += 1)
 	{
-		timingCount += game->TimingDistribution[i];
-		sumTiming10Ms += (int64_t) game->TimingDistribution[i] * ((int64_t) i - 20);
+		auto const frequency = (int64_t) game->TimingDistribution[i];
+		timingCount += frequency;
+		sumTiming10Ms += frequency * ((int64_t) i - 20);
 	}
 
-	if (timingCount > 0)
-        sumTiming10Ms = sumTiming10Ms * 10 / timingCount;
-
-	auto const meanTiming = (int) round((double) sumTiming10Ms * 10 / (double) timingCount);
+	auto const meanTiming = (double) sumTiming10Ms * 10 / (double) timingCount;
 
 	while (true)
 	{
@@ -235,7 +232,7 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 			break;
 		case GradesView_TimingDistribution:
 			if (timingCount > 0)
-                RenderTimingDistribution(config, game, highestDeltaFrequency);
+				RenderTimingDistribution(config, game, highestDeltaFrequency);
 			break;
 		}
 
@@ -254,7 +251,7 @@ static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
 			if (view == GradesView_Summary)
 			{
 				if (timingCount > 0)
-                    view = GradesView_TimingDistribution;
+					view = GradesView_TimingDistribution;
 			}
 			else
 				view = GradesView_Summary;
