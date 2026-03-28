@@ -52,59 +52,67 @@ static void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *data
 	}
 }
 
+typedef enum MenuItem
+{
+	MenuItem_Play,
+	MenuItem_KeyTest,
+	MenuItem_Settings,
+	MenuItem_About,
+} MenuItem;
+
+typedef enum MenuImage
+{
+	MenuImage_Banner,
+	MenuImage_ElementalCreation,
+	MenuImage_Daisuke,
+} MenuImage;
+
+static void RenderMainMenu(
+	const FXT_Config *config,
+	const MenuImage selectedImage,
+	const MenuItem selectedItem)
+{
+	dclear(C_WHITE);
+
+	switch (selectedImage)
+	{
+	case MenuImage_Banner:
+		dimage(0, 0, &Img_Banner);
+		break;
+	case MenuImage_ElementalCreation:
+		dimage(0, 0, &Img_Elemental_Creation);
+		break;
+	case MenuImage_Daisuke:
+		dimage(0, 0, &Img_Daisuke);
+		break;
+	}
+
+	for (MenuItem item = MenuItem_Play; item <= MenuItem_About; item += 1)
+	{
+		const int y = 16 * item;
+
+		dsubimage(
+			80, y, &Img_MainMenu_Buttons,
+			48 * config->Language, y,
+			48, 16, 0
+		);
+
+		if (selectedItem == item)
+			drect(80, y, 127, y + 15, C_INVERT);
+	}
+
+	dupdate();
+}
+
 void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 {
-	typedef enum MenuItem
-	{
-		MenuItem_Play,
-		MenuItem_KeyTest,
-		MenuItem_Settings,
-		MenuItem_About,
-	} MenuItem;
-
-	typedef enum MenuImage
-	{
-		MenuImage_Banner,
-		MenuImage_ElementalCreation,
-		MenuImage_Daisuke,
-	} MenuImage;
-
 	MenuItem selectedItem = MenuItem_Play;
 	MenuImage selectedImage = MenuImage_Banner;
 
 	// ReSharper disable once CppDFAEndlessLoop
 	while (true)
 	{
-		dclear(C_WHITE);
-
-		switch (selectedImage)
-		{
-		case MenuImage_Banner:
-			dimage(0, 0, &Img_Banner);
-			break;
-		case MenuImage_ElementalCreation:
-			dimage(0, 0, &Img_Elemental_Creation);
-			break;
-		case MenuImage_Daisuke:
-			dimage(0, 0, &Img_Daisuke);
-			break;
-		}
-
-		for (MenuItem renderItem = MenuItem_Play; renderItem <= MenuItem_About; renderItem += 1)
-		{
-			const int y = 16 * renderItem;
-
-			dsubimage(
-				80, y, &Img_MainMenu_Buttons,
-				48 * config->Language, y,
-				48, 16, 0
-			);
-
-			if (selectedItem == renderItem)
-				drect(80, y, 127, y + 15, C_INVERT);
-		}
-
-		dupdate();
+		RenderMainMenu(config, selectedImage, selectedItem);
 
 		const key_event_t e = getkey();
 
