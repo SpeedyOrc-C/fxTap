@@ -13,9 +13,20 @@
 - 支持暂停。
 - 会自动在文件系统里面搜索所有的谱面。
 - 支持保存成绩。
+- 查看误差分布的直方图。
 - 英文和中文用户界面。
 
-# 怎么玩？
+## 截图
+
+| 游玩画面                          | 设置                                      |
+|:----------------------------------|:------------------------------------------|
+| ![](Gallery/Main%20Menu.png)      | ![](Gallery/Set%20note%20fall%20time.png) |
+| ![](Gallery/Song%20selection.png) | ![](Gallery/Set%20note%20appearance.png)  |
+| ![](Gallery/Gameplay.png)         | ![](Gallery/Set%20language.png)           |
+
+前往[画廊](Gallery)查看更多截图……
+
+## 怎么玩？
 
 请前往 Wiki 查看。
 
@@ -44,4 +55,6 @@ fxsdk build-fx
 
 - 转谱器：[fxTap Adapater](https://github.com/SpeedyOrc-C/fxTap-Adapter)
 - 核心库：[fxTap Core](https://github.com/SpeedyOrc-C/fxTap-Core)
-- 
+- 本仓库的其他位置
+    - [卡西欧星球](https://git.planet-casio.com/Chen-Zhanming/fxTap)
+    - [GitHub](https://github.com/SpeedyOrc-C/fxTap)

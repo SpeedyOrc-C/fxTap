@@ -15,9 +15,20 @@ the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
 - Walking the file system to find out all your beatmaps.
 - Previewing beatmap.
 - Saving grades.
+- Viewing timing distribution as a histogram.
 - English & Chinese UI.
 
-# How to play?
+## Screenshots
+
+| Gameplay                          | Settings                                  |
+|:----------------------------------|:------------------------------------------|
+| ![](Gallery/Main%20Menu.png)      | ![](Gallery/Set%20note%20fall%20time.png) |
+| ![](Gallery/Song%20selection.png) | ![](Gallery/Set%20note%20appearance.png)  |
+| ![](Gallery/Gameplay.png)         | ![](Gallery/Set%20language.png)           |
+
+Go to [gallary](Gallery) for more...
+
+## How to play?
 
 Please go to wiki.
 
@@ -47,3 +58,6 @@ fxsdk build-fx
 
 - Beatmap converter：[fxTap Adapater](https://github.com/SpeedyOrc-C/fxTap-Adapter)
 - Core library：[fxTap Core](https://github.com/SpeedyOrc-C/fxTap-Core)
+- This repo on
+    - [Planète Casio](https://git.planet-casio.com/Chen-Zhanming/fxTap)
+    - [GitHub](https://github.com/SpeedyOrc-C/fxTap)
