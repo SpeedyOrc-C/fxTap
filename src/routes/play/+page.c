@@ -147,15 +147,16 @@ static void RenderResultSummary(
 	const float scoreV1, const float scoreV2, const double meanTiming,
 	const FXT_Grades *grades, const FXT_Game *game)
 {
-	dprint(0, 0 * 8, C_BLACK, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
-	dprint(0, 1 * 8, C_BLACK, "Max Combo:%u", game->Combo);
-	dprint(0, 2 * 8, C_BLACK, "S300:%u", grades->Perfect);
-	dprint(0, 3 * 8, C_BLACK, " 300:%u", grades->Great);
-	dprint(0, 4 * 8, C_BLACK, " 200:%u", grades->Good);
-	dprint(64, 2 * 8, C_BLACK, " 100:%u", grades->Ok);
-	dprint(64, 3 * 8, C_BLACK, "  50:%u", grades->Meh);
-	dprint(64, 4 * 8, C_BLACK, "Miss:%u", grades->Miss);
-	dprint(0, 5 * 8, C_BLACK, "Mean Timing:%.1fms", meanTiming);
+	static constexpr int fg = C_BLACK;
+	dprint(0, 0 * 8, fg, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
+	dprint(0, 1 * 8, fg, "Max Combo:%u", game->Combo);
+	dprint(0, 2 * 8, fg, "S300:%u", grades->Perfect);
+	dprint(0, 3 * 8, fg, " 300:%u", grades->Great);
+	dprint(0, 4 * 8, fg, " 200:%u", grades->Good);
+	dprint(64, 2 * 8, fg, " 100:%u", grades->Ok);
+	dprint(64, 3 * 8, fg, "  50:%u", grades->Meh);
+	dprint(64, 4 * 8, fg, "Miss:%u", grades->Miss);
+	dprint(0, 5 * 8, fg, "Mean Timing:%.1fms", meanTiming);
 
 	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
 }
@@ -164,9 +165,19 @@ static void RenderTimingDistribution(const FXT_Config *config, const FXT_Game *g
 {
 	static constexpr int y1 = DHEIGHT - 18;
 
-	dprint_opt(1 + 3 * 10, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "-100");
-	dprint_opt(3 + 3 * 20 + 1, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "0");
-	dprint_opt(1 + 3 * 30, y1 + 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_TOP, "+100");
+	{
+		static constexpr int fg = C_BLACK;
+		static constexpr int bg = C_NONE;
+		static constexpr int halign = DTEXT_CENTER;
+		static constexpr int valign = DTEXT_TOP;
+		static constexpr int y = y1 + 2;
+		static constexpr int x1 = 1 + 3 * 10;
+		static constexpr int x2 = 3 + 3 * 20 + 1;
+		static constexpr int x3 = 1 + 3 * 30;
+		dprint_opt(x1, y, fg, bg, halign, valign, "-100");
+		dprint_opt(x2, y, fg, bg, halign, valign, "0");
+		dprint_opt(x3, y, fg, bg, halign, valign, "+100");
+	}
 
 	dsubimage(65, 56, &Img_Summary_FN, 0, 8 * config->Language, 40, 8, 0);
 
