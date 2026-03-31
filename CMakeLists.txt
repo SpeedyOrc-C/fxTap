@@ -32,6 +32,7 @@ set(ASSETS_fx
 		assets-fx/About.png
 		assets-fx/SelectSong_TypeFilename.png
 		assets-fx/SelectASong_Title.png
+		assets-fx/Modifications.png
 		assets-fx/SelectASong_FN.png
 		assets-fx/Path_FN.png
 

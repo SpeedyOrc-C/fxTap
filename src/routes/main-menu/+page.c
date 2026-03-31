@@ -19,11 +19,11 @@ static FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
 	return FXT_Beatmap_Load(dst, path);
 }
 
-static void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database)
+static void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
 	while (true)
 	{
-		auto const path = UI_AskBeatmapPath_ListLibrary(config, database);
+		auto const path = UI_AskBeatmapPath_ListLibrary(config, database, modOption);
 
 		if (path.Path == nullptr)
 			break;
@@ -43,7 +43,7 @@ static void UI_SelectPlayLoop(const FXT_Config *config, const FXT_Database *data
 			continue;
 		}
 
-		UI_Play(&beatmap, config, path.Path);
+		UI_Play(&beatmap, config, modOption, path.Path);
 
 		if (path.NeedFree)
 			free(path.Path);
@@ -104,7 +104,7 @@ static void RenderMainMenu(
 	dupdate();
 }
 
-void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
+void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
 	MenuItem selectedItem = MenuItem_Play;
 	MenuImage selectedImage = MenuImage_Banner;
@@ -153,7 +153,7 @@ void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database)
 			switch (selectedItem)
 			{
 			case MenuItem_Play:
-				UI_SelectPlayLoop(config, database);
+				UI_SelectPlayLoop(config, database, modOption);
 				break;
 			case MenuItem_KeyTest:
 				UI_KeyTest(config);

@@ -2,8 +2,9 @@
 
 #include <fxTap/config.h>
 #include <fxTap/database.h>
+#include <fxTap/mod.h>
 
-void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database);
+void UI_MainMenuLoop(FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption);
 
 void UI_About();
 
@@ -13,7 +14,7 @@ typedef struct
 	FXT_Grades Grades;
 } UI_Play_Result;
 
-UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath);
+UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath);
 
 void UI_Settings(FXT_Config *config);
 
@@ -30,4 +31,4 @@ typedef struct OCharP
 OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config);
 
 [[nodiscard]]
-OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database);
+OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption);

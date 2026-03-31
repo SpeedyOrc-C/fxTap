@@ -221,7 +221,44 @@ static void UI_ShowBeatmapDetail(const FXT_DatabaseRecord *record)
 	getkey();
 }
 
-OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database)
+static void UI_Modifications(FXT_ModOption *option, const FXT_Config *config)
+{
+	while (true)
+	{
+		dclear(C_WHITE);
+		dsubimage(0, 0, &Img_Modifications, 0, 64 * config->Language, DWIDTH, DHEIGHT, 0);
+
+		if (option->Mirror)
+			drect(2, 13, 62, 27, C_INVERT);
+
+		if (option->Random)
+			drect(65, 13, 125, 27, C_INVERT);
+
+		dupdate();
+
+		auto const e = getkey();
+
+		switch (e.key)
+		{
+		case KEY_1:
+			option->Mirror = ! option->Mirror;
+			if (option->Mirror)
+				option->Random = false;
+			break;
+		case KEY_4:
+			option->Random = ! option->Random;
+			if (option->Random)
+				option->Mirror = false;
+			break;
+		case KEY_EXIT:
+			return;
+		default:
+			break;
+		}
+	}
+}
+
+OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
 	auto const db = *database;
 
@@ -303,12 +340,16 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 				selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : size - 1;
 			break;
 
-		case KEY_F4:
+		case KEY_F3:
 			if (size > 0)
 				selectedIndex = rtc_ticks() % size;
 			break;
 
-		case KEY_F6:
+		case KEY_F4:
+			UI_Modifications(modOption, config);
+			break;
+
+		case KEY_F5:
 		case KEY_VARS:
 			if (size > 0)
 				UI_ShowBeatmapDetail(&view[selectedIndex]->value);
@@ -321,7 +362,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 			descending = ! descending;
 			break;
 
-		case KEY_F5: {
+		case KEY_F6: {
 			auto const userPath = UI_AskBeatmapPath_TypeFileNameManually(config);
 			if (userPath.Path != nullptr)
 				return userPath;

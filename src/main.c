@@ -1,6 +1,7 @@
 #include <fxlibc/printf.h>
 #include <fxTap/config.h>
 #include <fxTap/database.h>
+#include <fxTap/mod.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
@@ -58,7 +59,9 @@ int main(void)
 		return 1;
 	}
 
-	UI_MainMenuLoop(&config, &database);
+	FXT_ModOption modOption = {};
+
+	UI_MainMenuLoop(&config, &database, &modOption);
 
 	return 1;
 }

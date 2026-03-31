@@ -288,7 +288,7 @@ static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const F
 	});
 }
 
-UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const char *beatmapPath)
+UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
 {
 	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
 
@@ -317,7 +317,7 @@ UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, con
 	FXT_Game game;
 
 restart:
-	FXT_Game_Init(&game, beatmap);
+	FXT_Game_Init(&game, beatmap, modOption);
 
 	if (config->OverrideDefaultOverallDifficulty)
 		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
