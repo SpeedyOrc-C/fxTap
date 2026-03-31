@@ -241,11 +241,13 @@ static void UI_Modifications(FXT_ModOption *option, const FXT_Config *config)
 		switch (e.key)
 		{
 		case KEY_1:
+		case KEY_F1:
 			option->Mirror = ! option->Mirror;
 			if (option->Mirror)
 				option->Random = false;
 			break;
 		case KEY_4:
+		case KEY_F4:
 			option->Random = ! option->Random;
 			if (option->Random)
 				option->Mirror = false;
@@ -346,6 +348,7 @@ OCharP UI_AskBeatmapPath_ListLibrary(const FXT_Config *config, const FXT_Databas
 			break;
 
 		case KEY_F4:
+		case KEY_OPTN:
 			UI_Modifications(modOption, config);
 			break;
 
