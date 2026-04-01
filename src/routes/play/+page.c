@@ -1,390 +1,128 @@
-#include <math.h>
-#include <fxTap/beatmap.h>
-#include <fxTap/config.h>
-#include <fxTap/game.h>
-#include <fxTap/keymap.h>
-#include <fxTap/render.h>
-#include <gint/display.h>
+#include <stb_ds.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fxTap/database.h>
 #include <gint/keyboard.h>
 #include <gint/rtc.h>
 #include "assets.h"
 #include "ui.h"
 
-static int ColumnWidth = 10;
-static int TapNoteHeight = 4;
-
-static void RenderTap(const int column, const double positionBottom)
+OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
-	auto const x = column * ColumnWidth;
-	auto const y = (int) round(DHEIGHT - 1 - positionBottom);
-	drect(x + 1, y - TapNoteHeight, x + ColumnWidth - 1, y, C_BLACK);
-}
+	auto const db = *database;
 
-static void RenderHold(const int column, const double positionBottom, const double positionTop)
-{
-	auto const x1 = column * ColumnWidth + 1;
-	auto const y1 = (int) round(DHEIGHT - 1 - positionTop);
-	auto const x2 = column * ColumnWidth + ColumnWidth - 1;
-	auto const y2 = (int) round(DHEIGHT - 1 - positionBottom);
+	bool descending = true;
+	const size_t size = shlenu(db);
 
-	for (int x = x1; x <= x2; x += 1)
-		for (int y = y1; y <= y2; y += 1)
-			if ((x + y) % 2 == 0)
-				dpixel(x, y, C_BLACK);
+	size_t selectedIndex = 0;
 
-	drect_border(x1, y1, x2, y2, C_NONE, 1, C_BLACK);
-}
+	const struct FXT_Database *viewOrderByNameAsc[size] = {};
+	const struct FXT_Database *viewOrderByNameDsc[size] = {};
 
-static int32_t Time128Delta(const int32_t start, const int32_t end)
-{
-	if (start <= end)
-		return end - start;
-	return 128 * 60 * 60 * 24 - start + end;
-}
-
-static void RenderGameFrame(
-	const FXT_Game *game,
-	const FXT_RendererController *rendererController,
-	const FXT_TimeMs timeNow,
-	const FXT_TimeMs endTime,
-	const bool isPressingColumn[10])
-{
-	dclear(C_WHITE);
-
-	// Render notes
-	FXT_RendererController_Run(rendererController, game, timeNow);
-
-	// Render framework
-	for (int column = 0; column <= game->Beatmap->ColumnCount; column += 1)
+	for (size_t i = 0; i < size; i += 1)
 	{
-		auto const x = column * ColumnWidth;
-
-		for (int y = 0; y < DHEIGHT; y += 2)
-			dpixel(x, y, C_BLACK);
-
-		// Render pressing effect
-		if (isPressingColumn[column])
-			drect_border(
-				x, DHEIGHT - TapNoteHeight,
-				x + ColumnWidth, DHEIGHT - 1,
-				C_NONE, 2, C_BLACK);
+		viewOrderByNameAsc[i] = &db[i];
+		viewOrderByNameDsc[i] = &db[i];
 	}
 
-	for (int x = 0; x < game->Beatmap->ColumnCount * ColumnWidth + 1; x += 2)
-	{
-		dpixel(x, DHEIGHT - TapNoteHeight, C_BLACK);
-		dpixel(x, DHEIGHT - 1, C_BLACK);
-	}
-
-	// Display number of notes in different grades
-	{
-		static constexpr int x = DWIDTH - 7;
-		static constexpr int fg = C_BLACK;
-		static constexpr int bg = C_NONE;
-		static constexpr int halign = DTEXT_RIGHT;
-		static constexpr int valign = DTEXT_TOP;
-		static const char *format = "%d";
-		dprint_opt(x, 0 * 8, fg, bg, halign, valign, format, game->Grades.Miss);
-		dprint_opt(x, 1 * 8, fg, bg, halign, valign, format, game->Grades.Meh);
-		dprint_opt(x, 2 * 8, fg, bg, halign, valign, format, game->Grades.Ok);
-		dprint_opt(x, 3 * 8, fg, bg, halign, valign, format, game->Grades.Good);
-		dprint_opt(x, 4 * 8, fg, bg, halign, valign, format, game->Grades.Great);
-		dprint_opt(x, 5 * 8, fg, bg, halign, valign, format, game->Grades.Perfect);
-		dprint_opt(x, 7 * 8 + 1, fg, bg, halign, valign, format, game->Combo);
-	}
-
-	// Render progress bar
-	drect_border(DWIDTH - 4, 0, DWIDTH - 1, DHEIGHT - 1, C_WHITE, 1, C_BLACK);
-	auto const progress = (int) roundf((float) (DHEIGHT - 2) * (float) timeNow / (float) endTime);
-	if (progress > 0)
-		drect(DWIDTH - 3, 1, DWIDTH - 2, progress, C_BLACK);
-
-	dupdate();
-}
-
-typedef enum PauseAction
-{
-	PauseAction_Resume,
-	PauseAction_Restart,
-	PauseAction_Stop,
-} PauseAction;
-
-static PauseAction Pause(const FXT_Config *config)
-{
-	for (int x = 0; x < DWIDTH; x += 1)
-		for (int y = 0; y < DHEIGHT; y += 1)
-			if ((x + y) % 2 == 1)
-				dpixel(x, y, C_WHITE);
-
-	dline(0, 55, DWIDTH - 1, 55, C_WHITE);
-	dsubimage(0, 56, &Img_Pause_FN, 0, 8 * config->Language, 128, 8, 0);
-	dupdate();
+	qsort(viewOrderByNameAsc, size, sizeof(FXT_Database), FXT_Database_Compare_Reverse_Void);
+	qsort(viewOrderByNameDsc, size, sizeof(FXT_Database), FXT_Database_Compare_Void);
 
 	while (true)
 	{
-		auto const e = getkey();
+		auto const view = descending ? viewOrderByNameDsc : viewOrderByNameAsc;
+
+		dclear(C_WHITE);
+
+		dsubimage(1, 1, &Img_SelectASong_Title, 0, 10 * config->Language, 128, 10, 0);
+		drect(0, 0, 127, 10, C_INVERT);
+		dsubimage(0, 56, &Img_SelectASong_FN, 0, 8 * config->Language, 128, 8, 0);
+
+		dsubimage(2, 56, descending ? &Img_Ascending_FN : &Img_Descending_FN, 0, 8 * config->Language, 19, 8, 0);
+
+		if (size == 0)
+		{
+			dtext(56, 27, C_BLACK, "???");
+		}
+		else
+		{
+			auto const lastGrades = view[selectedIndex]->value.LastGrades;
+
+			if (lastGrades.Exist)
+			{
+				auto const scoreV2 = FXT_Grades_ScoreV2(lastGrades.Value);
+				dprint(91, 2, C_WHITE, "%.2f", scoreV2 * 100);
+			}
+
+			// Draw 2 beatmaps before
+			if (selectedIndex >= 2)
+				dtext(1, 13, C_BLACK, view[selectedIndex - 2]->value.Title);
+			if (selectedIndex >= 1)
+				dtext(1, 21, C_BLACK, view[selectedIndex - 1]->value.Title);
+
+			// Draw selected beatmap
+			dtext(1, 30, C_BLACK, view[selectedIndex]->value.Title);
+			drect(0, 29, 127, 37, C_INVERT);
+
+			// Draw 2 beatmaps after
+			if (size - selectedIndex >= 2)
+				dtext(1, 39, C_BLACK, view[selectedIndex + 1]->value.Title);
+			if (size - selectedIndex >= 3)
+				dtext(1, 47, C_BLACK, view[selectedIndex + 2]->value.Title);
+		}
+
+		dupdate();
+
+		const key_event_t e = getkey();
 
 		switch (e.key)
 		{
-		case KEY_F1:
-		case KEY_F2:
-			return PauseAction_Stop;
+		case KEY_DOWN:
+		case KEY_RIGHT:
+			if (size > 0)
+				selectedIndex = (selectedIndex + 1) % size;
+			break;
+
+		case KEY_UP:
+		case KEY_LEFT:
+			if (size > 0)
+				selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : size - 1;
+			break;
+
 		case KEY_F3:
+			if (size > 0)
+				selectedIndex = rtc_ticks() % size;
+			break;
+
 		case KEY_F4:
-			return PauseAction_Restart;
+		case KEY_OPTN:
+			UI_Play_Mods(modOption, config);
+			break;
+
 		case KEY_F5:
-		case KEY_F6:
-		case KEY_EXE:
-			return PauseAction_Resume;
-		default:
+		case KEY_VARS:
+			if (size > 0)
+				UI_Play_Detail(&view[selectedIndex]->value);
 			break;
-		}
-	}
-}
 
-static void RenderResultSummary(
-	const FXT_Config *config,
-	const float scoreV1, const float scoreV2, const double meanTiming,
-	const FXT_Grades *grades, const FXT_Game *game)
-{
-	static constexpr int fg = C_BLACK;
-	dprint(0, 0 * 8, fg, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
-	dprint(0, 1 * 8, fg, "Max Combo:%u", game->Combo);
-	dprint(0, 2 * 8, fg, "S300:%u", grades->Perfect);
-	dprint(0, 3 * 8, fg, " 300:%u", grades->Great);
-	dprint(0, 4 * 8, fg, " 200:%u", grades->Good);
-	dprint(64, 2 * 8, fg, " 100:%u", grades->Ok);
-	dprint(64, 3 * 8, fg, "  50:%u", grades->Meh);
-	dprint(64, 4 * 8, fg, "Miss:%u", grades->Miss);
-	dprint(0, 5 * 8, fg, "Mean Timing:%.1fms", meanTiming);
-
-	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
-}
-
-static void RenderTimingDistribution(const FXT_Config *config, const FXT_Game *game, const size_t highestDeltaFrequency)
-{
-	static constexpr int y1 = DHEIGHT - 18;
-
-	{
-		static constexpr int fg = C_BLACK;
-		static constexpr int bg = C_NONE;
-		static constexpr int halign = DTEXT_CENTER;
-		static constexpr int valign = DTEXT_TOP;
-		static constexpr int y = y1 + 2;
-		static constexpr int x1 = 1 + 3 * 10;
-		static constexpr int x2 = 3 + 3 * 20 + 1;
-		static constexpr int x3 = 1 + 3 * 30;
-		dprint_opt(x1, y, fg, bg, halign, valign, "-100");
-		dprint_opt(x2, y, fg, bg, halign, valign, "0");
-		dprint_opt(x3, y, fg, bg, halign, valign, "+100");
-	}
-
-	dsubimage(65, 56, &Img_Summary_FN, 0, 8 * config->Language, 40, 8, 0);
-
-	for (size_t i = 0; i < 41; i += 1)
-	{
-		const int x1 = 3 + 3 * (int) i;
-		const int x2 = x1 + 1;
-
-		const int height = (int) round(40 * (double) game->TimingDistribution[i] / (double) highestDeltaFrequency);
-		const int y2 = y1 - height + 1;
-
-		if (height > 0)
-			drect(x1, y2, x2, y1, C_BLACK);
-
-		if (i == 5 || i == 10 || i == 15 || i == 20 || i == 25 || i == 30 || i == 35)
-			for (int x = x1; x <= x2; x += 1)
-				for (int y = 0; y <= y1; y += 1)
-					if ((x + y) % 2 == 0)
-						dpixel(x, y, C_BLACK);
-	}
-}
-
-static bool ShowGrade(const FXT_Game *game, const FXT_Config *config)
-{
-	typedef enum GradesView
-	{
-		GradesView_Summary,
-		GradesView_TimingDistribution,
-	} GradesView;
-
-	GradesView view = GradesView_Summary;
-
-	auto const grades = game->Grades;
-	auto const scoreV1 = 100 * FXT_Grades_ScoreV1(grades);
-	auto const scoreV2 = 100 * FXT_Grades_ScoreV2(grades);
-
-	size_t highestDeltaFrequency = 0;
-	for (size_t i = 0; i < 41; i += 1)
-		if (game->TimingDistribution[i] > highestDeltaFrequency)
-			highestDeltaFrequency = game->TimingDistribution[i];
-
-	int64_t sumTiming10Ms = 0;
-	int64_t timingCount = 0;
-	for (size_t i = 0; i < 41; i += 1)
-	{
-		auto const frequency = (int64_t) game->TimingDistribution[i];
-		timingCount += frequency;
-		sumTiming10Ms += frequency * ((int64_t) i - 20);
-	}
-
-	auto const meanTiming = (double) sumTiming10Ms * 10 / (double) timingCount;
-
-	while (true)
-	{
-		dclear(C_WHITE);
-
-		dsubimage(107, 56, &Img_Save_FN, 0, 8 * config->Language, 19, 8, 0);
-
-		switch (view)
-		{
-		case GradesView_Summary:
-			RenderResultSummary(config, scoreV1, scoreV2, meanTiming, &grades, game);
-			break;
-		case GradesView_TimingDistribution:
-			if (timingCount > 0)
-				RenderTimingDistribution(config, game, highestDeltaFrequency);
-			break;
-		}
-
-		dupdate();
-
-		auto const e = getkey();
-
-		switch (e.key)
-		{
 		case KEY_EXIT:
+			return (OCharP){.Path = nullptr};
+
+		case KEY_F1:
+			descending = ! descending;
+			break;
+
+		case KEY_F6: {
+			auto const userPath = UI_Play_FromPath(config);
+			if (userPath.Path != nullptr)
+				return userPath;
+			break;
+		}
+
 		case KEY_EXE:
-			return false;
-
-		case KEY_F4:
-		case KEY_F5:
-			if (view == GradesView_Summary)
-			{
-				if (timingCount > 0)
-					view = GradesView_TimingDistribution;
-			}
-			else
-				view = GradesView_Summary;
-			break;
-
-		case KEY_F6:
-			return true;
-
-		default:
-			break;
-		}
-	}
-}
-
-static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const FXT_Grades *grades)
-{
-	if (gint[HWFS] == HWFS_FUGUE)
-		return FXT_SaveGradesAlongBeatmap(beatmapPath, grades);
-
-	return gint_call((gint_call_t){
-		.function = FXT_SaveGradesAlongBeatmap_BFile,
-		.args = {{.pv_c = beatmapPath}, {.pv_c = grades}},
-	});
-}
-
-UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
-{
-	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
-
-	if (keyMapper == nullptr)
-	{
-		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "Can't find key mapper");
-		dupdate();
-		getkey();
-		return (UI_Play_Result){.Finished = false};
-	}
-
-	ColumnWidth = config->ColumnWidth;
-	TapNoteHeight = config->TapNoteHeight;
-
-	const FXT_RendererController rendererController = {
-		.HeightAbove = DHEIGHT - 1,
-		.VisibleTime = config->NotesFallingTime,
-		.RenderTap = &RenderTap,
-		.RenderHold = &RenderHold,
-	};
-
-	static constexpr FXT_TimeMs WaitTimeBeforeStart = 1000;
-	static constexpr FXT_TimeMs WaitTimeAfterEnd = 1000;
-
-	FXT_Game game;
-
-restart:
-	FXT_Game_Init(&game, beatmap, modOption);
-
-	if (config->OverrideDefaultOverallDifficulty)
-		game.Tolerance = FXT_Tolerance_FromOverallDifficulty(
-			(double) config->CustomOverallDifficulty10 / 10);
-
-	const FXT_TimeMs endTime = FXT_Game_LastNoteEndTime(&game) + WaitTimeAfterEnd;
-
-	FXT_TimeMs timeOffset = -WaitTimeBeforeStart;
-	auto startTime128 = rtc_ticks();
-
-	while (true)
-	{
-		while (pollevent().type != KEYEV_NONE)
-		{
-		}
-
-		bool isPressingColumn[FXT_MaxColumnCount] = {};
-
-		for (int column = 0; column < game.Beatmap->ColumnCount; column += 1)
-		{
-			auto const fxTapKey = keyMapper(column);
-			auto const physicalKey = config->PhysicalKeyOfFxTapKey[fxTapKey];
-			isPressingColumn[column] = keydown(physicalKey) != 0;
-		}
-
-		const int32_t timeElapsedSinceStart128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
-		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
-		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
-
-		FXT_Game_Update(&game, timeNow, isPressingColumn);
-		RenderGameFrame(&game, &rendererController, timeNow, endTime, isPressingColumn);
-
-		// Game finished normally
-		if (timeNow > endTime || keydown(KEY_OPTN))
-		{
-			auto const saveGrades = ShowGrade(&game, config);
-
-			if (! saveGrades)
-				return (UI_Play_Result){.Finished = true, .Grades = game.Grades};
-
-			auto const error = SaveGradesAlongBeatmap(beatmapPath, &game.Grades);
-
-			if (error)
-			{
-				dclear(C_WHITE);
-				dprint(1, 1, C_BLACK, "Database Error: %d", error);
-				dupdate();
-				getkey();
-			}
-
-			return (UI_Play_Result){.Finished = true, .Grades = game.Grades};
-		}
-
-		// Pause
-		if (keydown(KEY_EXIT))
-		{
-			switch (Pause(config))
-			{
-			case PauseAction_Resume:
-				timeOffset = timeNow;
-				startTime128 = rtc_ticks();
-				continue;
-			case PauseAction_Restart:
-				goto restart;
-			case PauseAction_Stop:
-				return (UI_Play_Result){.Finished = false};
-			}
+			if (size > 0)
+				return (OCharP){.Path = view[selectedIndex]->key, .NeedFree = false};
+		default: break;
 		}
 	}
 }

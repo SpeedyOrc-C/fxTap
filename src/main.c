@@ -61,7 +61,7 @@ int main(void)
 
 	FXT_ModOption modOption = {};
 
-	UI_MainMenuLoop(&config, &database, &modOption);
+	UI_Root(&config, &database, &modOption);
 
 	return 1;
 }

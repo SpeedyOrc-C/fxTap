@@ -1,5 +1,4 @@
 #include "getkey-alpha-lock.h"
-
 #include <gint/keyboard.h>
 
 KeyboardAlpha KeyboardAlphaState = KA_Idle;

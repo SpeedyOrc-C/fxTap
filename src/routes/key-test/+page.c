@@ -2,8 +2,8 @@
 #include <fxTap/keymap.h>
 #include <gint/display.h>
 #include <gint/keyboard.h>
-#include "settings.h"
 #include "ui.h"
+#include "utils/keycode.h"
 
 static const char *ShowPhysicalKey(const FXT_Config *config, const FXT_Key key)
 {
