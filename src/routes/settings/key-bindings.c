@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <fxTap/keymap.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "settings.h"
 
 FXT_Key selectedKeyBinding;

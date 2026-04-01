@@ -2,7 +2,7 @@
 #include <fxTap/config.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "ui.h"
 
 static constexpr uint8_t ItemCount = 6;

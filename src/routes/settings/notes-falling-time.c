@@ -1,4 +1,4 @@
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "settings.h"
 
 void NotesFallingTime_Render(const FXT_Config *config)

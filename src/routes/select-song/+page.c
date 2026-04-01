@@ -6,7 +6,7 @@
 #include <fxTap/database.h>
 #include <gint/keyboard.h>
 #include <gint/rtc.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "getkey-alpha-lock.h"
 #include "ui.h"
 

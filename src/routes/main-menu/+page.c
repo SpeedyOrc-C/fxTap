@@ -4,7 +4,7 @@
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "ui.h"
 
 [[nodiscard]]

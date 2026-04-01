@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <gint/keyboard.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "ui.h"
 
 void UI_About()

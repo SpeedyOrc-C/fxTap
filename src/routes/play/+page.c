@@ -7,7 +7,7 @@
 #include <gint/display.h>
 #include <gint/keyboard.h>
 #include <gint/rtc.h>
-#include "fxconv-assets.h"
+#include "assets.h"
 #include "ui.h"
 
 static int ColumnWidth = 10;
