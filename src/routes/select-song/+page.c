@@ -52,18 +52,18 @@ OCharP UI_AskBeatmapPath_TypeFileNameManually(const FXT_Config *config)
 	{
 		dclear(C_WHITE);
 		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
-		dprint(0, 35, C_BLACK, "[%s]", fileName);
-		dprint(98, 48, C_BLACK,
-		       KeyboardAlphaState == KA_Idle
-			       ? "[1]"
-			       : KeyboardAlphaState == KA_Active
-				         ? isCapitalised
-					           ? "[A]"
-					           : "[a]"
-				         : isCapitalised
-					           ? "L[A]"
-					           : "L[a]"
-		);
+		drect_border(0, 33, DWIDTH - 1, 43, C_NONE, 1, C_BLACK);
+		dtext(2, 35, C_BLACK, fileName);
+		dprint_opt(DWIDTH - 1, 48, C_BLACK, C_WHITE, DTEXT_RIGHT, DTEXT_TOP,
+		           KeyboardAlphaState == KA_Idle
+			           ? "[1]"
+			           : KeyboardAlphaState == KA_Active
+				             ? isCapitalised
+					               ? "[A]"
+					               : "[a]"
+				             : isCapitalised
+					               ? "L[A]"
+					               : "L[a]");
 		dimage(0, 56, &Img_Path_FN);
 		dupdate();
 
