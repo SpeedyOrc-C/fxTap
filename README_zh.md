@@ -10,6 +10,9 @@
 - 支持 beatmania IIDX 和 DJMax 的轨道映射。
 - 支持谱面的准度要求。
 - 可自定义的按键映射、下落速度、音符的高度与轨道的宽度。
+- 支持模组：
+  - 镜像
+  - 随机
 - 支持暂停。
 - 会自动在文件系统里面搜索所有的谱面。
 - 支持保存成绩。
@@ -23,6 +26,7 @@
 | ![](Gallery/Main%20Menu.png)      | ![](Gallery/Set%20note%20fall%20time.png) |
 | ![](Gallery/Song%20selection.png) | ![](Gallery/Set%20note%20appearance.png)  |
 | ![](Gallery/Gameplay.png)         | ![](Gallery/Set%20language.png)           |
+| ![](Gallery/Modifications.png)    |                                           |
 
 前往[画廊](Gallery)查看更多截图……
 
