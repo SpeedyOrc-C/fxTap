@@ -7,12 +7,8 @@ set(FXTAP_VERSION "02.01.0000")
 
 set(SOURCES
 		src/main.c
-		src/routes/about/+page.c
-		src/routes/key-test/+page.c
 		src/routes/+page.c
-		src/routes/play/+page.c
-		src/routes/play/from-path/getkey-alpha-lock.c
-		src/routes/play/from-list/+page.c
+		src/routes/key-test/+page.c
 		src/routes/settings/+page.c
 		src/routes/settings/notes-falling-time.c
 		src/routes/settings/note-appearance.c
@@ -20,9 +16,13 @@ set(SOURCES
 		src/routes/settings/key-binding-style.c
 		src/routes/settings/language.c
 		src/routes/settings/custom-overall-difficulty.c
+		src/routes/play/+page.c
+		src/routes/play/from-path/+page.c
+		src/routes/play/from-path/getkey-alpha-lock.c
+		src/routes/play/from-list/+page.c
 		src/routes/play/detail/+page.c
 		src/routes/play/mods/+page.c
-		src/routes/play/from-path/+page.c
+		src/routes/about/+page.c
 		src/utils/keycode.c
 )
 set(ASSETS
