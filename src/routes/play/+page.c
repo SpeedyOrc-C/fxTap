@@ -1,4 +1,5 @@
 #include <math.h>
+#include <time.h>
 #include <fxTap/beatmap.h>
 #include <fxTap/config.h>
 #include <fxTap/game.h>
@@ -12,19 +13,20 @@
 
 static int ColumnWidth = 10;
 static int TapNoteHeight = 4;
+static int foolOffset = 0;
 
 static void RenderTap(const int column, const double positionBottom)
 {
-	auto const x = column * ColumnWidth;
+	auto const x = foolOffset + column * ColumnWidth;
 	auto const y = (int) round(DHEIGHT - 1 - positionBottom);
 	drect(x + 1, y - TapNoteHeight, x + ColumnWidth - 1, y, C_BLACK);
 }
 
 static void RenderHold(const int column, const double positionBottom, const double positionTop)
 {
-	auto const x1 = column * ColumnWidth + 1;
+	auto const x1 = foolOffset + column * ColumnWidth + 1;
 	auto const y1 = (int) round(DHEIGHT - 1 - positionTop);
-	auto const x2 = column * ColumnWidth + ColumnWidth - 1;
+	auto const x2 = foolOffset + column * ColumnWidth + ColumnWidth - 1;
 	auto const y2 = (int) round(DHEIGHT - 1 - positionBottom);
 
 	for (int x = x1; x <= x2; x += 1)
@@ -51,13 +53,15 @@ static void RenderGameFrame(
 {
 	dclear(C_WHITE);
 
+	foolOffset = (int) (20.0 + 20.0 * sin((double) timeNow / 500));
+
 	// Render notes
 	FXT_RendererController_Run(rendererController, game, timeNow);
 
 	// Render framework
 	for (int column = 0; column <= game->Beatmap->ColumnCount; column += 1)
 	{
-		auto const x = column * ColumnWidth;
+		auto const x = foolOffset + column * ColumnWidth;
 
 		for (int y = 0; y < DHEIGHT; y += 2)
 			dpixel(x, y, C_BLACK);
@@ -72,8 +76,8 @@ static void RenderGameFrame(
 
 	for (int x = 0; x < game->Beatmap->ColumnCount * ColumnWidth + 1; x += 2)
 	{
-		dpixel(x, DHEIGHT - TapNoteHeight, C_BLACK);
-		dpixel(x, DHEIGHT - 1, C_BLACK);
+		dpixel(x + foolOffset, DHEIGHT - TapNoteHeight, C_BLACK);
+		dpixel(x + foolOffset, DHEIGHT - 1, C_BLACK);
 	}
 
 	// Display number of notes in different grades
@@ -288,7 +292,8 @@ static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const F
 	});
 }
 
-UI_Play_Result UI_Play(const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
+UI_Play_Result UI_Play(
+	const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
 {
 	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
 
@@ -346,6 +351,11 @@ restart:
 		const int32_t timeElapsedSinceStart128 = Time128Delta((int32_t) startTime128, (int32_t) rtc_ticks());
 		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
 		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
+
+		for (size_t column = 0; column < game.Beatmap->ColumnCount; column += 1)
+		{
+			game.ColumnOrder[column] = (column + timeNow / 1000) % game.Beatmap->ColumnCount;
+		}
 
 		FXT_Game_Update(&game, timeNow, isPressingColumn);
 		RenderGameFrame(&game, &rendererController, timeNow, endTime, isPressingColumn);
