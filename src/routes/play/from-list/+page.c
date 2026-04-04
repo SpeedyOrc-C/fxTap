@@ -44,6 +44,7 @@ static int32_t Time128Delta(const int32_t start, const int32_t end)
 
 static void RenderGameFrame(
 	const FXT_Game *game,
+	const FXT_ModOption *modOption,
 	const FXT_RendererController *rendererController,
 	const FXT_TimeMs timeNow,
 	const FXT_TimeMs endTime,
@@ -52,7 +53,7 @@ static void RenderGameFrame(
 	dclear(C_WHITE);
 
 	// Render notes
-	FXT_RendererController_Run(rendererController, game, timeNow);
+	FXT_RendererController_Run(rendererController, game, modOption, timeNow);
 
 	// Render framework
 	for (int column = 0; column <= game->Beatmap->ColumnCount; column += 1)
@@ -288,7 +289,8 @@ static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const F
 	});
 }
 
-UI_Play_Result UI_Play_FromList(const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
+UI_Play_Result UI_Play_FromList(
+	const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
 {
 	const KeyMapper keyMapper = FXT_FetchKeyMapper(beatmap, config);
 
@@ -347,8 +349,8 @@ restart:
 		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
 		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
 
-		FXT_Game_Update(&game, timeNow, isPressingColumn);
-		RenderGameFrame(&game, &rendererController, timeNow, endTime, isPressingColumn);
+		FXT_Game_Update(&game, modOption, timeNow, isPressingColumn);
+		RenderGameFrame(&game, modOption, &rendererController, timeNow, endTime, isPressingColumn);
 
 		// Game finished normally
 		if (timeNow > endTime || keydown(KEY_OPTN))

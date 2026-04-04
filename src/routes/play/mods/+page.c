@@ -15,6 +15,12 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 		if (option->Random)
 			drect(65, 13, 125, 27, C_INVERT);
 
+		if (option->NoRelease)
+			drect(65, 30, 125, 44, C_INVERT);
+
+		if (option->HoldOff)
+			drect(65, 47, 125, 61, C_INVERT);
+
 		dupdate();
 
 		auto const e = getkey();
@@ -32,6 +38,18 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 			option->Random = ! option->Random;
 			if (option->Random)
 				option->Mirror = false;
+			break;
+		case KEY_5:
+		case KEY_F5:
+			option->NoRelease = ! option->NoRelease;
+			if (option->NoRelease)
+				option->HoldOff = false;
+			break;
+		case KEY_6:
+		case KEY_F6:
+			option->HoldOff = ! option->HoldOff;
+			if (option->HoldOff)
+				option->NoRelease = false;
 			break;
 		case KEY_EXIT:
 			return;
