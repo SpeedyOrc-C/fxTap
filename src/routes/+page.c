@@ -98,7 +98,7 @@ static void RenderMainMenu(
 		);
 
 		if (selectedItem == item)
-			drect(80, y, 127, y + 15, C_INVERT);
+			drect(81, y + 1, 126, y + 14, C_INVERT);
 	}
 
 	dupdate();
