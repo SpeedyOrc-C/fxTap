@@ -29,7 +29,7 @@ void UI_Root(
 	FXT_ModOption *modOption
 );
 
-void UI_Play_Detail(const FXT_DatabaseRecord *record);
+void UI_Play_Detail(const char *beatmapPath);
 
 void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config);
 

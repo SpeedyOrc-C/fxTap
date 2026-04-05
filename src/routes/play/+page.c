@@ -102,7 +102,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOp
 		case KEY_F5:
 		case KEY_VARS:
 			if (size > 0)
-				UI_Play_Detail(&view[selectedIndex]->value);
+				UI_Play_Detail(view[selectedIndex]->key);
 			break;
 
 		case KEY_EXIT:

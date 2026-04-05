@@ -2,22 +2,9 @@
 #include <fxTap/config.h>
 #include <fxTap/game.h>
 #include <gint/display.h>
-#include <gint/hardware.h>
 #include <gint/keyboard.h>
 #include "assets.h"
 #include "ui.h"
-
-[[nodiscard]]
-static FXT_BeatmapError TryLoadBeatmap(FXT_Beatmap *dst, const char *path)
-{
-	if (gint[HWFS] == HWFS_CASIOWIN)
-		return gint_call((gint_call_t){
-			.function = FXT_Beatmap_Load_BFile,
-			.args = {{.pv = dst}, {.pc_c = path}}
-		});
-
-	return FXT_Beatmap_Load(dst, path);
-}
 
 static void SelectPlayLoop(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
@@ -29,7 +16,7 @@ static void SelectPlayLoop(const FXT_Config *config, const FXT_Database *databas
 			break;
 
 		FXT_Beatmap beatmap;
-		const FXT_BeatmapError error = TryLoadBeatmap(&beatmap, path.Path);
+		const FXT_BeatmapError error = FXT_Beatmap_Load_BFile_Auto(&beatmap, path.Path);
 
 		if (error)
 		{
