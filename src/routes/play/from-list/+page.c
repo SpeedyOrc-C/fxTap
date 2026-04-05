@@ -100,6 +100,9 @@ static void RenderGameFrame(
 	if (progress > 0)
 		drect(DWIDTH - 3, 1, DWIDTH - 2, progress, C_BLACK);
 
+	if (modOption->Reverse)
+		drect(0, 0, DWIDTH - 1, DHEIGHT - 1, C_INVERT);
+
 	dupdate();
 }
 
