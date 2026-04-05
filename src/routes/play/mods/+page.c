@@ -15,6 +15,8 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 			dsubimage(0, 11, &Img_Modifications, left, 11 + 51 * page, DWIDTH, 51, 0);
 		}
 
+		dprint_opt(DWIDTH - 3, 2, C_WHITE, C_NONE, DTEXT_RIGHT, DTEXT_TOP, "%u/%u", page + 1, 2);
+
 		switch (page)
 		{
 		case 0:
