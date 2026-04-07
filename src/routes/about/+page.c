@@ -24,10 +24,8 @@ void UI_About()
 
 		case 2:
 			dsubimage(0, 0, &Img_About, 0, 128, 128, 64, 0);
-			dtext(1, 12, C_BLACK, "GCC Version:");
-			dprint(1, 12 + 1 + dfont_default()->line_height, C_BLACK,__VERSION__);
-			dtext(1, 12 + 2 * (1 + dfont_default()->line_height), C_BLACK, "Compiled at:");
-			dprint(1, 12 + 3 * (1 + dfont_default()->line_height), C_BLACK, "%s %s", __DATE__, __TIME__);
+			dprint(1, 20, C_BLACK, "GCC Version: %s", __VERSION__);
+			dprint(1, 34, C_BLACK, "Compiled at: %s", __DATE__);
 			break;
 
 		default:

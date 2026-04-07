@@ -5,6 +5,8 @@
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
+
+#include "assets.h"
 #include "ui.h"
 
 static FXT_ConfigError LoadConfig(FXT_Config *dst)
@@ -34,6 +36,7 @@ static FXT_DatabaseError LoadDatabase(FXT_Database *dst)
 int main(void)
 {
 	__printf_enable_fp();
+	dfont(&Font_Piczel);
 
 	FXT_Config config;
 	auto const configError = LoadConfig(&config);

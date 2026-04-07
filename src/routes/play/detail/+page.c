@@ -21,8 +21,8 @@ void UI_Play_Detail(const char *beatmapPath)
 	dclear(C_WHITE);
 
 	dprint(0, 0, C_BLACK, "%s", beatmap.Title);
-	dprint(0, 8, C_BLACK, "%s", beatmap.Artist);
-	dprint(0, 21, C_BLACK, "%uK  OD:%.1f", beatmap.ColumnCount, beatmap.OverallDifficulty);
+	dprint(0, 10, C_BLACK, "%s", beatmap.Artist);
+	dprint(0, 22, C_BLACK, "Keys: %uK  OD: %.1f", beatmap.ColumnCount, beatmap.OverallDifficulty);
 	dprint(0, 34, C_BLACK, "Note count:");
 
 	{
@@ -30,9 +30,9 @@ void UI_Play_Detail(const char *beatmapPath)
 		char *p = buffer;
 
 		for (size_t i = 0; i < beatmap.ColumnCount; i += 1)
-			p += sprintf(p, i == 0 ? "%d" : ",%d", beatmap.ColumnSize[i]);
+			p += sprintf(p, i == 0 ? "%d" : ", %d", beatmap.ColumnSize[i]);
 
-		dtext(0, 42, C_BLACK, buffer);
+		dtext(0, 43, C_BLACK, buffer);
 	}
 
 	{
@@ -50,7 +50,7 @@ void UI_Play_Detail(const char *beatmapPath)
 					hold += 1;
 		}
 
-		dprint(0, 56, C_BLACK, "Tap:%u  Hold:%u", tap, hold);
+		dprint(0, 54, C_BLACK, "Tap: %u, Hold: %u", tap, hold);
 	}
 
 

@@ -34,10 +34,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOp
 
 		dclear(C_WHITE);
 
-		dsubimage(1, 1, &Img_SelectASong_Title, 0, 10 * config->Language, 128, 10, 0);
-		drect(0, 0, 127, 10, C_INVERT);
 		dsubimage(0, 56, &Img_SelectASong_FN, 0, 8 * config->Language, 128, 8, 0);
-
 		dsubimage(2, 56, descending ? &Img_Ascending_FN : &Img_Descending_FN, 0, 8 * config->Language, 19, 8, 0);
 
 		if (size == 0)
@@ -56,19 +53,19 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOp
 
 			// Draw 2 beatmaps before
 			if (selectedIndex >= 2)
-				dtext(1, 13, C_BLACK, view[selectedIndex - 2]->value.Title);
+				dtext(1, 1, C_BLACK, view[selectedIndex - 2]->value.Title);
 			if (selectedIndex >= 1)
-				dtext(1, 21, C_BLACK, view[selectedIndex - 1]->value.Title);
+				dtext(1, 11, C_BLACK, view[selectedIndex - 1]->value.Title);
 
 			// Draw selected beatmap
-			dtext(1, 30, C_BLACK, view[selectedIndex]->value.Title);
-			drect(0, 29, 127, 37, C_INVERT);
+			dtext(1, 22, C_BLACK, view[selectedIndex]->value.Title);
+			drect(0, 21, DWIDTH, 31, C_INVERT);
 
 			// Draw 2 beatmaps after
 			if (size - selectedIndex >= 2)
-				dtext(1, 39, C_BLACK, view[selectedIndex + 1]->value.Title);
+				dtext(1, 33, C_BLACK, view[selectedIndex + 1]->value.Title);
 			if (size - selectedIndex >= 3)
-				dtext(1, 47, C_BLACK, view[selectedIndex + 2]->value.Title);
+				dtext(1, 43, C_BLACK, view[selectedIndex + 2]->value.Title);
 		}
 
 		dupdate();

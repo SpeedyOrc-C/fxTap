@@ -3,7 +3,7 @@ set(CMAKE_C_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(fxTap)
 
-set(FXTAP_VERSION "02.02.0000")
+set(FXTAP_VERSION "02.03.0000")
 
 set(SOURCES
 		src/main.c
@@ -28,6 +28,8 @@ set(SOURCES
 set(ASSETS
 )
 set(ASSETS_fx
+		assets-fx/Piczel
+
 		assets-fx/Banner.png
 		assets-fx/Elemental_Creation.png
 		assets-fx/Daisuke.png
@@ -35,7 +37,6 @@ set(ASSETS_fx
 		assets-fx/MainMenu_Buttons.png
 		assets-fx/About.png
 		assets-fx/SelectSong_TypeFilename.png
-		assets-fx/SelectASong_Title.png
 		assets-fx/Modifications.png
 		assets-fx/SelectASong_FN.png
 		assets-fx/Path_FN.png

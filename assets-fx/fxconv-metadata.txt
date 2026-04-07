@@ -1,3 +1,12 @@
 *.png:
   type: bopti-image
   name_regex: ([^\.]+)\.png Img_\1
+
+Piczel:
+  type: font
+  name: Font_Piczel
+  charset: unicode
+  grid.size: 5x9
+  proportional: true
+  grid.padding: 1
+  line-distance: 10

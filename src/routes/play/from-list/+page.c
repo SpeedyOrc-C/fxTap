@@ -152,15 +152,15 @@ static void RenderResultSummary(
 	const FXT_Grades *grades, const FXT_Game *game)
 {
 	static constexpr int fg = C_BLACK;
-	dprint(0, 0 * 8, fg, "Accuracy:%.2f/%.2f", scoreV1, scoreV2);
-	dprint(0, 1 * 8, fg, "Max Combo:%u", game->Combo);
-	dprint(0, 2 * 8, fg, "S300:%u", grades->Perfect);
-	dprint(0, 3 * 8, fg, " 300:%u", grades->Great);
-	dprint(0, 4 * 8, fg, " 200:%u", grades->Good);
-	dprint(64, 2 * 8, fg, " 100:%u", grades->Ok);
-	dprint(64, 3 * 8, fg, "  50:%u", grades->Meh);
-	dprint(64, 4 * 8, fg, "Miss:%u", grades->Miss);
-	dprint(0, 5 * 8, fg, "Mean Timing:%.1fms", meanTiming);
+	dprint(0, 0 * 8, fg, "Accuracy: %.2f/%.2f", scoreV1, scoreV2);
+	dprint(0, 1 * 8, fg, "Max Combo: %u", game->Combo);
+	dprint(0, 2 * 8 + 2, fg, "S300: %u", grades->Perfect);
+	dprint(0, 3 * 8 + 2, fg, " 300: %u", grades->Great);
+	dprint(0, 4 * 8 + 2, fg, " 200: %u", grades->Good);
+	dprint(64, 2 * 8 + 2, fg, " 100: %u", grades->Ok);
+	dprint(64, 3 * 8 + 2, fg, "  50: %u", grades->Meh);
+	dprint(64, 4 * 8 + 2, fg, "Miss: %u", grades->Miss);
+	dprint(0, 44, fg, "Mean Timing: %.1fms", meanTiming);
 
 	dsubimage(65, 56, &Img_TimingDistribution_FN, 0, 8 * config->Language, 40, 8, 0);
 }
