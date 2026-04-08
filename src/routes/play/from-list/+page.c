@@ -55,6 +55,12 @@ static void RenderGameFrame(
 	// Render notes
 	FXT_RendererController_Run(rendererController, game, modOption, timeNow);
 
+	if (modOption->Hidden)
+		drect(0, 43, DWIDTH - 1, DHEIGHT - 1, C_WHITE);
+
+	if (modOption->FadeIn)
+		drect(0, 0, DWIDTH - 1, 20, C_WHITE);
+
 	// Render framework
 	for (int column = 0; column <= game->Beatmap->ColumnCount; column += 1)
 	{

@@ -11,14 +11,15 @@ the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
 - Support beatmania IIDX & DJMax column mapping.
 - Support Overall Difficulty.
 - Customisable key mapping, note falling speed, column width and tap note height.
-- Support modifications:
-  - Mirror
-  - Random
+- Modifications:
+  - Mirror, Random
+  - Hidden, Fade in, Reverse
+  - No Release, Hold off
 - Support pausing.
-- Walking the file system to find out all your beatmaps.
-- Previewing beatmap.
-- Saving grades.
-- Viewing timing distribution as a histogram.
+- Walk the file system to find out all your beatmaps.
+- View beatmap metadata.
+- Save grades.
+- View timing distribution as a histogram.
 - English & Chinese UI.
 
 ## Screenshots

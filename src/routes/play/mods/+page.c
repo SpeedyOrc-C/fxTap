@@ -23,6 +23,12 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 			if (option->Mirror)
 				drect(2, 13, 62, 27, C_INVERT);
 
+			if (option->Hidden)
+				drect(2, 30, 62, 44, C_INVERT);
+
+			if (option->FadeIn)
+				drect(2, 47, 62, 61, C_INVERT);
+
 			if (option->Random)
 				drect(65, 13, 125, 27, C_INVERT);
 
@@ -58,6 +64,18 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 				option->Mirror = ! option->Mirror;
 				if (option->Mirror)
 					option->Random = false;
+				break;
+			case KEY_2:
+			case KEY_F2:
+				option->Hidden = ! option->Hidden;
+				if (option->Hidden)
+					option->FadeIn = false;
+				break;
+			case KEY_3:
+			case KEY_F3:
+				option->FadeIn = ! option->FadeIn;
+				if (option->FadeIn)
+					option->Hidden = false;
 				break;
 			case KEY_4:
 			case KEY_F4:
