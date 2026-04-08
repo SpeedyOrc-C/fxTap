@@ -12,9 +12,9 @@ the successor of [fx4K](https://github.com/SpeedyOrc-C/fx4K).
 - Support Overall Difficulty.
 - Customisable key mapping, note falling speed, column width and tap note height.
 - Modifications:
-  - Mirror, Random
-  - Hidden, Fade in, Reverse
-  - No Release, Hold off
+    - Mirror, Random
+    - Hidden, Fade in, Reverse
+    - No Release, Hold off
 - Support pausing.
 - Walk the file system to find out all your beatmaps.
 - View beatmap metadata.
@@ -36,6 +36,11 @@ Go to [gallary](Gallery) for more...
 ## How to play?
 
 Please go to wiki.
+
+## Help me!
+
+- QQ Group chat: `1091854146`
+- Discord: `chenzhanming04`
 
 # Beatmap Index
 
