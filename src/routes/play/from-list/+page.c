@@ -153,7 +153,7 @@ static void RenderResultSummary(
 {
 	static constexpr int fg = C_BLACK;
 	dprint(0, 0 * 8, fg, "Accuracy: %.2f/%.2f", scoreV1, scoreV2);
-	dprint(0, 1 * 8, fg, "Max Combo: %u", game->Combo);
+	dprint(0, 1 * 8, fg, "Max Combo: %u", game->MaxCombo);
 	dprint(0, 2 * 8 + 2, fg, "S300: %u", grades->Perfect);
 	dprint(0, 3 * 8 + 2, fg, " 300: %u", grades->Great);
 	dprint(0, 4 * 8 + 2, fg, " 200: %u", grades->Good);
