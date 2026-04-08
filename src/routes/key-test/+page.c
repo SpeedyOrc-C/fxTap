@@ -10,7 +10,7 @@ static const char *ShowPhysicalKey(const FXT_Config *config, const FXT_Key key)
 	auto const physicalKeyCode = config->PhysicalKeyOfFxTapKey[key];
 
 	if (physicalKeyCode == 0)
-		return "UNSET";
+		return "";
 
 	return KeyCode_ToString(physicalKeyCode);
 }
@@ -43,11 +43,11 @@ void UI_KeyTest(const FXT_Config *config)
 			const bool isDown = keydown(config->PhysicalKeyOfFxTapKey[key]);
 
 			dprint_opt(
-				0, key * (1 + dfont_default()->line_height),
+				1, key * 11 + 1,
 				isDown ? C_WHITE : C_BLACK,
 				isDown ? C_BLACK : C_WHITE,
 				DTEXT_LEFT, DTEXT_TOP,
-				"%s %s",
+				"[%s] %s",
 				FXT_Key_ToString(key),
 				keyNames[key]
 			);
@@ -58,11 +58,11 @@ void UI_KeyTest(const FXT_Config *config)
 			const bool isDown = keydown(config->PhysicalKeyOfFxTapKey[key]);
 
 			dprint_opt(
-				64, (key - FXT_Key_K6) * (1 + dfont_default()->line_height),
+				64, (key - FXT_Key_K6) * 11 + 1,
 				isDown ? C_WHITE : C_BLACK,
 				isDown ? C_BLACK : C_WHITE,
 				DTEXT_LEFT, DTEXT_TOP,
-				"%s %s",
+				"[%s] %s",
 				FXT_Key_ToString(key),
 				keyNames[key]
 			);
