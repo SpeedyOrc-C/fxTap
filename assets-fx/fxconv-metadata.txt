@@ -10,3 +10,12 @@ Piczel:
   proportional: true
   grid.padding: 1
   line-distance: 10
+
+Tiny:
+  type: font
+  name: Font_Tiny
+  charset: unicode
+  grid.size: 3x5
+  proportional: true
+  grid.padding: 1
+  line-distance: 10

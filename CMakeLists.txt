@@ -29,6 +29,7 @@ set(ASSETS
 )
 set(ASSETS_fx
 		assets-fx/Piczel
+		assets-fx/Tiny
 
 		assets-fx/Banner.png
 		assets-fx/Elemental_Creation.png

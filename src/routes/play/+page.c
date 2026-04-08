@@ -7,6 +7,17 @@
 #include "assets.h"
 #include "ui.h"
 
+void RenderBeatmapListItem(const struct FXT_Database *const db[], const size_t index, const int y)
+{
+	dtext(1, y, C_BLACK, db[index]->value.Title);
+	auto const key = db[index]->key;
+	char keyNoExtension[strlen(key) + 1 - 4] = {};
+	memcpy(keyNoExtension, key, strlen(key) - 4);
+	dfont(&Font_Tiny);
+	dprint_opt(DWIDTH - 2, y + 2, C_BLACK, C_NONE, DTEXT_RIGHT, DTEXT_TOP, keyNoExtension);
+	dfont(&Font_Piczel);
+}
+
 OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
 {
 	auto const db = *database;
@@ -51,21 +62,18 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOp
 				dprint(91, 2, C_WHITE, "%.2f", scoreV2 * 100);
 			}
 
-			// Draw 2 beatmaps before
 			if (selectedIndex >= 2)
-				dtext(1, 1, C_BLACK, view[selectedIndex - 2]->value.Title);
+				RenderBeatmapListItem(view, selectedIndex - 2, 1);
 			if (selectedIndex >= 1)
-				dtext(1, 11, C_BLACK, view[selectedIndex - 1]->value.Title);
+				RenderBeatmapListItem(view, selectedIndex - 1, 11);
 
-			// Draw selected beatmap
-			dtext(1, 22, C_BLACK, view[selectedIndex]->value.Title);
+			RenderBeatmapListItem(view, selectedIndex, 22);
 			drect(0, 21, DWIDTH, 31, C_INVERT);
 
-			// Draw 2 beatmaps after
 			if (size - selectedIndex >= 2)
-				dtext(1, 33, C_BLACK, view[selectedIndex + 1]->value.Title);
+				RenderBeatmapListItem(view, selectedIndex + 1, 33);
 			if (size - selectedIndex >= 3)
-				dtext(1, 43, C_BLACK, view[selectedIndex + 2]->value.Title);
+				RenderBeatmapListItem(view, selectedIndex + 2, 43);
 		}
 
 		dupdate();

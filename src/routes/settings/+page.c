@@ -36,10 +36,9 @@ void UI_Settings(FXT_Config *config)
 
 		dclear(C_WHITE);
 		dsubimage(1, 1, &Img_Settings_Title, 0, 10 * config->Language, 64, 10, 0);
-		dprint(97, 2, C_BLACK, "%c %d/%u",
-		       settingsChanged ? '*' : ' ',
-		       item + 1,
-		       ItemCount
+		dprint_opt(
+			DWIDTH - 3, 2, C_BLACK, C_NONE, DTEXT_RIGHT, DTEXT_TOP,
+			"%c %d/%u", settingsChanged ? '*' : ' ', item + 1, ItemCount
 		);
 		drect(0, 0, 127, 10, C_INVERT);
 		items[item].Render(config);

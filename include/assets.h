@@ -3,6 +3,7 @@
 #include <gint/display.h>
 
 extern const font_t Font_Piczel;
+extern const font_t Font_Tiny;
 
 extern const bopti_image_t Img_Banner;
 extern const bopti_image_t Img_Elemental_Creation;
