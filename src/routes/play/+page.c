@@ -7,7 +7,7 @@
 #include "assets.h"
 #include "ui.h"
 
-void RenderBeatmapListItem(const struct FXT_Database *const db[], const size_t index, const int y)
+static void RenderBeatmapListItem(const struct FXT_Database *const db[], const size_t index, const int y)
 {
 	dtext(1, y, C_BLACK, db[index]->value.Title);
 	auto const key = db[index]->key;
@@ -25,7 +25,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_ModOp
 	bool descending = true;
 	const size_t size = shlenu(db);
 
-	size_t selectedIndex = 0;
+	static size_t selectedIndex = 0;
 
 	const struct FXT_Database *viewOrderByNameAsc[size] = {};
 	const struct FXT_Database *viewOrderByNameDsc[size] = {};
