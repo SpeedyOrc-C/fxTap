@@ -38,6 +38,13 @@ int main(void)
 	__printf_enable_fp();
 	dfont(&Font_Piczel);
 
+	dclear(C_WHITE);
+	dprint_opt(
+		DWIDTH / 2, DHEIGHT / 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE,
+		"Loading..."
+	);
+	dupdate();
+
 	FXT_Config config;
 	auto const configError = LoadConfig(&config);
 
