@@ -4,13 +4,18 @@
 #include <gint/display.h>
 #include <gint/keyboard.h>
 #include "assets.h"
+#include "stb_ds.h"
 #include "ui.h"
 
-static void SelectPlayLoop(const FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
+static void SelectPlayLoop(
+	const FXT_Config *config,
+	FXT_Database *database,
+	FXT_DatabaseView *view,
+	FXT_ModOption *modOption)
 {
 	while (true)
 	{
-		auto const path = UI_Play(config, database, modOption);
+		auto const path = UI_Play(config, database, view, modOption);
 
 		if (path.Path == nullptr)
 			break;
@@ -30,7 +35,14 @@ static void SelectPlayLoop(const FXT_Config *config, const FXT_Database *databas
 			continue;
 		}
 
-		UI_Play_FromList(&beatmap, config, modOption, path.Path);
+		auto const result = UI_Play_FromList(&beatmap, config, modOption, path.Path);
+
+		if (result.Finished)
+		{
+			auto const record = &shgets(*database, path.Path).value;
+			record->LastGrades.Exist = true;
+			record->LastGrades.Value = result.Grades;
+		}
 
 		if (path.NeedFree)
 			free(path.Path);
@@ -91,7 +103,7 @@ static void RenderMainMenu(
 	dupdate();
 }
 
-void UI_Root(FXT_Config *config, const FXT_Database *database, FXT_ModOption *modOption)
+void UI_Root(FXT_Config *config, FXT_Database *database, FXT_DatabaseView *view, FXT_ModOption *modOption)
 {
 	MenuItem selectedItem = MenuItem_Play;
 	MenuImage selectedImage = MenuImage_Banner;
@@ -140,7 +152,7 @@ void UI_Root(FXT_Config *config, const FXT_Database *database, FXT_ModOption *mo
 			switch (selectedItem)
 			{
 			case MenuItem_Play:
-				SelectPlayLoop(config, database, modOption);
+				SelectPlayLoop(config, database, view, modOption);
 				break;
 			case MenuItem_KeyTest:
 				UI_KeyTest(config);

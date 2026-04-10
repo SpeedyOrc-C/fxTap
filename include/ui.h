@@ -2,6 +2,7 @@
 
 #include <fxTap/config.h>
 #include <fxTap/database.h>
+#include <fxTap/database/view.h>
 #include <fxTap/mod.h>
 
 // char* with ownership transfer mark
@@ -19,13 +20,15 @@ typedef struct
 
 void UI_Root(
 	FXT_Config *config,
-	const FXT_Database *database,
+	FXT_Database *database,
+	FXT_DatabaseView *view,
 	FXT_ModOption *modOption
 );
 
 [[nodiscard]] OCharP UI_Play(
 	const FXT_Config *config,
 	const FXT_Database *database,
+	FXT_DatabaseView *view,
 	FXT_ModOption *modOption
 );
 

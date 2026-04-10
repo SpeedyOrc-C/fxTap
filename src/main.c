@@ -2,10 +2,10 @@
 #include <fxTap/config.h>
 #include <fxTap/database.h>
 #include <fxTap/mod.h>
+#include <fxTap/database/view.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include <gint/keyboard.h>
-
 #include "assets.h"
 #include "ui.h"
 
@@ -56,15 +56,29 @@ int main(void)
 	if (databaseError)
 	{
 		dclear(C_WHITE);
-		dprint(1, 1, C_BLACK, "Database Error: %d", configError);
+		dprint(1, 1, C_BLACK, "Database Error: %d", databaseError);
 		dupdate();
 		getkey();
 		return 1;
 	}
 
+	FXT_DatabaseView view;
+	auto const databaseViewError = FXT_DatabaseView_Init(&view, &database);
+
+	if (databaseViewError)
+	{
+		dclear(C_WHITE);
+		dprint(1, 1, C_BLACK, "Database View Error: %d", databaseViewError);
+		dupdate();
+		getkey();
+		return 1;
+	}
+
+	FXT_DatabaseView_SortDsc(&view);
+
 	FXT_ModOption modOption = {};
 
-	UI_Root(&config, &database, &modOption);
+	UI_Root(&config, &database, &view, &modOption);
 
 	return 1;
 }
