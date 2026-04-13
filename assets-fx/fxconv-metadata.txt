@@ -19,3 +19,12 @@ Tiny:
   proportional: true
   grid.padding: 1
   line-distance: 10
+
+Fusion9x9:
+    type: font
+    name: Font_Fusion9x9
+    charset: unicode
+    grid.size: 9x9
+    proportional: false
+    grid.padding: 0
+    line-distance: 10

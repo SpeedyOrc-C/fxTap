@@ -32,6 +32,32 @@ static uint8_t AlphaFromKeyCode(const int keyCode)
 	}
 }
 
+static const char *Text_EnterBeatmapPath(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "输入谱面路径……";
+	default:
+		dfont(&Font_Piczel);
+		return "Enter beatmap's path...";
+	}
+}
+
+static const char *Text_YouCanOmitItsExtension(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "你可以忽略文件扩展名。";
+	default:
+		dfont(&Font_Piczel);
+		return "You can omit its extension.";
+	}
+}
+
 [[nodiscard]]
 OCharP UI_Play_FromPath(const FXT_Config *config)
 {
@@ -49,7 +75,10 @@ OCharP UI_Play_FromPath(const FXT_Config *config)
 	while (true)
 	{
 		dclear(C_WHITE);
-		dsubimage(0, 0, &Img_SelectSong_TypeFilename, 0, 30 * config->Language, 128, 30, 0);
+		drect(0, 0, DWIDTH - 1, 10, C_BLACK);
+		dtext(1, 1, C_WHITE, Text_EnterBeatmapPath(config));
+		dtext(1, 13, C_BLACK, Text_YouCanOmitItsExtension(config));
+
 		drect_border(0, 33, DWIDTH - 1, 45, C_NONE, 1, C_BLACK);
 		dtext(2, 35, C_BLACK, fileName);
 		dprint_opt(DWIDTH - 1, 48, C_BLACK, C_WHITE, DTEXT_RIGHT, DTEXT_TOP,

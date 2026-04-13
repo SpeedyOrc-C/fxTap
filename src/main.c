@@ -33,17 +33,22 @@ static FXT_DatabaseError LoadDatabase(FXT_Database *dst)
 	});
 }
 
+static const char *Text_SearchingBeatmaps(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "正在搜索谱面……";
+	default:
+		dfont(&Font_Piczel);
+		return "Searching beatmaps...";
+	}
+}
+
 int main(void)
 {
 	__printf_enable_fp();
-	dfont(&Font_Piczel);
-
-	dclear(C_WHITE);
-	dprint_opt(
-		DWIDTH / 2, DHEIGHT / 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE,
-		"Loading..."
-	);
-	dupdate();
 
 	FXT_Config config;
 	auto const configError = LoadConfig(&config);
@@ -56,6 +61,13 @@ int main(void)
 		getkey();
 		return 1;
 	}
+
+	dclear(C_WHITE);
+	dprint_opt(
+		DWIDTH / 2, DHEIGHT / 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE,
+		Text_SearchingBeatmaps(&config)
+	);
+	dupdate();
 
 	FXT_Database database;
 	auto const databaseError = LoadDatabase(&database);

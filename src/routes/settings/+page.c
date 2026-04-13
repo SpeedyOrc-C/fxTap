@@ -1,8 +1,8 @@
-#include "settings.h"
 #include <fxTap/config.h>
 #include <gint/display.h>
 #include <gint/hardware.h>
 #include "assets.h"
+#include "settings.h"
 #include "ui.h"
 
 static constexpr uint8_t ItemCount = 6;
@@ -13,6 +13,19 @@ typedef struct MenuItem
 
 	void (*AcceptEvent)(key_event_t e, FXT_Config *config);
 } MenuItem;
+
+static const char *Text_Settings(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "设置";
+	default:
+		dfont(&Font_Piczel);
+		return "Settings";
+	}
+}
 
 void UI_Settings(FXT_Config *config)
 {
@@ -35,12 +48,13 @@ void UI_Settings(FXT_Config *config)
 		const bool settingsChanged = ! FXT_Config_Equal(&oldConfig, config);
 
 		dclear(C_WHITE);
-		dsubimage(1, 1, &Img_Settings_Title, 0, 10 * config->Language, 64, 10, 0);
+		drect(0, 0, 127, 10, C_BLACK);
+		dtext(1, 1, C_WHITE, Text_Settings(config));
+		dfont(&Font_Piczel);
 		dprint_opt(
-			DWIDTH - 3, 2, C_BLACK, C_NONE, DTEXT_RIGHT, DTEXT_TOP,
+			DWIDTH - 3, 2, C_WHITE, C_NONE, DTEXT_RIGHT, DTEXT_TOP,
 			"%c %d/%u", settingsChanged ? '*' : ' ', item + 1, ItemCount
 		);
-		drect(0, 0, 127, 10, C_INVERT);
 		items[item].Render(config);
 		dupdate();
 

@@ -2,15 +2,29 @@
 #include "settings.h"
 #include "ui.h"
 
+static const char *Text_CustomOverallDifficulty(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "自定义总体难度";
+	default:
+		dfont(&Font_Piczel);
+		return "Custom Overall Difficulty";
+	}
+}
+
 void CustomOverallDifficulty_Render(const FXT_Config *config)
 {
 	auto const od = (double) config->CustomOverallDifficulty10 / 10;
 	auto const tolerance = FXT_Tolerance_FromOverallDifficulty((double) config->CustomOverallDifficulty10 / 10);
 
-	dsubimage(0, 12, &Img_Settings_CustomOverallDifficulty_Caption, 0, 10 * config->Language, 128, 10, 0);
+	dtext(1, 13, C_BLACK, Text_CustomOverallDifficulty(config));
 
 	if (config->OverrideDefaultOverallDifficulty)
 	{
+		dfont(&Font_Piczel);
 		dprint(42, 24, C_BLACK, "[OD: %.1f]", od);
 
 		dprint(24, 34, C_BLACK, "%4i %4i %4i",

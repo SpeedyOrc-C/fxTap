@@ -14,6 +14,7 @@ void KeyBindings_Render(const FXT_Config *config)
 	assert(FXT_Key_K1 <= selectedKeyBinding && selectedKeyBinding <= FXT_Key_S1);
 
 	drect_border(92, 26, 106, 36, C_WHITE, 1, C_BLACK);
+	dfont(&Font_Piczel);
 	dtext(94, 28, C_BLACK, FXT_Key_ToString(selectedKeyBinding));
 	drect_border(92, 40, 124, 50, C_WHITE, 1, C_BLACK);
 	dtext(94, 42, C_BLACK, keyString != nullptr ? keyString : "UNSET");

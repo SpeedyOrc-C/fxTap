@@ -1,10 +1,34 @@
 #include "assets.h"
 #include "settings.h"
 
+static const char *Text_Language(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "语言";
+	default:
+		dfont(&Font_Piczel);
+		return "Language";
+	}
+}
+
+static const char *Text_LanguageOption(const FXT_Language language)
+{
+	switch (language)
+	{
+	case FXT_Language_ZhCn:
+		return "简体中文（中国大陆）";
+	default:
+		return "English (United States)";
+	}
+}
+
 void Language_Render(const FXT_Config *config)
 {
-	dsubimage(0, 12, &Img_Settings_Language_Caption, 0, 10 * config->Language, 128, 10, 0);
-	dsubimage(48, 29, &Img_Settings_Language_Options, 0, 10 * config->Language, 48, 10, 0);
+	dtext(1, 13, C_BLACK, Text_Language(config));
+	dprint_opt(DWIDTH / 2, DHEIGHT / 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE, Text_LanguageOption(config->Language));
 	dsubimage(0, 56, &Img_Settings_Language_FN, 0, 0, 128, 8, 0);
 }
 

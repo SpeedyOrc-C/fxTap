@@ -1,9 +1,23 @@
 #include "assets.h"
 #include "settings.h"
 
+static const char *Text_NoteFallingTime(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "音符下落时间";
+	default:
+		dfont(&Font_Piczel);
+		return "Note Falling Time";
+	}
+}
+
 void NotesFallingTime_Render(const FXT_Config *config)
 {
-	dsubimage(0, 12, &Img_Settings_NotesFallingTime_Caption, 0, 10 * config->Language, 128, 10, 0);
+	dtext(1, 13, C_BLACK, Text_NoteFallingTime(config));
+	dfont(&Font_Piczel);
 	dprint(42, 29, C_BLACK, "%4d ms", config->NotesFallingTime);
 	dimage(0, 56, &Img_Settings_NotesFallingTime_FN_EN);
 }

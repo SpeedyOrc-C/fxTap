@@ -298,6 +298,19 @@ static FXT_DatabaseError SaveGradesAlongBeatmap(const char *beatmapPath, const F
 	});
 }
 
+static const char *Text_YouFailed(const FXT_Config *c)
+{
+	switch (c->Language)
+	{
+	case FXT_Language_ZhCn:
+		dfont(&Font_Fusion9x9);
+		return "你失败了";
+	default:
+		dfont(&Font_Piczel);
+		return "You Failed";
+	}
+}
+
 UI_Play_Result UI_Play_FromList(
 	const FXT_Beatmap *beatmap, const FXT_Config *config, const FXT_ModOption *modOption, const char *beatmapPath)
 {
@@ -358,8 +371,24 @@ restart:
 		const FXT_TimeMs timeElapsedSinceStart = timeElapsedSinceStart128 * 1000 / 128;
 		const FXT_TimeMs timeNow = timeOffset + timeElapsedSinceStart;
 
-		FXT_Game_Update(&game, modOption, timeNow, isPressingColumn);
+		auto const result = FXT_Game_Update(&game, modOption, timeNow, isPressingColumn);
 		RenderGameFrame(&game, modOption, &rendererController, timeNow, endTime, isPressingColumn);
+
+		if (result == FXT_GameUpdateResult_Restart)
+		{
+			dclear(C_WHITE);
+			dprint_opt(
+				DWIDTH / 2, DHEIGHT / 2, C_BLACK, C_NONE, DTEXT_CENTER, DTEXT_MIDDLE,
+				Text_YouFailed(config)
+			);
+			dupdate();
+
+			while (getkey().key != KEY_EXIT)
+			{
+			}
+
+			return (UI_Play_Result){.Finished = false};
+		}
 
 		// Game finished normally
 		if (timeNow > endTime || keydown(KEY_OPTN))

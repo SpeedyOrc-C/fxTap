@@ -30,6 +30,7 @@ set(ASSETS
 set(ASSETS_fx
 		assets-fx/Piczel
 		assets-fx/Tiny
+		assets-fx/Fusion9x9
 
 		assets-fx/Banner.png
 		assets-fx/Elemental_Creation.png
@@ -37,7 +38,6 @@ set(ASSETS_fx
 
 		assets-fx/MainMenu_Buttons.png
 		assets-fx/About.png
-		assets-fx/SelectSong_TypeFilename.png
 		assets-fx/Modifications.png
 		assets-fx/SelectASong_FN.png
 		assets-fx/Path_FN.png
@@ -52,18 +52,11 @@ set(ASSETS_fx
 		assets-fx/TimingDistribution_FN.png
 
 		assets-fx/Settings_Language_FN.png
-		assets-fx/Settings_Title.png
-		assets-fx/Settings_NoteAppearance_Caption.png
 		assets-fx/Settings_NoteAppearance_FN.png
-		assets-fx/Settings_NotesFallingTime_Caption.png
 		assets-fx/Settings_NotesFallingTime_FN_EN.png
-		assets-fx/Settings_KeyBindingStyle_Caption.png
 		assets-fx/Settings_KeyBindingStyle_Logos.png
 		assets-fx/Settings_KeyBindingStyle_FN_EN.png
 		assets-fx/Settings_KeyBindings_Caption.png
-		assets-fx/Settings_Language_Caption.png
-		assets-fx/Settings_Language_Options.png
-		assets-fx/Settings_CustomOverallDifficulty_Caption.png
 		assets-fx/Settings_CustomOverallDifficulty_Disabled_FN.png
 		assets-fx/Settings_CustomOverallDifficulty_Enabled_FN.png
 )
