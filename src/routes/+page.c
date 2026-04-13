@@ -15,7 +15,7 @@ static void SelectPlayLoop(
 {
 	while (true)
 	{
-		auto const path = UI_Play(config, database, view, modOption);
+		auto const path = UI_Play(config, view, modOption);
 
 		if (path.Path == nullptr)
 			break;

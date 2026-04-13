@@ -6,7 +6,7 @@
 #include "assets.h"
 #include "ui.h"
 
-OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_DatabaseView *view, FXT_ModOption *modOption)
+OCharP UI_Play(const FXT_Config *config, FXT_DatabaseView *view, FXT_ModOption *modOption)
 {
 	static bool descending = true;
 
@@ -29,7 +29,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_Datab
 				drect_border(DWIDTH - 4, 0, DWIDTH - 1, 54, C_NONE, 1, C_BLACK);
 
 				const float headIndex = (float) view->FocusedGroupIndex;
-				const float windowSize = 4;
+				constexpr float windowSize = 4;
 				const float maxIndex = (float) view->GroupCount + windowSize - 1;
 				const float tailIndex = headIndex + windowSize;
 
@@ -133,6 +133,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_Datab
 			case KEY_F3:
 				view->FocusedGroupIndex = rtc_ticks() % view->GroupCount;
 				view->FocusedVersionIndex = 0;
+				view->VersionWindowHeadIndex = 0;
 				break;
 
 			case KEY_F5:

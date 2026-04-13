@@ -27,7 +27,6 @@ void UI_Root(
 
 [[nodiscard]] OCharP UI_Play(
 	const FXT_Config *config,
-	const FXT_Database *database,
 	FXT_DatabaseView *view,
 	FXT_ModOption *modOption
 );
