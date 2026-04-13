@@ -132,6 +132,7 @@ OCharP UI_Play(const FXT_Config *config, const FXT_Database *database, FXT_Datab
 			{
 			case KEY_F3:
 				view->FocusedGroupIndex = rtc_ticks() % view->GroupCount;
+				view->FocusedVersionIndex = 0;
 				break;
 
 			case KEY_F5:
