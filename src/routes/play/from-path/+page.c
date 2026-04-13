@@ -80,6 +80,7 @@ OCharP UI_Play_FromPath(const FXT_Config *config)
 		dtext(1, 13, C_BLACK, Text_YouCanOmitItsExtension(config));
 
 		drect_border(0, 33, DWIDTH - 1, 45, C_NONE, 1, C_BLACK);
+		dfont(&Font_Piczel);
 		dtext(2, 35, C_BLACK, fileName);
 		dprint_opt(DWIDTH - 1, 48, C_BLACK, C_WHITE, DTEXT_RIGHT, DTEXT_TOP,
 		           KeyboardAlphaState == KA_Idle
