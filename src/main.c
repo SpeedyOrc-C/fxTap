@@ -56,6 +56,7 @@ int main(void)
 	if (configError)
 	{
 		dclear(C_WHITE);
+		dfont(&Font_Piczel);
 		dprint(1, 1, C_BLACK, "Config Error: %d", configError);
 		dupdate();
 		getkey();
@@ -75,6 +76,7 @@ int main(void)
 	if (databaseError)
 	{
 		dclear(C_WHITE);
+		dfont(&Font_Piczel);
 		dprint(1, 1, C_BLACK, "Database Error: %d", databaseError);
 		dupdate();
 		getkey();
@@ -87,6 +89,7 @@ int main(void)
 	if (databaseViewError)
 	{
 		dclear(C_WHITE);
+		dfont(&Font_Piczel);
 		dprint(1, 1, C_BLACK, "Database View Error: %d", databaseViewError);
 		dupdate();
 		getkey();

@@ -25,9 +25,10 @@ void UI_About()
 
 		case 2:
 			dsubimage(0, 0, &Img_About, 0, 128, 128, 64, 0);
-			dprint(1, 15, C_BLACK, "GCC Version: %s", __VERSION__);
-			dprint(1, 26, C_BLACK, "Compiled at: %s", __DATE__);
-			dprint(1, 37, C_BLACK, "File System: %s",
+			dfont(&Font_Piczel);
+			dprint(2, 13, C_BLACK, "GCC Version: %s", __VERSION__);
+			dprint(2, 24, C_BLACK, "Compiled at: %s", __DATE__);
+			dprint(2, 35, C_BLACK, "File System: %s",
 			       gint[HWFS] == HWFS_FUGUE ? "Fugue" : gint[HWFS] == HWFS_CASIOWIN ? "Casiowin" : "None"
 			);
 			break;
