@@ -46,7 +46,7 @@ static const char *Text_SearchingBeatmaps(const FXT_Config *c)
 	}
 }
 
-int main(void)
+int main()
 {
 	__printf_enable_fp();
 

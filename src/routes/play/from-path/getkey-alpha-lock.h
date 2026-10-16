@@ -11,4 +11,4 @@ typedef enum KeyboardAlpha
 
 extern KeyboardAlpha KeyboardAlphaState;
 
-key_event_t getkey_alpha_lock(void);
+key_event_t getkey_alpha_lock();

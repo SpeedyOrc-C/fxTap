@@ -10,8 +10,8 @@
 
 static uint8_t AlphaFromKeyCode(const int keyCode)
 {
-	const int row = keyCode >> 4;
-	const int column = keyCode & 0xf;
+	auto const row = (unsigned) keyCode >> 4u;
+	auto const column = (unsigned) keyCode & 0xfu;
 
 	switch (row)
 	{

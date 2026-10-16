@@ -3,7 +3,7 @@
 
 KeyboardAlpha KeyboardAlphaState = KA_Idle;
 
-key_event_t getkey_alpha_lock(void)
+key_event_t getkey_alpha_lock()
 {
 	auto e = getkey_opt(GETKEY_DEFAULT ^ GETKEY_MOD_ALPHA, nullptr);
 

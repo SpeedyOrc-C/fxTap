@@ -2,12 +2,12 @@
 #include "assets.h"
 #include "ui.h"
 
-static void Invert1(void) { drect(2, 13, 62, 27, C_INVERT); }
-static void Invert2(void) { drect(2, 30, 62, 44, C_INVERT); }
-static void Invert3(void) { drect(2, 47, 62, 61, C_INVERT); }
-static void Invert4(void) { drect(65, 13, 125, 27, C_INVERT); }
-static void Invert5(void) { drect(65, 30, 125, 44, C_INVERT); }
-static void Invert6(void) { drect(65, 47, 125, 61, C_INVERT); }
+static void Invert1() { drect(2, 13, 62, 27, C_INVERT); }
+static void Invert2() { drect(2, 30, 62, 44, C_INVERT); }
+static void Invert3() { drect(2, 47, 62, 61, C_INVERT); }
+static void Invert4() { drect(65, 13, 125, 27, C_INVERT); }
+static void Invert5() { drect(65, 30, 125, 44, C_INVERT); }
+static void Invert6() { drect(65, 47, 125, 61, C_INVERT); }
 
 void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 {
@@ -19,7 +19,7 @@ void UI_Play_Mods(FXT_ModOption *option, const FXT_Config *config)
 		{
 			const int left = DWIDTH * config->Language;
 			dsubimage(0, 0, &Img_Modifications, left, 0, DWIDTH, 11, 0);
-			dsubimage(0, 11, &Img_Modifications, left, 11 + 51 * page, DWIDTH, 51, 0);
+			dsubimage(0, 11, &Img_Modifications, left, 11 + 51 * (int) page, DWIDTH, 51, 0);
 		}
 
 		dprint_opt(DWIDTH - 3, 2, C_WHITE, C_NONE, DTEXT_RIGHT, DTEXT_TOP, "%u/%u", page + 1, 2);

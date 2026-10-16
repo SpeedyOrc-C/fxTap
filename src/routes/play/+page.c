@@ -92,19 +92,19 @@ OCharP UI_Play(const FXT_Config *config, FXT_DatabaseView *view, FXT_ModOption *
 				dfont(&Font_Tiny);
 
 				auto const version = group.Members[memberIndex]->value.Version;
-				dtext(9, 23 + 7 * offset, C_BLACK, version);
+				dtext(9, 23 + 7 * (int) offset, C_BLACK, version);
 
 				auto const lastGrades = group.Members[memberIndex]->value.LastGrades;
 
 				if (lastGrades.Exist)
 					dprint_opt(
-						115, 23 + 7 * offset, C_BLACK, C_NONE,
+						115, 23 + 7 * (int) offset, C_BLACK, C_NONE,
 						DTEXT_RIGHT, DTEXT_TOP,
 						"%.2f", 100 * FXT_Grades_ScoreV2(lastGrades.Value)
 					);
 
 				if (memberIndex == view->FocusedVersionIndex)
-					drect(8, 22 + 7 * offset, 116, 28 + 7 * offset, C_INVERT);
+					drect(8, 22 + 7 * (int) offset, 116, 28 + 7 * (int) offset, C_INVERT);
 			}
 
 			if (view->GroupCount - view->FocusedGroupIndex >= 2)

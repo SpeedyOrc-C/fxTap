@@ -22,7 +22,7 @@ void NotesFallingTime_Render(const FXT_Config *config)
 	dimage(0, 56, &Img_Settings_NotesFallingTime_FN_EN);
 }
 
-void AdjustNotesFallingTime(FXT_Config *config, const int16_t delta)
+static void AdjustNotesFallingTime(FXT_Config *config, const int16_t delta)
 {
 	config->NotesFallingTime += delta;
 
